@@ -1,0 +1,127 @@
+.museum-sticky-container {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #FAFAFA; /* Subtle off-white to make the white frame pop */
+  overflow: hidden;
+}
+
+.museum-gallery-area {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  height: 55vh; /* Enough space for the frame */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.museum-card-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  justify-content: center;
+}
+
+.museum-frame {
+  background: #ffffff;
+  border-radius: 4px; /* Inner art matting */
+  padding: 32px; /* The white passepartout (matboard) */
+  box-shadow: 
+    0 40px 100px rgba(0,0,0,0.08), /* Soft luxury drop shadow */
+    inset 0 4px 16px rgba(0,0,0,0.04), /* Inner shadow on the art */
+    0 0 0 20px #ffffff, /* The thick white outer frame */
+    0 0 0 21px rgba(0,0,0,0.06); /* The very thin dark edge of the frame */
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px; /* Outer frame rounded corners */
+}
+
+/* Glass reflection shimmer */
+.museum-frame::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-25deg);
+  animation: glassShimmer 7s infinite cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes glassShimmer {
+  0% { left: -100%; }
+  15% { left: 200%; }
+  100% { left: 200%; }
+}
+
+/* Floor Shadow under the frame */
+.museum-floor-shadow {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 30px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Soft Spotlight from above */
+.museum-spotlight {
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vertical Progress Indicator */
+.museum-indicator {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 50;
+}
+
+.indicator-dot {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: #D1D5DB;
+  transition: all 0.4s ease;
+  position: relative;
+  cursor: default;
+}
+
+.indicator-dot.active {
+  color: #00101F;
+  transform: scale(1.2);
+}
+
+.indicator-dot.active::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 2px;
+  background: #0067A4;
+}

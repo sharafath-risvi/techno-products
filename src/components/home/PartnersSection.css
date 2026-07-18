@@ -1,0 +1,58 @@
+.marquee-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  /* Premium faded edges for Awwwards style */
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-set {
+  display: flex;
+  gap: 32px;
+  padding-right: 32px; /* Perfect symmetry gap */
+}
+
+.row1-track {
+  animation: marqueeLeft 35s linear infinite;
+}
+
+.row2-track {
+  animation: marqueeRight 45s linear infinite;
+}
+
+@keyframes marqueeLeft {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-25%, 0, 0); } /* 4 sets, shifting 1 set = -25% */
+}
+
+@keyframes marqueeRight {
+  0% { transform: translate3d(-25%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.partner-card {
+  width: 280px;
+  height: 120px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+.partner-card:hover {
+  transform: scale(1.05) translateZ(0); /* Hardware accelerate scale */
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.08);
+}
