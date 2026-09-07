@@ -18,7 +18,7 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [hoveredIndustry, setHoveredIndustry] = useState(industriesData[0]);
   const [hoveredSolution, setHoveredSolution] = useState(solutions[0]);
-  const [hoveredInsight, setHoveredInsight] = useState({ label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.jpg' });
+  const [hoveredInsight, setHoveredInsight] = useState({ label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.webp' });
   const location = useLocation();
   const dropdownTimers = useRef({});
 
@@ -32,7 +32,7 @@ export default function Navbar() {
     label: 'All Products',
     desc: 'Browse our complete industrial catalogue',
     href: '/products/all',
-    image: '/industries images/allproducts.png',
+    image: '/industries images/allproducts.webp',
   };
 
   const dynamicProductChildren = apiCategories.length > 0 
@@ -86,8 +86,8 @@ export default function Navbar() {
       href: null,
       insightsMega: true,
       insightsItems: [
-        { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.jpg' },
-        { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.jpg' },
+        { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.webp' },
+        { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.webp' },
       ],
     },
     { label: 'Contact', href: '/contact' },
@@ -299,9 +299,9 @@ export default function Navbar() {
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
                                   <img 
                                     src={{
-                                      'electrical-systems': '/industries images/electricalImages.png',
-                                      'maintenance-support': '/industries images/maintanence_support.png',
-                                      'control-panel-solutions': '/industries images/control_panel.jpg'
+                                      'electrical-systems': '/industries images/electricalImages.webp',
+                                      'maintenance-support': '/industries images/maintanence_support.webp',
+                                      'control-panel-solutions': '/industries images/control_panel.webp'
                                     }[hoveredSolution.slug] || hoveredSolution.image} 
                                     alt={hoveredSolution.title} 
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
@@ -502,14 +502,14 @@ export default function Navbar() {
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
                                   <img 
                                     src={{
-                                      'cement-mining': '/industries images/cement_mining.png',
-                                      'automotive': '/industries images/automative.png',
-                                      'hvac': '/industries images/HVAC.png',
-                                      'textile': '/industries images/Textile.png',
-                                      'infrastructure': '/industries images/infracture.png',
-                                      'water-treatment': '/industries images/waterTreatment.png',
-                                      'food-beverage': '/industries images/food_beverage.jpg',
-                                      'paper-pulp': '/industries images/paper_pulp.jpg'
+                                      'cement-mining': '/industries images/cement_mining.webp',
+                                      'automotive': '/industries images/automative.webp',
+                                      'hvac': '/industries images/HVAC.webp',
+                                      'textile': '/industries images/Textile.webp',
+                                      'infrastructure': '/industries images/infracture.webp',
+                                      'water-treatment': '/industries images/waterTreatment.webp',
+                                      'food-beverage': '/industries images/food_beverage.webp',
+                                      'paper-pulp': '/industries images/paper_pulp.webp'
                                     }[hoveredIndustry.slug] || hoveredIndustry.image} 
                                     alt={hoveredIndustry.name} 
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} 

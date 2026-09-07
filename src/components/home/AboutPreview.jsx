@@ -8,7 +8,7 @@ import { useGSAP } from '@gsap/react';
 gsap.registerPlugin(ScrollTrigger);
 
 // High-quality industrial & manufacturing hero photography
-const FULL_WIDTH_INDUSTRIAL_IMAGE = '/industries images/allproducts.png';
+const FULL_WIDTH_INDUSTRIAL_IMAGE = '/industries images/allproducts.webp';
 
 // Exactly 3 Premium Storytelling Cards with distinct industrial background images
 const STORY_CHAPTERS = [

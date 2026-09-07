@@ -32,7 +32,7 @@ export default function TestimonialsPage() {
         {/* Background image with strong overlay */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <img
-            src="/industries images/testimonal.jpg"
+            src="/industries images/testimonal.webp"
             alt="Industrial background"
             style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.18) saturate(0.6)' }}
           />

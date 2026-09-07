@@ -10,11 +10,14 @@ export default function SolutionDetailPage() {
   const solution = solutions.find(s => s.slug === slug);
   if (!solution) return <Navigate to="/solutions" replace />;
 
-  const mappedImage = {
-    'electrical-systems': '/industries images/electricalImages.png',
-    'maintenance-support': '/industries images/maintanence_support.png',
-    'control-panel-solutions': '/industries images/control_panel.jpg'
-  }[solution.slug] || solution.image;
+  const solutionImages = {
+    'power-transmission': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1920&h=1080&fit=crop',
+    'electrical-systems': '/industries images/electricalImages.webp',
+    'maintenance-support': '/industries images/maintanence_support.webp',
+    'control-panel-solutions': '/industries images/control_panel.webp'
+  };
+
+  const mappedImage = solutionImages[solution.slug] || solution.image;
 
   const { products } = useProducts();
   const relatedCats = productCategories.filter(c => solution.relatedProducts.includes(c.id));

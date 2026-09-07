@@ -28,7 +28,7 @@ export default function CaseStoriesPage() {
         position: 'relative', overflow: 'hidden' 
       }}>
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', opacity: 0.35 }}>
-          <img src="/industries images/case_stories.jpg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src="/industries images/case_stories.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #001426 0%, transparent 100%)' }} />
         </div>
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
