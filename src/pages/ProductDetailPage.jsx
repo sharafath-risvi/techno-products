@@ -3,18 +3,16 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, CheckCircle2, FileText, Download, ShieldCheck, 
-  Layers, Settings, Cpu, ArrowRight, Share2, Printer, 
-  HelpCircle, Check, PhoneCall, Mail, Building2, User
+  Settings, ArrowRight, Share2, Printer, Check, PhoneCall, Mail, Building2, User, Loader2
 } from 'lucide-react';
-import { allProductsData, productCategories } from '../data/siteData';
+import { useApi } from '../hooks/useApi';
 
 export default function ProductDetailPage() {
-  const { categorySlug, productSlug } = useParams();
+  const { categorySlug, productId } = useParams();
   const navigate = useNavigate();
   
-  // Find product by exact slug or fallback ID match
-  const product = allProductsData.find(p => p.slug === productSlug || p.id === productSlug) || 
-                  allProductsData.find(p => p.categorySlug === categorySlug);
+  const { data: productData, loading, error } = useApi(`https://technoproducts.in/wp-json/api/v1/products/${productId}`);
+  const product = productData;
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [activeTab, setActiveTab] = useState('overview');
@@ -30,15 +28,23 @@ export default function ProductDetailPage() {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Reset top scroll and image/tab index when product slug changes
+  // Reset top scroll and image/tab index when product ID changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveImageIdx(0);
     setActiveTab('overview');
     setFormSubmitted(false);
-  }, [productSlug]);
+  }, [productId]);
 
-  if (!product) {
+  if (loading) {
+    return (
+      <main style={{ padding: '140px 0 100px', background: '#F8FAFC', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Loader2 size={48} color="#0067A4" className="animate-spin" />
+      </main>
+    );
+  }
+
+  if (error || !product) {
     return (
       <main style={{ padding: '140px 0 100px', background: '#F8FAFC', minHeight: '80vh', textAlign: 'center' }}>
         <div className="container" style={{ maxWidth: 600 }}>
@@ -56,9 +62,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  const images = product.thumbnails && product.thumbnails.length > 0 
-    ? product.thumbnails 
-    : [product.image, product.image, product.image];
+  const images = product.image ? [product.image] : [];
 
   const handleDownload = (title) => {
     setToastMessage(`Downloading ${title}...`);
@@ -70,10 +74,8 @@ export default function ProductDetailPage() {
     setFormSubmitted(true);
   };
 
-  // Find related products in same category
-  const relatedProducts = allProductsData
-    .filter(p => p.categorySlug === product.categorySlug && p.id !== product.id && p.slug !== product.slug)
-    .slice(0, 4);
+  // Find related products from API response
+  const relatedProducts = product.related_products || [];
 
   return (
     <main style={{ background: '#FFFFFF', minHeight: '100vh', paddingBottom: 120 }}>
@@ -107,13 +109,11 @@ export default function ProductDetailPage() {
             <ChevronRight size={14} color="#94A3B8" />
             <Link to="/products" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }}>Products</Link>
             <ChevronRight size={14} color="#94A3B8" />
-            <Link to={`/products/${product.categorySlug}`} style={{ color: '#0067A4', fontWeight: 700, textDecoration: 'none' }}>
-              {product.categoryName || product.categorySlug.toUpperCase()}
+            <Link to={`/products/${categorySlug}`} style={{ color: '#0067A4', fontWeight: 700, textDecoration: 'none' }}>
+              {categorySlug.toUpperCase()}
             </Link>
             <ChevronRight size={14} color="#94A3B8" />
-            <span style={{ color: '#0F172A', fontWeight: 700 }} className="truncate-breadcrumb">
-              {product.name}
-            </span>
+            <span style={{ color: '#0F172A', fontWeight: 700 }} className="truncate-breadcrumb" dangerouslySetInnerHTML={{ __html: product.name }} />
           </nav>
         </div>
       </section>
@@ -135,7 +135,7 @@ export default function ProductDetailPage() {
                   transition={{ duration: 0.3 }}
                   className="main-image"
                 />
-                <div className="gallery-badge-brand">{product.brand}</div>
+                {product.brand && <div className="gallery-badge-brand">{product.brand}</div>}
                 <div className="gallery-badge-status">Official Industrial Warranty</div>
               </div>
 
@@ -157,46 +157,12 @@ export default function ProductDetailPage() {
             {/* Right: Product Specification Summary & Actions */}
             <div className="detail-info">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
-                <span className="brand-tag">{product.brand}</span>
-                <span className="category-tag">{product.categoryName || product.categorySlug}</span>
+                <span className="category-tag">{categorySlug}</span>
               </div>
 
-              <h1 className="product-title">{product.name}</h1>
+              <h1 className="product-title" dangerouslySetInnerHTML={{ __html: product.name }} />
               
-              <p className="product-short-desc">
-                {product.shortDescription || product.description}
-              </p>
-
-              {/* Highlights */}
-              {product.highlights && product.highlights.length > 0 && (
-                <div className="highlights-box">
-                  <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 13, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
-                    Engineering Highlights
-                  </h4>
-                  <div className="highlights-grid">
-                    {product.highlights.map((hl, idx) => (
-                      <div key={idx} className="highlight-item">
-                        <CheckCircle2 size={16} color="#0067A4" />
-                        <span>{hl}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Key Quick Specs Table */}
-              <div className="quick-specs">
-                <div className="quick-specs-header">Key Technical Data</div>
-                <div className="quick-specs-grid">
-                  {Object.entries(product.specs || {}).slice(0, 4).map(([k, v]) => (
-                    <div key={k} className="quick-spec-item">
-                      <div className="spec-key">{k}</div>
-                      <div className="spec-val">{v}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
+              <div className="product-short-desc" dangerouslySetInnerHTML={{ __html: product.description }} />
               {/* CTA Button Group */}
               <div className="detail-actions">
                 <a 
@@ -246,11 +212,7 @@ export default function ProductDetailPage() {
           {/* Tab Headers */}
           <div className="tab-navigation scrollbar-hide">
             {[
-              { id: 'overview', label: 'Product Overview', icon: FileText },
-              { id: 'specs', label: 'Technical Specifications', icon: Settings },
-              { id: 'features', label: 'Features & Benefits', icon: CheckCircle2 },
-              { id: 'applications', label: 'Industry Applications', icon: Layers },
-              { id: 'downloads', label: 'Downloads & Manuals', icon: Download }
+              { id: 'overview', label: 'Product Overview', icon: FileText }
             ].map(tab => {
               const Icon = tab.icon;
               return (
@@ -273,11 +235,7 @@ export default function ProductDetailPage() {
             {activeTab === 'overview' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
                 <h3 className="tab-heading">Product Description & Engineering Overview</h3>
-                <div className="overview-text">
-                  {(product.overview || product.description || '').split('\n\n').map((para, idx) => (
-                    <p key={idx}>{para}</p>
-                  ))}
-                </div>
+                <div className="overview-text" dangerouslySetInnerHTML={{ __html: product.description }} />
 
                 <div style={{ marginTop: 40, padding: 32, background: '#EFF6FF', borderRadius: 16, border: '1px solid #BFDBFE' }}>
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#1E3A8A', marginBottom: 12 }}>
@@ -290,105 +248,7 @@ export default function ProductDetailPage() {
               </motion.div>
             )}
 
-            {/* SPECS TAB */}
-            {activeTab === 'specs' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-                <h3 className="tab-heading">Complete Technical Specifications</h3>
-                <div className="specs-table-wrapper">
-                  <table className="specs-table">
-                    <tbody>
-                      {Object.entries(product.specs || {}).map(([key, value], idx) => (
-                        <tr key={key} className={idx % 2 === 0 ? 'row-even' : 'row-odd'}>
-                          <td className="spec-table-key">{key}</td>
-                          <td className="spec-table-val">{value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </motion.div>
-            )}
 
-            {/* FEATURES TAB */}
-            {activeTab === 'features' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-                <h3 className="tab-heading">Key Features & Engineering Advantages</h3>
-                <div className="features-list">
-                  {(product.features || [
-                    'Built with rugged cast-iron or heavy-duty structural housing for extreme industrial durability.',
-                    'Optimized internal geometry and premium electrical insulation ensuring high continuous operational efficiency.',
-                    'Engineered strictly in conformance with IEC / IS international performance standards.',
-                    'Pre-tested at the factory with certified quality compliance and thermal stability guarantees.'
-                  ]).map((feat, idx) => (
-                    <div key={idx} className="feature-card">
-                      <div className="feature-icon">
-                        <CheckCircle2 size={20} color="#0067A4" />
-                      </div>
-                      <div className="feature-text">{feat}</div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* APPLICATIONS TAB */}
-            {activeTab === 'applications' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-                <h3 className="tab-heading">Recommended Industrial Applications</h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#64748B', marginBottom: 28 }}>
-                  This series is widely deployed and proven across heavy process sectors requiring continuous operational reliability:
-                </p>
-                <div className="applications-grid">
-                  {(product.applications || [
-                    'Cement & Metallurgy Processing',
-                    'Water & Wastewater Pumping Stations',
-                    'Paper & Pulp Mills',
-                    'Automotive Assembly & Robotics',
-                    'Textile Machinery & Spinning Mills',
-                    'Chemical Processing & Petrochemicals'
-                  ]).map((app, idx) => (
-                    <div key={idx} className="application-card">
-                      <Layers size={20} color="#0067A4" />
-                      <span>{app}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* DOWNLOADS TAB */}
-            {activeTab === 'downloads' && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-                <h3 className="tab-heading">Technical Documentation & Catalogues</h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#64748B', marginBottom: 28 }}>
-                  Download official manufacturer data sheets, dimensional drawings, and installation guides:
-                </p>
-                <div className="downloads-grid">
-                  {(product.downloads || [
-                    { title: `${product.brand} Technical Datasheet`, type: 'PDF', size: '2.4 MB' },
-                    { title: `Installation & Operation Manual`, type: 'PDF', size: '4.8 MB' },
-                    { title: `${product.brand} Industrial Catalogue`, type: 'PDF', size: '12.1 MB' }
-                  ]).map((doc, idx) => (
-                    <div key={idx} className="download-card">
-                      <div className="doc-icon">
-                        <FileText size={24} color="#0067A4" />
-                      </div>
-                      <div className="doc-info">
-                        <div className="doc-title">{doc.title}</div>
-                        <div className="doc-meta">{doc.type} Document • {doc.size}</div>
-                      </div>
-                      <button 
-                        onClick={() => handleDownload(doc.title)}
-                        className="btn-doc-download"
-                      >
-                        <Download size={18} />
-                        <span>Download</span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
 
           </div>
         </div>
@@ -413,8 +273,8 @@ export default function ProductDetailPage() {
 
               <div style={{ background: 'rgba(255,255,255,0.06)', padding: 24, borderRadius: 16, border: '1px solid rgba(255,255,255,0.1)', marginBottom: 32 }}>
                 <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', marginBottom: 8 }}>Selected Unit</div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#FFF', marginBottom: 4 }}>{product.name}</div>
-                <div style={{ fontSize: 14, color: '#93C5FD' }}>{product.brand} • {product.categoryName}</div>
+                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#FFF', marginBottom: 4 }} dangerouslySetInnerHTML={{ __html: product.name }} />
+                <div style={{ fontSize: 14, color: '#93C5FD' }}>{categorySlug}</div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -451,7 +311,7 @@ export default function ProductDetailPage() {
                     Inquiry Received Successfully
                   </h3>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#64748B', lineHeight: 1.6, marginBottom: 28, maxWidth: 440, margin: '0 auto 28px' }}>
-                    Thank you for contacting Techno Products. Our technical specialist for <strong>{product.brand}</strong> will review your requirements and reply with a formal quote within 4 business hours.
+                    Thank you for contacting Techno Products. Our technical specialist will review your requirements and reply with a formal quote within 4 business hours.
                   </p>
                   <button onClick={() => setFormSubmitted(false)} className="btn btn-outline" style={{ display: 'inline-flex' }}>
                     Send Another Inquiry
@@ -544,11 +404,11 @@ export default function ProductDetailPage() {
                   Explore Similar Models
                 </div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, color: '#0F172A' }}>
-                  Related {product.categoryName || 'Products'}
+                  Related Products
                 </h2>
               </div>
-              <Link to={`/products/${product.categorySlug}`} className="btn btn-outline" style={{ display: 'inline-flex' }}>
-                View All {product.categoryName}
+              <Link to={`/products/${categorySlug}`} className="btn btn-outline" style={{ display: 'inline-flex' }}>
+                View All in Category
               </Link>
             </div>
 
@@ -556,29 +416,26 @@ export default function ProductDetailPage() {
               {relatedProducts.map(rel => (
                 <motion.div
                   key={rel.id}
-                  onClick={() => navigate(`/products/${rel.categorySlug}/${rel.slug}`)}
+                  onClick={() => navigate(`/products/${categorySlug}/${rel.id}`)}
                   className="premium-product-card"
                   whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,0,0,0.08)' }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
                   style={{ cursor: 'pointer' }}
                 >
                   <div className="card-image-wrapper">
-                    <img src={rel.image} alt={rel.name} className="card-image" />
-                    <div className="card-brand-badge">{rel.brand}</div>
+                    {rel.image ? (
+                      <img src={rel.image} alt={rel.name} className="card-image" />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontFamily: 'var(--font-heading)' }}>
+                        No Image
+                      </div>
+                    )}
                   </div>
                   <div className="card-content">
-                    <h3 className="card-title">{rel.name}</h3>
-                    <div className="card-specs">
-                      {Object.entries(rel.specs || {}).slice(0, 2).map(([k, v]) => (
-                        <div key={k} className="spec-item">
-                          <div className="spec-label">{k}</div>
-                          <div className="spec-value">{v}</div>
-                        </div>
-                      ))}
-                    </div>
+                    <h3 className="card-title" dangerouslySetInnerHTML={{ __html: rel.name }} />
                     <div className="card-actions">
                       <Link 
-                        to={`/products/${rel.categorySlug}/${rel.slug}`}
+                        to={`/products/${categorySlug}/${rel.id}`}
                         onClick={(e) => e.stopPropagation()}
                         className="btn-quick-view"
                         style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
@@ -596,6 +453,12 @@ export default function ProductDetailPage() {
 
       {/* Styled CSS for Product Detail Page */}
       <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 1s linear infinite; }
+        
         .truncate-breadcrumb {
           max-width: 320px;
           white-space: nowrap;
@@ -621,6 +484,15 @@ export default function ProductDetailPage() {
           display: flex;
           flex-direction: column;
           gap: 16px;
+        }
+        
+        .detail-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: 100%;
+          padding-top: 10px;
+          padding-bottom: 10px;
         }
         .main-image-wrapper {
           position: relative;
@@ -725,8 +597,8 @@ export default function ProductDetailPage() {
           font-family: var(--font-body);
           font-size: 16px;
           color: #475569;
-          line-height: 1.6;
-          margin-bottom: 28px;
+          line-height: 1.8;
+          margin-bottom: 40px;
         }
 
         .highlights-box {

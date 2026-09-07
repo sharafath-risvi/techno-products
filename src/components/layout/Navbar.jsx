@@ -2,55 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
 import { Menu, X, ChevronDown, ArrowRight, Phone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { productCategories, solutions, industriesData } from '../../data/siteData';
+import { productCategories as staticProductCategories, solutions, industriesData } from '../../data/siteData';
+import { useApi } from '../../hooks/useApi';
+import { useProducts } from '../../context/ProductsContext';
 
 const textColor = '#000000';
 const logoBlue = '#0067A4';
 const activeBlue = '#00446F';
-
-const navItems = [
-  {
-    label: 'About',
-    href: null,        // Dropdown-only trigger — does not navigate
-    dropdown: [
-      { label: 'Our Company', desc: 'History, values & philosophy', href: '/about/company' },
-      { label: 'Leadership', desc: 'Meet our founders & team', href: '/about/leadership' },
-      { label: 'Careers', desc: 'Join our growing team', href: '/careers' },
-    ],
-  },
-  {
-    label: 'Products',
-    href: null,
-    mega: true,
-    children: productCategories.map((cat) => ({
-      label: cat.shortName,
-      desc: cat.tag,
-      href: `/products/${cat.slug}`,
-      image: cat.image,
-    })),
-  },
-  {
-    label: 'Solutions',
-    href: null,
-    solutionsMega: true,
-  },
-  {
-    label: 'Industries',
-    href: null,
-    industries: true,
-  },
-  {
-    label: 'Insights',
-    href: null,
-    insightsMega: true,
-    insightsItems: [
-      { label: 'Blog & Articles', desc: 'Technical guides, industry insights & automation news', href: '/insights/blog', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1400&h=900&fit=crop&q=85' },
-      { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1400&h=900&fit=crop&q=85' },
-      { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1400&h=900&fit=crop&q=85' },
-    ],
-  },
-  { label: 'Contact', href: '/contact' },
-];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -60,9 +18,80 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [hoveredIndustry, setHoveredIndustry] = useState(industriesData[0]);
   const [hoveredSolution, setHoveredSolution] = useState(solutions[0]);
-  const [hoveredInsight, setHoveredInsight] = useState({ label: 'Blog & Articles', desc: 'Technical guides, industry insights & automation news', href: '/insights/blog', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1400&h=900&fit=crop&q=85' });
+  const [hoveredInsight, setHoveredInsight] = useState({ label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.jpg' });
   const location = useLocation();
   const dropdownTimers = useRef({});
+
+  const { products } = useProducts();
+
+  // Fetch real product categories
+  const { data: apiCategoriesData } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
+  const apiCategories = apiCategoriesData?.data || [];
+
+  const allProductsItem = {
+    label: 'All Products',
+    desc: 'Browse our complete industrial catalogue',
+    href: '/products/all',
+    image: '/industries images/allproducts.png',
+  };
+
+  const dynamicProductChildren = apiCategories.length > 0 
+    ? [allProductsItem, ...apiCategories.map((cat) => {
+        // Use an ORIGINAL REAL PRODUCT IMAGE from that category's actual products
+        const realProductForCat = products.find(p => p.category_slug === cat.slug);
+        const catImage = realProductForCat?.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop';
+        
+        return {
+          label: cat.name,
+          desc: cat.description || `Explore ${cat.name}`,
+          href: `/products/${cat.slug}`,
+          image: catImage,
+        };
+      })]
+    : [allProductsItem, ...staticProductCategories.map((cat) => ({
+        label: cat.shortName,
+        desc: cat.tag,
+        href: `/products/${cat.slug}`,
+        image: cat.image,
+      }))];
+
+  const navItems = [
+    {
+      label: 'About',
+      href: null,
+      dropdown: [
+        { label: 'Our Company', desc: 'History, values & philosophy', href: '/about/company' },
+        { label: 'Leadership', desc: 'Meet our founders & team', href: '/about/leadership' },
+        { label: 'Careers', desc: 'Join our growing team', href: '/careers' },
+      ],
+    },
+    {
+      label: 'Products',
+      href: null,
+      mega: true,
+      children: dynamicProductChildren,
+    },
+    {
+      label: 'Solutions',
+      href: null,
+      solutionsMega: true,
+    },
+    {
+      label: 'Industries',
+      href: null,
+      industries: true,
+    },
+    {
+      label: 'Insights',
+      href: null,
+      insightsMega: true,
+      insightsItems: [
+        { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.jpg' },
+        { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.jpg' },
+      ],
+    },
+    { label: 'Contact', href: '/contact' },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -109,17 +138,13 @@ export default function Navbar() {
         }}
         role="navigation" aria-label="Main navigation"
       >
-        <div className="container" style={{ display: 'flex', alignItems: 'center', height: 96 }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', height: 112 }}>
 
           {/* Logo */}
           <div style={{ flex: '0 0 auto', paddingLeft: 8, paddingRight: 24 }}>
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
-              <div style={{ width: 36, height: 36, background: logoBlue, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#fff' }}>T</span>
-              </div>
-              <div>
-                <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 15, letterSpacing: '0.08em', textTransform: 'uppercase', color: textColor, lineHeight: 1.1 }}>TECHNO</div>
-                <div style={{ fontFamily: 'var(--font-body)', fontWeight: 400, fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#666', lineHeight: 1 }}>PRODUCTS</div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 100, width: 'auto', objectFit: 'contain' }} />
               </div>
             </Link>
           </div>
@@ -143,7 +168,7 @@ export default function Navbar() {
                       {({ isActive }) => (
                         <div style={{
                           display: 'flex', alignItems: 'center', gap: 4,
-                          fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 15,
+                          fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 16,
                           color: isActive || isOpen ? activeBlue : textColor,
                           padding: '8px 0', position: 'relative',
                           transition: 'color 0.2s ease', cursor: 'pointer',
@@ -163,7 +188,7 @@ export default function Navbar() {
                     /* Dropdown-only trigger — no href, no navigation on click */
                     <div style={{
                       display: 'flex', alignItems: 'center', gap: 4,
-                      fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 15,
+                      fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 16,
                       color: isOpen ? activeBlue : textColor,
                       padding: '8px 0', position: 'relative',
                       transition: 'color 0.2s ease', cursor: 'default',
@@ -272,7 +297,15 @@ export default function Navbar() {
                                 style={{ borderRadius: 16, overflow: 'hidden', background: '#F5F5F5' }}
                               >
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                  <img src={hoveredSolution.image} alt={hoveredSolution.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                  <img 
+                                    src={{
+                                      'electrical-systems': '/industries images/electricalImages.png',
+                                      'maintenance-support': '/industries images/maintanence_support.png',
+                                      'control-panel-solutions': '/industries images/control_panel.jpg'
+                                    }[hoveredSolution.slug] || hoveredSolution.image} 
+                                    alt={hoveredSolution.title} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  />
                                 </div>
                                 <div style={{ padding: '16px' }}>
                                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>{hoveredSolution.title}</div>
@@ -393,9 +426,11 @@ export default function Navbar() {
                               onMouseEnter={e => { e.currentTarget.style.background = '#F8F9FA'; e.currentTarget.style.borderColor = 'rgba(0,68,111,0.08)'; }}
                               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'transparent'; }}
                             >
-                              <div style={{ width: 48, height: 48, borderRadius: 10, overflow: 'hidden', background: '#F0F2F5', flexShrink: 0 }}>
-                                <img src={child.image} alt={child.label} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
-                              </div>
+                              {child.image && (
+                                <div style={{ width: 48, height: 48, borderRadius: 10, overflow: 'hidden', background: '#F0F2F5', flexShrink: 0 }}>
+                                  <img src={child.image} alt={child.label} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                                </div>
+                              )}
                               <div>
                                 <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: '#001426', marginBottom: 2 }}>{child.label}</div>
                                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888' }}>{child.desc}</div>
@@ -465,7 +500,20 @@ export default function Navbar() {
                                 style={{ borderRadius: 16, overflow: 'hidden', background: '#F5F5F5' }}
                               >
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                  <img src={hoveredIndustry.image} alt={hoveredIndustry.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                  <img 
+                                    src={{
+                                      'cement-mining': '/industries images/cement_mining.png',
+                                      'automotive': '/industries images/automative.png',
+                                      'hvac': '/industries images/HVAC.png',
+                                      'textile': '/industries images/Textile.png',
+                                      'infrastructure': '/industries images/infracture.png',
+                                      'water-treatment': '/industries images/waterTreatment.png',
+                                      'food-beverage': '/industries images/food_beverage.jpg',
+                                      'paper-pulp': '/industries images/paper_pulp.jpg'
+                                    }[hoveredIndustry.slug] || hoveredIndustry.image} 
+                                    alt={hoveredIndustry.name} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                  />
                                 </div>
                                 <div style={{ padding: '16px' }}>
                                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>{hoveredIndustry.name}</div>
@@ -499,7 +547,7 @@ export default function Navbar() {
 
         {/* Right: Phone + CTA — absolutely pinned to right edge, outside container */}
         <div className="hidden md:flex" style={{
-          position: 'absolute', top: 0, right: 24, height: 96,
+          position: 'absolute', top: 0, right: 24, height: 112,
           display: 'flex', alignItems: 'center', gap: 4,
         }}>
           <a
@@ -532,7 +580,7 @@ export default function Navbar() {
             onMouseEnter={e => { e.currentTarget.style.background = '#003355'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseLeave={e => { e.currentTarget.style.background = activeBlue; e.currentTarget.style.transform = 'none'; }}
           >
-            Get Consultation
+            Speak to an Expert
           </Link>
         </div>
       </nav>

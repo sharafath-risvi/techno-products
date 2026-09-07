@@ -12,7 +12,7 @@ const products = [
     title: 'GEARBOXES',
     shortName: 'Gearboxes',
     desc: 'Precision-engineered industrial gearboxes designed for maximum torque transmission, ultimate reliability, and long-term performance under extreme loads.',
-    image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/11/W-Series.jpeg',
     slug: '/products'
   },
   {
@@ -21,7 +21,7 @@ const products = [
     title: 'ELECTRIC MOTORS',
     shortName: 'Electric Motors',
     desc: 'High-efficiency industrial motors built to power heavy machinery with minimal energy loss and unmatched durability in harsh environments.',
-    image: 'https://images.unsplash.com/photo-1581092335397-9583eb92d232?w=800&q=80',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/1-SCA.png',
     slug: '/products'
   },
   {
@@ -30,7 +30,7 @@ const products = [
     title: 'DRIVES & AUTOMATION',
     shortName: 'Drives & Automation',
     desc: 'Advanced VFD drives and intelligent automation systems offering precise control, energy savings, and seamless integration for smart manufacturing.',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/FC051-Danfoss-Drive.jpeg',
     slug: '/products'
   },
   {
@@ -39,7 +39,7 @@ const products = [
     title: 'CONTROL PANELS',
     shortName: 'Control Panels',
     desc: 'Custom-built industrial control panels engineered to exact specifications, ensuring safety, compliance, and flawless operational logic.',
-    image: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&q=80',
+    image: '/images/control_panel.png',
     slug: '/products'
   },
   {
@@ -48,7 +48,7 @@ const products = [
     title: 'CABLES & ACCESSORIES',
     shortName: 'Cables & Accessories',
     desc: 'Heavy-duty industrial cables and essential accessories providing robust power delivery and communication across massive industrial complexes.',
-    image: 'https://images.unsplash.com/photo-1565514020179-026b92b84bb6?w=800&q=80',
+    image: '/images/techno_service_support.jpeg',
     slug: '/products' 
   }
 ];

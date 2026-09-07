@@ -2,49 +2,20 @@ import { motion } from 'framer-motion';
 import SectionTag from '../ui/RevealText';
 
 const clients = [
-  { id: 1, client: "TNPL", category: "Paper Industry", image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1600&h=900&fit=crop" },
-  { id: 2, client: "Larsen & Toubro", category: "Heavy Engineering", image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1600&h=900&fit=crop" },
-  { id: 3, client: "Chettinad Cement", category: "Cement Manufacturing", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&h=900&fit=crop" },
-  { id: 4, client: "Schwing Stetter", category: "Manufacturing", image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?w=1600&h=900&fit=crop" }
+  { id: 1, client: "TNPL", category: "Paper Industry", image: "/Clients/tnpl1-1.jpg" },
+  { id: 2, client: "Larsen & Toubro", category: "Heavy Engineering", image: "/Clients/Larsen_Turbo.jpg" },
+  { id: 3, client: "Chettinad Cement", category: "Cement Manufacturing", image: "/Clients/chettinad1.jpg" },
+  { id: 4, client: "Schwing Stetter", category: "Manufacturing", image: "/Clients/schewind-1.jpg" }
 ];
 
 function ClientCard({ clientData }) {
   return (
-    <div 
-      style={{ 
-        width: '100%', 
-        aspectRatio: '1/1',
-        position: 'relative',
-        borderRadius: 24, 
-        overflow: 'hidden', 
-        boxShadow: '0 16px 32px rgba(0,0,0,0.1)',
-      }}
-    >
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
       <img 
         src={clientData.image} 
-        alt={clientData.client} 
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        alt="Client Logo" 
+        style={{ maxWidth: '100%', maxHeight: '180px', objectFit: 'contain' }} 
       />
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,16,31,0.4)' }} />
-      
-      <h3 style={{ 
-        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-        fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(20px, 3vw, 32px)',
-        color: '#ffffff', margin: 0, textAlign: 'center', width: '90%', pointerEvents: 'none',
-        textShadow: '0 8px 24px rgba(0,0,0,0.6)', letterSpacing: '-0.02em', wordWrap: 'break-word'
-      }}>
-        {clientData.client}
-      </h3>
-      
-      <div style={{
-        position: 'absolute', bottom: '10%', left: '50%', transform: 'translateX(-50%)',
-        background: '#ffffff', padding: '8px 16px', borderRadius: 40,
-        fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11,
-        color: '#00101F', letterSpacing: '0.08em', textTransform: 'uppercase',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', whiteSpace: 'nowrap'
-      }}>
-        {clientData.category}
-      </div>
     </div>
   );
 }

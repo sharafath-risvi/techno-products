@@ -31,8 +31,8 @@ export default function HomePage() {
       <WhyChooseUs />
       {/* 6. Case Stories (Moved immediately below Why Choose Us) */}
       <HomeCaseStories />
-      {/* 7. Product Categories (Product Portfolio) */}
-      <ProductCategories />
+      {/* 7. Product Categories (Product Portfolio) - HIDDEN per user request */}
+      {/* <ProductCategories /> */}
       {/* 8. Infinite Scrolling Marquee */}
       <PartnersSection />
       {/* 9. Museum Exhibition Certifications Gallery */}

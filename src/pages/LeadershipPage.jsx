@@ -8,7 +8,7 @@ import CTASection from '../components/home/CTASection';
 
 /* ── Image assets — premium industrial leadership photography ───────────── */
 const IMG_MAIN =
-  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=1400&fit=crop&q=85';
+  '/Background_wallpapers/our_story.jpg';
 const IMG_SECONDARY =
   'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&h=600&fit=crop&q=85';
 const IMG_ACCENT =
@@ -342,11 +342,11 @@ function LeadershipHero() {
             transition={{ duration: 1.1, ease: EASE, delay: 0.3 }}
             style={{
               position: 'relative',
-              width: '68%',
+              width: '100%',
               borderRadius: 24,
               overflow: 'hidden',
               boxShadow: '0 40px 80px -20px rgba(0,16,31,0.15)',
-              aspectRatio: '3/4',
+              aspectRatio: '4/5',
             }}
           >
             <motion.div style={{ y: imgMainY, height: '115%', marginTop: '-7.5%', willChange: 'transform' }}>
@@ -364,100 +364,7 @@ function LeadershipHero() {
             }} />
           </motion.div>
 
-          {/* Floating secondary image — offset top-left */}
-          <motion.div
-            initial={{ opacity: 0, x: -30, y: 20 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            transition={{ duration: 1.0, ease: EASE, delay: 0.55 }}
-            style={{
-              position: 'absolute',
-              top: '6%',
-              left: 0,
-              width: '46%',
-              borderRadius: 18,
-              overflow: 'hidden',
-              boxShadow: '0 24px 48px -10px rgba(0,16,31,0.12)',
-              border: '3px solid #F8FAFC',
-              aspectRatio: '4/3',
-            }}
-          >
-            <motion.div style={{ y: imgSecY, height: '115%', marginTop: '-7.5%', willChange: 'transform' }}>
-              <img
-                src={IMG_SECONDARY}
-                alt="Engineering leadership discussion"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-            </motion.div>
-          </motion.div>
 
-          {/* Brand blue accent strip behind primary image */}
-          <motion.div
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1, ease: EASE, delay: 0.2 }}
-            style={{
-              position: 'absolute',
-              top: '8%',
-              right: '-16px',
-              width: 4,
-              height: '55%',
-              background: 'linear-gradient(to bottom, #0067A4, #00446F)',
-              borderRadius: 4,
-              transformOrigin: 'top',
-            }}
-          />
-
-          {/* Glass stat card — floating over primary image */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, ease: EASE, delay: 0.9 }}
-            style={{
-              position: 'absolute',
-              bottom: '12%',
-              left: '2%',
-              background: 'rgba(255,255,255,0.88)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(0,103,164,0.12)',
-              borderRadius: 16,
-              padding: '20px 24px',
-              boxShadow: '0 16px 40px rgba(0,68,111,0.1)',
-              minWidth: 160,
-            }}
-          >
-            <div style={{
-              fontFamily: 'var(--font-heading)',
-              fontWeight: 700,
-              fontSize: 32,
-              color: '#00446F',
-              lineHeight: 1,
-              marginBottom: 4,
-            }}>
-              1999
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 12,
-              color: '#888',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-            }}>
-              Founded
-            </div>
-            <div style={{
-              marginTop: 12,
-              display: 'flex',
-              gap: 4,
-            }}>
-              {[...Array(5)].map((_, j) => (
-                <div key={j} style={{
-                  width: 20, height: 3, borderRadius: 2,
-                  background: j < 4 ? '#0067A4' : 'rgba(0,103,164,0.2)',
-                }} />
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
 

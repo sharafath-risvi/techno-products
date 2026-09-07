@@ -1,0 +1,68 @@
+.mill-title-box.mill-title-box-1{
+    position: relative;
+    z-index: 1;
+}
+.mill-subtitle{text-transform: uppercase; color: var(--color-theme-primary);
+    position: relative;
+    font-family: var(--global-font-family);
+    font-weight: var(--font-weight-semi-bold);
+    margin-bottom: 15px;
+    display: inline-block;
+    letter-spacing: var(--letter-spacing);
+    font-size: var(--font-size-normal);
+}
+.mill-title-box.text-center{
+    margin-bottom: 40px;
+}
+.mill-subtitle:before {
+    content: "";
+    width: 23px;
+    height: 49px;
+    border: 3px solid  var(--color-theme-secondary);
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: -1;
+}
+.mill-title-box.center{
+    margin-bottom: 60px;
+}
+.mill-title-box.left{
+    margin-bottom: 30px;
+}
+
+.mill-title-box.mill-title-box-2{ margin: 0;}
+.mill-title-box.mill-title-box-2 .mill-title.mill-heading-title{
+
+    background-image: linear-gradient(177.74deg, #FFFFFF 23.4%, rgba(250, 250, 250, 0) 75.95%);;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-style: normal;
+    font-weight: bold;
+    color: var(--color-theme-white);
+    text-transform: uppercase;
+}
+.mill-title-box.mill-title-box-2 h2.mill-title.mill-heading-title{
+    font-size: 150px;
+}
+
+
+.routed-text .mill-title-box.mill-title-box-2 .mill-title {
+    transform: rotate( 180deg);
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    background-image: linear-gradient(267deg, #FFFFFF 23.4%, rgb(255 44 44 / 0%) 75.95%);
+}
+
+@media(max-width: 1024px){
+    .mill-title-box.center{
+        margin-bottom:30px;
+    }
+}
+
+@media(max-width: 767px){
+    .mobile-text-center .mill-title, .mobile-text-center  .mill-title-desc{
+        text-align: center;
+    }
+}
+

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Phone, CalendarCheck } from 'lucide-react';
 
@@ -28,6 +28,8 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import CaseStoriesPage from './pages/CaseStoriesPage';
 import CaseStoryDetailPage from './pages/CaseStoryDetailPage';
 import CareersPage from './pages/CareersPage';
+
+import { ProductsProvider } from './context/ProductsContext';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -59,25 +61,24 @@ function LoadingScreen({ onComplete }) {
       exit={{ opacity: 0, y: '-100%' }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       style={{
-        position: 'fixed', inset: 0, zIndex: 99999, background: '#001426',
+        position: 'fixed', inset: 0, zIndex: 99999, background: '#F8FAFC',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
       }}
     >
-      <div style={{ position: 'relative', width: 240, height: 60, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', overflow: 'hidden', padding: 20 }}>
         <motion.div
-          initial={{ y: 60 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 48, color: '#fff', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
-          TECHNO<span style={{ color: '#D71B32' }}>.</span>
+          <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 200, width: 'auto', objectFit: 'contain' }} />
         </motion.div>
       </div>
       <motion.div
         initial={{ width: 0 }}
         animate={{ width: 200 }}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
-        style={{ height: 2, background: '#4F8FBF', marginTop: 24, borderRadius: 2 }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.4 }}
+        style={{ height: 2, background: '#0067A4', marginTop: 24, borderRadius: 2 }}
       />
     </motion.div>
   );
@@ -108,7 +109,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <>
+    <ProductsProvider>
       <AnimatePresence mode="wait">
         {loading && <LoadingScreen key="loading" onComplete={() => setLoading(false)} />}
       </AnimatePresence>
@@ -132,8 +133,9 @@ export default function App() {
                 {/* Existing pages – untouched */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route path="/products/:slug" element={<ProductCategoryPage />} />
-                <Route path="/products/:categorySlug/:productSlug" element={<ProductDetailPage />} />
+                <Route path="/products" element={<ProductCategoryPage key="all" />} />
+                <Route path="/products/:categorySlug" element={<ProductCategoryPage />} />
+                <Route path="/products/:categorySlug/:productId" element={<ProductDetailPage />} />
                 <Route path="/contact" element={<ContactPage />} />
 
                 {/* Phase 2 – About sub-pages */}
@@ -150,7 +152,7 @@ export default function App() {
                 <Route path="/insights/blog" element={<BlogPage />} />
                 <Route path="/insights/testimonials" element={<TestimonialsPage />} />
                 <Route path="/case-stories" element={<CaseStoriesPage />} />
-                <Route path="/case-stories/:slug" element={<CaseStoryDetailPage />} />
+                <Route path="/case-stories/:postId" element={<CaseStoryDetailPage />} />
 
                 {/* Phase 2 – Careers */}
                 <Route path="/careers" element={<CareersPage />} />
@@ -198,7 +200,6 @@ export default function App() {
           </Link>
         </>
       )}
-    </>
+    </ProductsProvider>
   );
 }
-

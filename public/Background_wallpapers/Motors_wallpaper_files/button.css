@@ -1,0 +1,8 @@
+.mill-btn-small{font-size: 14px;padding: 10px 20px;}
+.mill-btn-medium{font-size: 16px;padding: 15px 30px;}
+.mill-btn-large{font-size: 18px; padding: 20px 40px;}
+.mill-btn-extra-large{font-size:  20px; padding: 25px 50px;}
+.mill-btn-round{border-radius: 30px !important;overflow: hidden;}
+.mill-btn-semi-round{border-radius: 5px !important;overflow: hidden;}
+.mill-btn-circle{border-radius: 50% !important; overflow: hidden;}
+.mill-btn-outline{outline: 2px solid var(--mill-black) !important;}

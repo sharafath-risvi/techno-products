@@ -2,18 +2,43 @@ import { motion } from 'framer-motion';
 import SectionTag from '../ui/RevealText';
 import './PartnersSection.css';
 
-const row1 = ["ABB", "Siemens", "Delta", "Crompton", "Havells", "L&T", "Danfoss", "Bonfiglioli", "SKF", "WEG"];
-const row2 = ["Bosch", "Schneider", "Omron", "Mitsubishi", "ABB", "Siemens", "Yaskawa", "Fuji Electric"];
+const row1 = [
+  { name: 'ABB', logo: '/partners/ABB-1.png' },
+  { name: 'Innomotics', logo: '/partners/INNOMOTICS-A-Siemens-Business-450.png' },
+  { name: 'Schneider Electric', logo: '/partners/Schneider_Electric_2007.svg.png' },
+  { name: 'Bauer', logo: '/partners/bauer-1.png' },
+  { name: 'Bharat Bijlee', logo: '/partners/bharat-bijili.png' },
+  { name: 'Bonfiglioli', logo: '/partners/bonfigolli.png' },
+  { name: 'Crompton', logo: '/partners/cromton.png' },
+  { name: 'Danfoss', logo: '/partners/danfoss-logo.jpg' },
+  { name: 'Havells', logo: '/partners/havells.png' },
+  { name: 'Hindustan', logo: '/partners/hindustan.png' },
+  { name: 'JK Fenner', logo: '/partners/jk_fenner.png' }
+];
 
-function PartnerCard({ name }) {
+const row2 = [
+  { name: 'LEDL', logo: '/partners/ledl.png' },
+  { name: 'Marathon', logo: '/partners/marathon.png' },
+  { name: 'Motovario', logo: '/partners/motovario.png' },
+  { name: 'Murugappa', logo: '/partners/murugappa.png' },
+  { name: 'Polycab', logo: '/partners/pollycabs.png' },
+  { name: 'Rossi', logo: '/partners/rossi-1.png' },
+  { name: 'Shanthi', logo: '/partners/shanthi.png' },
+  { name: 'STM', logo: '/partners/stm.png' },
+  { name: 'Top Gear', logo: '/partners/top-gear.png' },
+  { name: 'Unitorq', logo: '/partners/unitorq.png' },
+  { name: 'Vagmine', logo: '/partners/vagmine.png' }
+];
+
+function PartnerCard({ partner }) {
   return (
-    <div className="partner-card">
-      <h3 style={{ 
-        fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, 
-        color: '#00101F', margin: 0, letterSpacing: '-0.02em' 
-      }}>
-        {name}
-      </h3>
+    <div className="partner-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <img 
+        src={partner.logo} 
+        alt={partner.name} 
+        style={{ maxWidth: '80%', maxHeight: '60px', objectFit: 'contain', mixBlendMode: 'multiply' }} 
+        title={partner.name}
+      />
     </div>
   );
 }
@@ -64,11 +89,11 @@ export default function PartnersSection() {
       </div>
 
       {/* Marquee Row 1 (Left to Right) */}
-      <div className="marquee-wrapper" style={{ marginBottom: 60 }}>
+      <div className="marquee-wrapper" style={{ marginBottom: 90 }}>
         <div className="marquee-track row1-track">
           {[...Array(4)].map((_, setIndex) => (
             <div key={`set1-${setIndex}`} className="marquee-set">
-              {row1.map((name, i) => <PartnerCard key={`r1-${setIndex}-${i}`} name={name} />)}
+              {row1.map((partner, i) => <PartnerCard key={`r1-${setIndex}-${i}`} partner={partner} />)}
             </div>
           ))}
         </div>
@@ -79,7 +104,7 @@ export default function PartnersSection() {
         <div className="marquee-track row2-track">
           {[...Array(4)].map((_, setIndex) => (
             <div key={`set2-${setIndex}`} className="marquee-set">
-              {row2.map((name, i) => <PartnerCard key={`r2-${setIndex}-${i}`} name={name} />)}
+              {row2.map((partner, i) => <PartnerCard key={`r2-${setIndex}-${i}`} partner={partner} />)}
             </div>
           ))}
         </div>

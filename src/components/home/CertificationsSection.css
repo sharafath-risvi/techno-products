@@ -125,3 +125,28 @@
   height: 2px;
   background: #0067A4;
 }
+
+.cert-gsap-track-wrapper {
+  width: 100vw;
+  margin: 40px 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.cert-gsap-container {
+  display: flex;
+  gap: 80px;
+  width: max-content;
+  padding: 20px calc(50vw - 200px);
+  will-change: transform;
+}
+
+.cert-gsap-slide-item {
+  flex-shrink: 0;
+}
+
+.cert-link:hover {
+  transform: translateY(-8px);
+}

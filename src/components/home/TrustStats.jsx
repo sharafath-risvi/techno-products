@@ -48,7 +48,7 @@ export default function TrustStats() {
   return (
     <section ref={sectionRef} style={{
       background: '#FFFFFF', // Pure white
-      padding: '90px 0', // Reduced for compact layout
+      padding: '60px 0', // Reduced for compact layout
       position: 'relative',
       overflow: 'hidden',
     }}>
@@ -84,7 +84,7 @@ export default function TrustStats() {
                 <div style={{
                   fontFamily: 'var(--font-heading)',
                   fontWeight: 700,
-                  fontSize: 'clamp(40px, 4.5vw, 56px)',
+                  fontSize: 'clamp(32px, 3.5vw, 48px)',
                   lineHeight: 1,
                   letterSpacing: '-0.04em',
                   color: '#001426', // Dark premium text

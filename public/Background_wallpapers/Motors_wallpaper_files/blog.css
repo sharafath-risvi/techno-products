@@ -1,0 +1,105 @@
+
+
+.mill-blog-main-box .mill-blogs-image img{
+    height: 550px;
+    object-fit: cover;
+    border-radius: var(--border-radius-box);
+}
+
+.mill-blog-main-box{
+    position: relative;
+    margin-bottom: 30px;
+}
+.blog-carousel.owl-carousel .mill-blog-main-box{
+    margin-bottom: 0;
+}
+.mill-blog-main-box .mill-blog-meta .blog-admin-date{
+    display: inline-block;
+    padding: 5px 15px;
+    background: var(--color-theme-primary);
+    border-radius: var(--border-radius);
+}
+.mill-blog-main-box .mill-blog-meta .blog-admin-date .blog-date{
+    margin: 0;
+    padding-right: 10px;
+    border-right: 2px solid var(--color-theme-white);
+    line-height: normal;
+}
+.mill-blog-main-box .mill-blog-meta .blog-admin-date .blog-admin{
+    padding-left: 5px;
+}
+.mill-blog-main-box .mill-blog-meta .blog-admin-date a{
+    color:var(--color-theme-white);
+    line-height: 16px;
+    text-transform: capitalize;
+}
+.mill-blog-main-box .mill-blogmain p{
+    padding: 15px 0;
+    margin: 0;
+}
+.mill-blog-main-box .mill-blog-meta{
+    position: absolute;
+    top: -20px;
+    left: 20px;
+}
+.mill-blog-main-box .mill-outerbox{
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 30px 20px 20px;
+}
+.mill-blog-main-box .mill-blogmain{
+    display: none;
+}
+
+.mill-blog-box .mill-blog-meta ul ,.blog-carousel.owl-carousel .mill-blog-box{
+    margin: 0;
+}
+.site.mill .mill-blog-box{
+    margin-bottom: 30px;
+    display: block;
+}
+.site.mill .blog-carousel .mill-blog-box 
+{
+    margin-bottom: 0;
+}
+
+.mill-default-blog-style-2-grid .mill-blog-box .mill-blog-details .blog-catgeory .iqonic-port-cat{
+    padding: 5px 15px;
+    color:var(--color-theme-white);
+    background: var(--color-theme-primary);
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-three);
+    font-family: var(--highlight-font-family);
+    font-weight: var(--font-weight-semi-bold);
+
+}
+
+.mill-default-blog-style-2-grid .mill-blog-box {
+    box-shadow: 10px 10px 50px rgb(0 0 0 / 5%);
+}
+.mill-default-blog-style-2-grid .mill-blog-box .mill-blog-details{
+    padding: 30px;
+    float: left;
+    position: relative;
+}
+.mill-default-blog-style-2-grid .mill-blog-box .mill-blog-image{
+    margin-bottom: 0;
+}
+.mill-default-blog-style-2-grid .mill-blog-box .blog-catgeory{
+    position: absolute;
+    top: -20px;
+}
+
+.mill-default-blog-style-2-grid .owl-stage-outer{
+    overflow: visible !important;
+}
+.mill-default-blog-style-2-grid .owl-item{
+    opacity: 0;
+}
+.mill-default-blog-style-2-grid .owl-item.active{
+    opacity: 1;
+}

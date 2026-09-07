@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-const STORY_IMG = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&h=1600&fit=crop&q=80';
+const STORY_IMG = '/Background_wallpapers/our_story.jpg';
 
 const TIMELINE_DATA = [
   { year: '1999', title: 'Company Founded', desc: 'Started with a vision to deliver dependable engineering solutions to local industries.' },
@@ -22,8 +22,8 @@ export default function FullOurStory() {
         
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '45% 1fr',
-          gap: '8%',
+          gridTemplateColumns: '48% 1fr',
+          gap: '7%',
           alignItems: 'start' // Critical for sticky to work
         }}>
           

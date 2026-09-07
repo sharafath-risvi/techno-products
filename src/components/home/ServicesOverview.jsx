@@ -13,7 +13,7 @@ const SERVICES_DATA = [
     title: 'MECHANICAL',
     name: 'Mechanical Services',
     desc: 'Complete industrial maintenance, installation, and optimization for reliable engineering performance.',
-    mainImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1600&q=85',
+    mainImage: '/images/mechanical_service.webp',
     smallImage: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400&q=80',
     link: '/services',
   },
@@ -22,7 +22,7 @@ const SERVICES_DATA = [
     title: 'ELECTRICAL',
     name: 'Electrical Services',
     desc: 'Professional diagnostics, drive servicing, and preventive maintenance for maximum uptime.',
-    mainImage: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1600&q=85',
+    mainImage: '/images/electrical_service.jpeg',
     smallImage: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=400&q=80',
     link: '/services',
   },
@@ -31,7 +31,7 @@ const SERVICES_DATA = [
     title: 'CONTROL PANEL',
     name: 'Control Panel Services',
     desc: 'Bespoke manufacturing and maintenance of industrial control panels for reliable automation.',
-    mainImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1600&q=85',
+    mainImage: '/images/control_panel.png',
     smallImage: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&q=80',
     link: '/services',
   },
@@ -41,6 +41,7 @@ export default function ServicesOverview() {
   const sectionRef = useRef(null);
   const containerRef = useRef(null);
   const panelsRef = useRef([]);
+  const wrapperRef = useRef(null);
 
   useGSAP(
     () => {
@@ -59,12 +60,11 @@ export default function ServicesOverview() {
 
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: sectionRef.current,
-            pin: true,
+            trigger: wrapperRef.current,
+            pin: false, // Use CSS sticky instead of GSAP pin
             scrub: 1,
             start: 'top top',
-            end: '+=1500', // Highly optimized distance for 1-scroll transitions
-            anticipatePin: 1,
+            end: 'bottom bottom',
             snap: {
               snapTo: 'labels',
               duration: { min: 0.4, max: 0.8 },
@@ -132,7 +132,8 @@ export default function ServicesOverview() {
   );
 
   return (
-    <section ref={sectionRef} className="editorial-expertise-section">
+    <div ref={wrapperRef} className="expertise-wrapper">
+      <section ref={sectionRef} className="editorial-expertise-section">
       {/* Absolute Header Overlay */}
       <div className="expertise-intro-heading">
         <h2 className="expertise-intro-title">
@@ -199,6 +200,23 @@ export default function ServicesOverview() {
       </div>
 
       <style>{`
+        .expertise-wrapper {
+          position: relative;
+          width: 100%;
+        }
+
+        @media (min-width: 1024px) {
+          .expertise-wrapper {
+            height: 300vh; /* Allow enough scroll distance for 3 panels */
+          }
+          
+          .editorial-expertise-section {
+            position: sticky !important;
+            top: 0;
+            height: 100vh;
+          }
+        }
+
         .editorial-expertise-section {
           background: #FFFFFF;
           overflow: hidden;
@@ -523,6 +541,7 @@ export default function ServicesOverview() {
           }
         }
       `}</style>
-    </section>
+      </section>
+    </div>
   );
 }

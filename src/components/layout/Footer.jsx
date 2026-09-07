@@ -2,6 +2,35 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Phone, Mail, MapPin, ArrowRight, FileText } from 'lucide-react';
 
+const LinkedinIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+  </svg>
+);
+
+const FacebookIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+
+const InstagramIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+
+const YoutubeIcon = ({ size = 22 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path>
+    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+  </svg>
+);
+
 const quickLinks = [
   { label: 'About', href: '/about' },
   { label: 'Products', href: '/products' },
@@ -22,28 +51,18 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 }
   }
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } 
-  }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } }
 };
 
 export default function Footer() {
   return (
     <footer className="premium-footer">
-      <div className="footer-pattern" />
-      <div className="footer-gradient" />
-      
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <motion.div 
           className="footer-main-grid"
@@ -55,26 +74,22 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <motion.div variants={itemVariants} className="footer-col brand-col">
             <Link to="/" className="footer-logo">
-              <div className="footer-logo-icon">T</div>
-              <div className="footer-logo-text">
-                <span className="logo-top">TECHNO</span>
-                <span className="logo-bottom">PRODUCTS</span>
-              </div>
+              <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 150, width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p className="footer-desc">
               Premier channel partner for top global industrial brands. Delivering reliable engineering solutions and performance-driven products since 1999.
             </p>
             <div className="footer-socials">
-              <a href="#" aria-label="LinkedIn">LI</a>
-              <a href="#" aria-label="Facebook">FB</a>
-              <a href="#" aria-label="Instagram">IG</a>
-              <a href="#" aria-label="YouTube">YT</a>
+              <a href="#" aria-label="LinkedIn"><LinkedinIcon size={22} /></a>
+              <a href="#" aria-label="Facebook"><FacebookIcon size={22} /></a>
+              <a href="#" aria-label="Instagram"><InstagramIcon size={22} /></a>
+              <a href="#" aria-label="YouTube"><YoutubeIcon size={22} /></a>
             </div>
           </motion.div>
 
           {/* Column 2: Quick Links */}
           <motion.div variants={itemVariants} className="footer-col">
-            <h4 className="footer-heading">Quick Links</h4>
+            <h4 className="footer-heading">Company</h4>
             <ul className="footer-link-list">
               {quickLinks.map(link => (
                 <li key={link.label}>
@@ -86,7 +101,7 @@ export default function Footer() {
 
           {/* Column 3: Products */}
           <motion.div variants={itemVariants} className="footer-col">
-            <h4 className="footer-heading">Products</h4>
+            <h4 className="footer-heading">Solutions</h4>
             <ul className="footer-link-list">
               {productLinks.map(link => (
                 <li key={link.label}>
@@ -98,7 +113,7 @@ export default function Footer() {
 
           {/* Column 4: Contact */}
           <motion.div variants={itemVariants} className="footer-col contact-col">
-            <h4 className="footer-heading">Contact Details</h4>
+            <h4 className="footer-heading">Get in Touch</h4>
             <div className="footer-contact-item">
               <MapPin size={18} className="contact-icon" />
               <span>Chennai Head Office<br/>Tamil Nadu, India</span>
@@ -116,15 +131,6 @@ export default function Footer() {
               <span>GST No.<br/>33AABCT1291J1ZF</span>
             </div>
           </motion.div>
-
-          {/* Column 5: CTA */}
-          <motion.div variants={itemVariants} className="footer-col cta-col">
-            <h4 className="footer-heading">Need Engineering Solutions?</h4>
-            <p className="cta-desc">Partner with us for reliable, high-performance industrial automation and drive solutions tailored to your needs.</p>
-            <Link to="/contact" className="footer-cta-btn">
-              Get a Quote <ArrowRight size={16} />
-            </Link>
-          </motion.div>
         </motion.div>
       </div>
 
@@ -133,7 +139,11 @@ export default function Footer() {
         <div className="container">
           <div className="bottom-bar-inner">
             <div className="copyright">
-              © {new Date().getFullYear()} Techno Products Development Pvt. Ltd.<br/>All Rights Reserved.
+              © {new Date().getFullYear()} Techno Products Development Pvt. Ltd. All Rights Reserved.
+            </div>
+            <div className="legal-links">
+              <a href="#">Privacy Policy</a>
+              <a href="#">Terms of Service</a>
             </div>
           </div>
         </div>
@@ -142,50 +152,32 @@ export default function Footer() {
       <style>{`
         .premium-footer {
           position: relative;
-          background-color: var(--color-primary-dark);
-          color: var(--color-white);
+          background-color: #F8FAFC;
+          color: #1E293B;
           overflow: hidden;
-          padding-top: 96px;
+          padding-top: 100px;
+          border-top: 1px solid rgba(0,0,0,0.06);
         }
         
-        .footer-pattern {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-          background-size: 30px 30px;
-          opacity: 0.8;
-          pointer-events: none;
-        }
-
-        .footer-gradient {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at center top, rgba(0, 103, 164, 0.4) 0%, transparent 60%);
-          pointer-events: none;
-        }
-
         .footer-main-grid {
           display: grid;
-          grid-template-columns: 2.2fr 1fr 1.3fr 1.4fr 1.5fr;
-          gap: 48px;
+          grid-template-columns: 2.2fr 1fr 1.3fr 1.6fr;
+          gap: 60px;
           padding-bottom: 80px;
         }
 
         @media (max-width: 1200px) {
           .footer-main-grid {
-            grid-template-columns: 2fr 1fr 1fr 1.2fr 1.5fr;
-            gap: 32px;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 40px;
           }
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 992px) {
           .footer-main-grid {
             grid-template-columns: repeat(2, 1fr);
             gap: 56px 40px;
           }
-          .brand-col { grid-column: 1 / -1; }
         }
 
         @media (max-width: 640px) {
@@ -204,49 +196,17 @@ export default function Footer() {
         .footer-logo {
           display: flex;
           align-items: center;
-          gap: 12px;
-          margin-bottom: 24px;
+          margin-bottom: 32px;
           text-decoration: none;
         }
-        .footer-logo-icon {
-          width: 36px;
-          height: 36px;
-          background: #88C5E6;
-          border-radius: 6px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: var(--font-heading);
-          font-weight: 700;
-          font-size: 18px;
-          color: var(--color-primary-dark);
-        }
-        .footer-logo-text {
-          display: flex;
-          flex-direction: column;
-        }
-        .logo-top {
-          font-family: var(--font-heading);
-          font-weight: 700;
-          font-size: 16px;
-          letter-spacing: 0.1em;
-          color: #FFFFFF;
-          line-height: 1.1;
-        }
-        .logo-bottom {
-          font-family: var(--font-body);
-          font-size: 10px;
-          letter-spacing: 0.18em;
-          color: #88C5E6;
-          line-height: 1;
-        }
+        
         .footer-desc {
           font-family: var(--font-body);
-          font-size: 15px;
+          font-size: 16px;
           line-height: 1.7;
-          color: rgba(255,255,255,0.7);
-          margin-bottom: 32px;
-          max-width: 340px;
+          color: #475569;
+          margin-bottom: 40px;
+          max-width: 380px;
         }
         .footer-socials {
           display: flex;
@@ -256,27 +216,46 @@ export default function Footer() {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.05);
-          color: #FFFFFF;
-          transition: all 0.3s ease;
+          background: #FFFFFF;
+          color: #64748B;
+          border: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .footer-socials a:hover {
-          background: #88C5E6;
-          color: var(--color-primary-dark);
-          transform: translateY(-4px);
+          background: #0067A4;
+          color: #FFFFFF;
+          border-color: #0067A4;
+          transform: translateY(-4px) scale(1.05);
+          box-shadow: 0 12px 24px rgba(0, 103, 164, 0.2);
         }
 
         /* Typography & Links */
         .footer-heading {
           font-family: var(--font-heading);
-          font-size: 18px;
+          font-size: 16px;
           font-weight: 700;
-          color: #FFFFFF;
-          margin-bottom: 24px;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: #0F172A;
+          margin-bottom: 32px;
+          position: relative;
         }
+        
+        .footer-heading::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 24px;
+          height: 2px;
+          background: #0067A4;
+          border-radius: 2px;
+        }
+
         .footer-link-list {
           list-style: none;
           padding: 0;
@@ -285,97 +264,50 @@ export default function Footer() {
           flex-direction: column;
           gap: 16px;
         }
+        
         .footer-nav-link {
           font-family: var(--font-body);
           font-size: 15px;
-          color: rgba(255,255,255,0.7);
+          color: #64748B;
           text-decoration: none;
-          position: relative;
-          display: inline-block;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
         }
-        .footer-nav-link::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          bottom: -4px;
-          width: 100%;
-          height: 1px;
-          background: #88C5E6;
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.3s ease;
-        }
+        
         .footer-nav-link:hover {
-          color: #88C5E6;
+          color: #0067A4;
           transform: translateX(4px);
-        }
-        .footer-nav-link:hover::after {
-          transform: scaleX(1);
         }
 
         /* Contact Details */
         .footer-contact-item {
           display: flex;
           align-items: flex-start;
-          gap: 14px;
-          margin-bottom: 20px;
+          gap: 16px;
+          margin-bottom: 24px;
           font-family: var(--font-body);
           font-size: 15px;
           line-height: 1.6;
-          color: rgba(255,255,255,0.7);
+          color: #475569;
           text-decoration: none;
         }
         .contact-icon {
-          color: #88C5E6;
+          color: #0067A4;
           flex-shrink: 0;
           margin-top: 2px;
         }
         .footer-contact-item.linkable {
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
         }
         .footer-contact-item.linkable:hover {
-          color: #88C5E6;
-          transform: translateX(4px);
-        }
-
-        /* CTA Column */
-        .cta-desc {
-          font-family: var(--font-body);
-          font-size: 14px;
-          line-height: 1.6;
-          color: rgba(255,255,255,0.6);
-          margin-bottom: 24px;
-        }
-        .footer-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          background: #FFFFFF;
-          color: var(--color-primary-dark);
-          padding: 14px 28px;
-          border-radius: 12px;
-          font-family: var(--font-heading);
-          font-weight: 700;
-          font-size: 14px;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          align-self: flex-start;
-        }
-        .footer-cta-btn:hover {
-          background: #88C5E6;
-          color: var(--color-primary-dark);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(136, 197, 230, 0.2);
+          color: #0067A4;
         }
 
         /* Bottom Bar */
         .footer-bottom-bar {
-          position: relative;
-          z-index: 2;
-          border-top: 1px solid rgba(255,255,255,0.08);
+          background: #FFFFFF;
+          border-top: 1px solid rgba(0,0,0,0.06);
           padding: 24px 0;
         }
         .bottom-bar-inner {
@@ -385,11 +317,26 @@ export default function Footer() {
           flex-wrap: wrap;
           gap: 16px;
         }
-        .copyright, .developer-credit {
+        .copyright {
           font-family: var(--font-body);
-          font-size: 13px;
-          color: rgba(255,255,255,0.4);
+          font-size: 14px;
+          color: #64748B;
         }
+        .legal-links {
+          display: flex;
+          gap: 24px;
+        }
+        .legal-links a {
+          font-family: var(--font-body);
+          font-size: 14px;
+          color: #64748B;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .legal-links a:hover {
+          color: #0067A4;
+        }
+        
         @media (max-width: 640px) {
           .bottom-bar-inner {
             flex-direction: column;

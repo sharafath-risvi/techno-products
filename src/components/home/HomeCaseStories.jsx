@@ -1,30 +1,13 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Loader2 } from 'lucide-react';
 import SectionTag, { RevealText } from '../ui/RevealText';
-
-const caseStories = [
-  {
-    id: 1,
-    slug: 'tnpl-vfd-retrofit',
-    industry: 'Paper & Pulp',
-    title: 'VFD Retrofit for Paper Machine Drives',
-    description: 'Replaced aging DC drives with Danfoss VLT® AutomationDrive FC 302 series across 14 paper machine drives, delivering 32% energy reduction and improved process control.',
-    result: '32% Energy Savings',
-    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900&h=620&fit=crop&q=85',
-  },
-  {
-    id: 2,
-    slug: 'chettinad-cement-kiln',
-    industry: 'Cement Manufacturing',
-    title: 'Motor & Gearbox Upgrade for Kiln Drive',
-    description: 'Complete mechanical drive system upgrade for a rotary kiln using Innomotics motors and Motovario gearboxes — achieving near-zero unplanned downtime in critical production.',
-    result: '99.8% Kiln Uptime',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=900&h=620&fit=crop&q=85',
-  },
-];
+import { useApi } from '../../hooks/useApi';
 
 export default function HomeCaseStories() {
+  const { data: apiData, loading, error } = useApi('https://technoproducts.in/wp-json/api/v1/posts?page=1&per_page=2');
+  const caseStories = apiData?.data || [];
+
   return (
     <section style={{ padding: '120px 0', background: '#F8F9FA' }}>
       <div className="container">
@@ -61,7 +44,21 @@ export default function HomeCaseStories() {
           style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 28 }}
           className="hcs-grid"
         >
-          {caseStories.map((story, i) => (
+          {loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '100px 0', gridColumn: '1 / -1' }}>
+              <Loader2 size={48} color="#0067A4" className="animate-spin" />
+            </div>
+          ) : error ? (
+            <div style={{ textAlign: 'center', color: '#D71B32', padding: '64px 0', fontFamily: 'var(--font-body)', gridColumn: '1 / -1' }}>
+              Failed to load case stories. Please try again.
+            </div>
+          ) : caseStories.length === 0 ? (
+            <div style={{ textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)', gridColumn: '1 / -1' }}>
+              No case stories found.
+            </div>
+          ) : caseStories.map((story, i) => {
+            const categoryName = story.categories?.[0]?.name || 'Industrial Project';
+            return (
             <motion.div
               key={story.id}
               initial={{ opacity: 0, y: 36 }}
@@ -69,7 +66,7 @@ export default function HomeCaseStories() {
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.65, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
             >
-              <Link to={`/case-stories/${story.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
+              <Link to={`/case-stories/${story.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
@@ -83,25 +80,6 @@ export default function HomeCaseStories() {
                   }}
                   className="hcs-card"
                 >
-                  {/* Background Image */}
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    style={{
-                      position: 'absolute', inset: 0,
-                      width: '100%', height: '100%',
-                      objectFit: 'cover',
-                      transition: 'transform 0.6s cubic-bezier(0.16,1,0.3,1)',
-                    }}
-                    className="hcs-card-img"
-                  />
-
-                  {/* Gradient overlay */}
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(0,10,26,0.92) 0%, rgba(0,10,26,0.35) 55%, transparent 100%)',
-                  }} />
-
                   {/* Content */}
                   <div style={{ position: 'relative', zIndex: 1, padding: '36px 36px' }}>
                     {/* Industry + result pill */}
@@ -111,7 +89,7 @@ export default function HomeCaseStories() {
                         letterSpacing: '0.14em', textTransform: 'uppercase',
                         color: 'rgba(255,255,255,0.6)',
                       }}>
-                        {story.industry}
+                        {categoryName}
                       </span>
                       <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.3)' }} />
                       <span style={{
@@ -121,24 +99,26 @@ export default function HomeCaseStories() {
                         background: 'rgba(79,143,191,0.15)',
                         borderRadius: 40, padding: '4px 10px',
                       }}>
-                        {story.result}
+                        {new Date(story.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </span>
                     </div>
 
-                    <h3 style={{
-                      fontFamily: 'var(--font-heading)', fontWeight: 700,
-                      fontSize: 'clamp(18px, 2vw, 26px)', color: '#fff',
-                      lineHeight: 1.2, marginBottom: 12,
-                    }}>
-                      {story.title}
-                    </h3>
+                    <h3 
+                      dangerouslySetInnerHTML={{ __html: story.title }}
+                      style={{
+                        fontFamily: 'var(--font-heading)', fontWeight: 700,
+                        fontSize: 'clamp(18px, 2vw, 26px)', color: '#fff',
+                        lineHeight: 1.2, marginBottom: 12,
+                      }}
+                    />
 
-                    <p style={{
-                      fontFamily: 'var(--font-body)', fontSize: 14,
-                      color: 'rgba(255,255,255,0.65)', lineHeight: 1.75, marginBottom: 24,
-                    }}>
-                      {story.description}
-                    </p>
+                    <div 
+                      dangerouslySetInnerHTML={{ __html: story.excerpt }}
+                      style={{
+                        fontFamily: 'var(--font-body)', fontSize: 14,
+                        color: 'rgba(255,255,255,0.65)', lineHeight: 1.75, marginBottom: 24,
+                      }}
+                    />
 
                     <div style={{
                       display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -153,13 +133,18 @@ export default function HomeCaseStories() {
                 </motion.div>
               </Link>
             </motion.div>
-          ))}
+          )})}
         </div>
       </div>
 
       <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 1s linear infinite; }
+        
         @media (max-width: 768px) { .hcs-grid { grid-template-columns: 1fr !important; } }
-        .hcs-card:hover .hcs-card-img { transform: scale(1.05); }
       `}</style>
     </section>
   );

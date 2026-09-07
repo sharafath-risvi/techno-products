@@ -7,45 +7,7 @@ import {
 } from 'lucide-react';
 import SectionTag, { RevealText, StaggerContainer, StaggerItem } from '../components/ui/RevealText';
 
-// Premium Editorial Stack Cards (Neutral, clean corporate engineering focus)
-const perks = [
-  { 
-    number: '01',
-    icon: Award, 
-    title: 'Global OEM Technical Training', 
-    desc: 'Participate in advanced certification and hands-on laboratory workshops directly at Danfoss, Innomotics, and Schneider Electric engineering centers across India and overseas.' 
-  },
-  { 
-    number: '02',
-    icon: TrendingUp, 
-    title: 'Accelerated Engineering Growth', 
-    desc: 'Benefit from transparent, merit-driven progression frameworks designed to elevate graduate engineers into high-impact technical specialists and project leadership roles.' 
-  },
-  { 
-    number: '03',
-    icon: Cpu, 
-    title: 'Challenging Industrial Execution', 
-    desc: 'Engage directly with multi-megawatt drive installations, SIL-3 safety automation, and heavy planetary gearbox overhauls—solving real-world mechanical and electrical challenges from day one.' 
-  },
-  { 
-    number: '04',
-    icon: Layers, 
-    title: 'Multi-Sector Industry Exposure', 
-    desc: 'Gain cross-sector engineering acumen by delivering mission-critical drive solutions for cement rotary kilns, automotive assembly lines, high-speed paper mills, and municipal water plants.' 
-  },
-  { 
-    number: '05',
-    icon: ShieldCheck, 
-    title: 'Comprehensive Total Rewards', 
-    desc: 'Enjoy industry-benchmark compensation structures paired with project performance bonuses, comprehensive health coverage, provident fund, and wellness entitlements.' 
-  },
-  { 
-    number: '06',
-    icon: Users, 
-    title: 'Collaborative Technical Synergy', 
-    desc: 'Thrive within a tight-knit culture of seasoned domain engineers where peer mentorship, technical curiosity, and innovative design solutions are actively encouraged and rewarded.' 
-  },
-];
+// Premium Editorial Stack Cards removed per user request
 
 export default function CareersPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -190,64 +152,9 @@ export default function CareersPage() {
       </section>
 
       {/* ====================================================
-          2. WHY TECHNO PRODUCTS (PREMIUM NEUTRAL STACK CARDS)
+          2. APPLY FOR OPPORTUNITIES (NEW PREMIUM SECTION)
           ==================================================== */}
-      <section style={{ padding: '110px 0', background: '#FFFFFF', position: 'relative', zIndex: 1 }}>
-        <div className="container" style={{ maxWidth: 1340 }}>
-          <RevealText>
-            <div style={{ textAlign: 'center', marginBottom: 72 }}>
-              <SectionTag>WHY TECHNO PRODUCTS</SectionTag>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 48px)', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#001426' }}>
-                More Than a Job — An Engineering Career
-              </h2>
-            </div>
-          </RevealText>
-
-          <StaggerContainer>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 32 }} className="careers-perks-grid">
-              {perks.map((p, i) => {
-                const IconComponent = p.icon;
-                return (
-                  <StaggerItem key={p.number}>
-                    <motion.div
-                      whileHover={{ y: -6, boxShadow: '0 18px 44px rgba(0, 20, 38, 0.06)', borderColor: 'rgba(0, 103, 164, 0.25)' }}
-                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                      style={{ 
-                        background: '#FFFFFF', borderRadius: 20, padding: '38px 34px', 
-                        border: '1px solid #E5E7EB', position: 'relative',
-                        display: 'flex', flexDirection: 'column', height: '100%',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.025)'
-                      }}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                        <div style={{ 
-                          fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 32, 
-                          color: '#001426', lineHeight: 1 
-                        }}>
-                          {p.number}
-                        </div>
-                      </div>
-
-                      <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, color: '#001426', marginBottom: 14, lineHeight: 1.3 }}>
-                        {p.title}
-                      </h3>
-                      
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#666', lineHeight: 1.75, margin: 0 }}>
-                        {p.desc}
-                      </p>
-                    </motion.div>
-                  </StaggerItem>
-                );
-              })}
-            </div>
-          </StaggerContainer>
-        </div>
-      </section>
-
-      {/* ====================================================
-          3. APPLY FOR OPPORTUNITIES (NEW PREMIUM SECTION)
-          ==================================================== */}
-      <section id="apply-opportunities" style={{ padding: '110px 0', background: '#F8FAFC', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+      <section id="apply-opportunities" style={{ padding: '110px 0', background: '#F8FAFC' }}>
         <div className="container" style={{ maxWidth: 1340 }}>
           <div className="apply-opportunities-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'start' }}>
             

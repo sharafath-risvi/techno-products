@@ -1,0 +1,537 @@
+diff --git a/src/pages/ProductCategoryPage.jsx b/src/pages/ProductCategoryPage.jsx
+index 861b65c..12cf313 100644
+--- a/src/pages/ProductCategoryPage.jsx
++++ b/src/pages/ProductCategoryPage.jsx
+@@ -1,105 +1,161 @@
+-import { useState, useMemo } from 'react';
++import { useState, useMemo, useEffect } from 'react';
+ import { useParams, Link, useNavigate } from 'react-router-dom';
+ import { motion, AnimatePresence } from 'framer-motion';
+-import { ChevronRight, SlidersHorizontal, Search, Download, X } from 'lucide-react';
+-import { productCategories, categoryFiltersData, allProductsData } from '../data/siteData';
++import { ChevronRight, SlidersHorizontal, Search, Loader2, ArrowLeft, ArrowRight, X } from 'lucide-react';
++import { useApi } from '../hooks/useApi';
++import { useProducts } from '../context/ProductsContext';
++
++// Filter Configurations based on User Prompt
++const FILTER_CONFIG = {
++  motors: {
++    hp: ["0.16", "0.25", "0.35", "0.5", "0.75", "1", "1.5", "2", "3", "4", "5", "7.5", "10", "12.5", "15", "20", "25", "30", "40", "50", "60", "75", "100", "120", "150", "170", "180", "200", "215", "220", "240", "270", "300", "335", "340", "370", "425", "473", "500"],
++    rpm: ["3000 2 Pole", "1500 4 Pole", "1000 6 Pole", "750 8 Pole"],
++    brand: ["Siemens", "Crompton", "Havells", "Bharat Bijlee", "Marathon"],
++    mounting: ["Foot", "Flange", "Foot Cum Flange", "Face", "Foot Cum Face"]
++  },
++  gearbox: {
++    hp: ["0.12", "0.16", "0.25", "0.33", "0.5", "0.75", "1", "1.5", "2", "3", "4", "5", "5.5", "7.5", "10", "12.5", "15", "20", "25", "30", "40", "50", "60", "75"],
++    type: ["Bevel Helical - A Series", "Inline Helical- AS Series", "Planetary - 3 SERIES", "Shaft Mounted - TA Series", "VF", "VFR Series", "Worm - W", "WR"],
++    model: ["100", "100.1", "110", "130", "150", "16", "185", "20", "210", "25", "250", "30", "30.3", "35", "35.35", "44", "45", "45.55", "49", "49,55", "50.6", "55", "60", "60.6", "603", "63", "70.7", "75", "80", "80.8", "86", "90"]
++  },
++  drives: {
++    model: ["AUTOMATION DRIVE (ADVANCED) - FC301", "AUTOMATION DRIVE (ADVANCED) - FC302", "AUTOMATION DRIVE (BASIC) - FC360", "HVAC (ADVANCED) - FC102", "HVAC (BASIC) - FC101", "MICRO DRIVE(BASIC) - FC051"],
++    kw: ["0.18", "0.37", "0.75", "1.1", "1.5", "11", "110", "15", "18", "18.5", "2.2", "200", "22", "3", "30", "37", "4", "45", "5.5", "55", "7.5"]
++  },
++  cables: {
++    category: ["Aluminium Armd", "Copper Armd", "Flexible"],
++    color: ["Black", "Blue", "Brown", "Green", "Grey", "Grey Black", "Orange", "Red", "White", "Yellow", "Yellow with Green"],
++    type: ["FR", "FRLS"]
++  },
++  enclosure: {
++    type: ["Double Door", "Floor Standing", "Single Door"],
++    mounting: ["Floor Mounted", "Wall Mounted"],
++    depth: ["120", "210", "300", "400"]
++  },
++  switchgears: {
++    amps: ["20", "250", "2500"],
++    category: ["ACB", "MCB", "MCCB"],
++    pole: ["3", "4"]
++  }
++};
+ 
+ export default function ProductCategoryPage() {
+-  const { slug } = useParams();
++  const { slug: urlSlug } = useParams();
++  const slug = urlSlug || 'all';
+   const navigate = useNavigate();
+ 
+-  // Determine current category or "All Products"
+-  let category = productCategories.find(c => c.slug === slug);
++  const [page, setPage] = useState(1);
++  const perPage = 12;
++  const [searchQuery, setSearchQuery] = useState('');
++  const [activeFilters, setActiveFilters] = useState({});
++
++  useEffect(() => {
++    setActiveFilters({});
++    setPage(1);
++    setSearchQuery('');
++  }, [slug]);
++
++  // Fetch categories for sidebar
++  const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
++  const categories = apiCategoriesData?.data || [];
++
++  // Fetch all products from context
++  const { products: allProducts, loading: prodLoading, error: prodError } = useProducts();
++
++  // Determine current category
++  let category = categories.find(c => c.slug === slug);
+   if (slug === 'all') {
+     category = {
+       id: "all",
+       name: "All Products",
+       shortName: "All Products",
+       slug: "all",
+       tag: "Complete Portfolio",
+       description: "Browse our entire catalogue of industrial products across all categories.",
+-      count: "300+",
+-      brands: [...new Set(productCategories.flatMap(c => c.brands || []))],
+-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop",
+-      filters: {}
++      count: allProducts ? allProducts.length : "All",
++      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop"
+     };
+   }
+ 
+-  // Filter States
+-  const [searchQuery, setSearchQuery] = useState('');
+-  const [selectedBrand, setSelectedBrand] = useState('All Brands');
+-  const [sortOption, setSortOption] = useState('Sort by: Recommended');
+-  const [activeFilters, setActiveFilters] = useState({});
+-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+-
+-  const toggleFilter = (key, value) => {
+-    setActiveFilters(prev => {
+-      const current = prev[key] || [];
+-      if (current.includes(value)) {
+-        return { ...prev, [key]: current.filter(v => v !== value) };
+-      } else {
+-        return { ...prev, [key]: [...current, value] };
+-      }
+-    });
+-  };
+-
+-  const handleReset = () => {
+-    setSearchQuery('');
+-    setSelectedBrand('All Brands');
+-    setActiveFilters({});
+-    setIsFilterOpen(false);
+-    navigate('/products/all', { replace: true });
+-  };
+-
+-  // Compute filtered products based on state
+-  const products = useMemo(() => {
+-    let result = allProductsData;
++  // FILTER LOGIC
++  const filteredProducts = useMemo(() => {
++    let result = allProducts;
+ 
++    // 1. ISOLATE BY CATEGORY
+     if (slug !== 'all') {
+-      result = result.filter(p => p.categorySlug === slug);
++      result = result.filter(p => p.category_slug === slug);
+     }
+ 
+-    if (searchQuery.trim() !== '') {
++    // 2. SEARCH QUERY
++    if (searchQuery.trim()) {
+       const q = searchQuery.toLowerCase();
+-      result = result.filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+-    }
+-
+-    if (selectedBrand !== 'All Brands') {
+-      result = result.filter(p => p.brand === selectedBrand);
++      result = result.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+     }
+ 
++    // 3. APPLY UI ATTRIBUTE FILTERS (AND logic across groups, OR logic within group)
+     Object.keys(activeFilters).forEach(key => {
+       const selectedValues = activeFilters[key];
+       if (selectedValues.length > 0) {
+-        result = result.filter(p => p.specs[key] && selectedValues.includes(p.specs[key]));
++        result = result.filter(p => {
++          if (!p.attributes || !p.attributes[key]) return false;
++          return selectedValues.includes(p.attributes[key]);
++        });
+       }
+     });
+ 
+-    if (sortOption === 'Name (A-Z)') {
+-      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+-    } else if (sortOption === 'Name (Z-A)') {
+-      result = [...result].sort((a, b) => b.name.localeCompare(a.name));
+-    } else if (sortOption === 'Power (High to Low)') {
+-      const getPower = (specs) => {
+-        // Handle various new power fields in official data
+-        if (specs.HP) return parseFloat(specs.HP) || 0;
+-        if (specs.KW) return parseFloat(specs.KW) || 0;
+-        return 0;
+-      };
+-      result = [...result].sort((a, b) => getPower(b.specs) - getPower(a.specs));
++    return result;
++  }, [allProducts, slug, searchQuery, activeFilters]);
++
++  // PAGINATION
++  const total_pages = Math.ceil(filteredProducts.length / perPage) || 1;
++  const paginatedProducts = filteredProducts.slice((page - 1) * perPage, page * perPage);
++  const pagination = { page, total_pages, total: filteredProducts.length };
++
++  const handleReset = () => {
++    setSearchQuery('');
++    setActiveFilters({});
++    setPage(1);
++  };
++
++  const handleClearCategory = () => {
++    handleReset();
++    navigate('/products/all', { replace: true });
++  };
++
++  const toggleFilter = (key, value) => {
++    setActiveFilters(prev => {
++      const current = prev[key] || [];
++      const updated = current.includes(value) 
++        ? current.filter(v => v !== value)
++        : [...current, value];
++      return { ...prev, [key]: updated };
++    });
++    setPage(1);
++  };
++
++  const handlePageChange = (newPage) => {
++    if (newPage >= 1 && newPage <= pagination.total_pages) {
++      setPage(newPage);
++      window.scrollTo({ top: 0, behavior: 'smooth' });
+     }
++  };
+ 
+-    return result;
+-  }, [slug, searchQuery, selectedBrand, sortOption, activeFilters]);
++  if (catLoading) {
++    return (
++      <main style={{ padding: '200px 0', textAlign: 'center', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
++        <Loader2 size={48} color="#0067A4" className="animate-spin" />
++      </main>
++    );
++  }
+ 
+-  if (!category) {
++  if (!catLoading && !category && slug !== 'all') {
+     return (
+       <main style={{ padding: '200px 0', textAlign: 'center' }}>
+         <h2>Category Not Found</h2>
+         <Link to="/products" className="btn btn-primary" style={{ marginTop: 24 }}>Back to Products</Link>
+       </main>
+     );
+   }
+ 
+   return (
+     <main style={{ background: '#F5F5F5', minHeight: '100vh', paddingBottom: 120 }}>
+@@ -165,131 +221,234 @@ export default function ProductCategoryPage() {
+                   <Search size={16} className="search-icon" />
+                   <input 
+                     type="text" 
+                     placeholder="Search Products..." 
+                     value={searchQuery}
+                     onChange={(e) => setSearchQuery(e.target.value)}
+                   />
+                 </div>
+               </div>
+ 
+-              {/* Categories Vertical List */}
+               <div className="filter-group">
+                 <h3>Categories</h3>
+                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+-                  {productCategories.map(cat => (
+-                    <Link 
+-                      key={cat.slug} 
+-                      to={`/products/${cat.slug}`} 
+-                      onClick={() => { setSearchQuery(''); setActiveFilters({}); }} 
+-                      style={{
+-                        padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
+-                        background: slug === cat.slug ? '#0067A4' : '#F8F9FA',
+-                        color: slug === cat.slug ? '#FFF' : '#333',
+-                        textDecoration: 'none', fontWeight: slug === cat.slug ? 700 : 400
+-                      }}
+-                    >
+-                      {cat.name}
+-                    </Link>
+-                  ))}
++                  <Link 
++                    to="/products/all"
++                    onClick={() => { setSearchQuery(''); setPage(1); }} 
++                    style={{
++                      padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
++                      background: slug === 'all' ? '#0067A4' : '#F8F9FA',
++                      color: slug === 'all' ? '#FFF' : '#333',
++                      textDecoration: 'none', fontWeight: slug === 'all' ? 700 : 400
++                    }}
++                  >
++                    All Products
++                  </Link>
++                  {catLoading ? (
++                    <div style={{ padding: 16, textAlign: 'center' }}><Loader2 size={24} className="animate-spin" color="#0067A4" /></div>
++                  ) : (
++                    categories.map(cat => (
++                      <Link 
++                        key={cat.slug} 
++                        to={`/products/${cat.slug}`} 
++                        onClick={() => { setSearchQuery(''); setPage(1); }} 
++                        style={{
++                          padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
++                          background: slug === cat.slug ? '#0067A4' : '#F8F9FA',
++                          color: slug === cat.slug ? '#FFF' : '#333',
++                          textDecoration: 'none', fontWeight: slug === cat.slug ? 700 : 400
++                        }}
++                      >
++                        {cat.name}
++                      </Link>
++                    ))
++                  )}
+                 </div>
+               </div>
+ 
+-              {slug !== 'all' && categoryFiltersData[slug] && Object.keys(categoryFiltersData[slug]).map((filterKey) => (
+-                <div key={filterKey} className="filter-group">
+-                  <h3>{filterKey}</h3>
+-                  <div className="checkbox-list">
+-                    {categoryFiltersData[slug][filterKey].map(val => (
+-                      <label key={val} className="checkbox-label">
++              {FILTER_CONFIG[slug] && Object.keys(FILTER_CONFIG[slug]).map(filterKey => (
++                <div className="filter-group" key={filterKey} style={{ marginTop: 24 }}>
++                  <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
++                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 200, overflowY: 'auto', paddingRight: 8 }} className="scrollbar-hide">
++                    {FILTER_CONFIG[slug][filterKey].map(val => (
++                      <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: '#333' }}>
+                         <input 
+                           type="checkbox" 
++                          style={{ width: 16, height: 16, accentColor: '#0067A4' }}
+                           checked={activeFilters[filterKey]?.includes(val) || false}
+                           onChange={() => toggleFilter(filterKey, val)}
+                         />
+-                        <span>{val}</span>
++                        {val}
+                       </label>
+                     ))}
+                   </div>
+                 </div>
+               ))}
+-              
+-              {slug === 'all' && (
+-                <div style={{ padding: '24px 0', color: '#666', fontSize: '15px' }}>
+-                  Please select a specific category to view its detailed filters.
+-                </div>
+-              )}
+ 
+-              <button className="btn btn-outline" onClick={handleReset} style={{ width: '100%', borderColor: '#E5E7EB', color: '#666', marginTop: 16 }}>
++              <button className="btn btn-outline" onClick={handleReset} style={{ width: '100%', borderColor: '#E5E7EB', color: '#666', marginTop: 32 }}>
+                 Reset Filters
+               </button>
+             </div>
+           </div>
+ 
+           {/* Right Area: Product Grid */}
+           <div>
+             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
+               <div className="product-count">
+-                Showing <span>{products.length} Products</span>
++                Showing Page <span>{pagination.page}</span> of <span>{pagination.total_pages}</span> ({pagination.total} Products Total)
+               </div>
+             </div>
+ 
+-            <div className="product-grid">
+-              {products.map((product) => (
+-                <motion.div
+-                  key={product.id}
+-                  onClick={() => navigate(`/products/${product.categorySlug}/${product.slug}`)}
+-                  className="premium-product-card"
+-                  whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,0,0,0.08)' }}
+-                  transition={{ duration: 0.5, ease: "easeOut" }}
+-                  style={{ cursor: 'pointer' }}
+-                >
+-                  <div className="card-image-wrapper">
+-                    <motion.img 
+-                      src={product.image} 
+-                      alt={product.name} 
+-                      className="card-image"
+-                      whileHover={{ scale: 1.05 }}
+-                      transition={{ duration: 0.7 }}
+-                    />
+-                    <div className="card-brand-badge">{product.brand}</div>
+-                  </div>
+-                  
+-                  <div className="card-content">
+-                    <h3 className="card-title">{product.name}</h3>
+-                    <div className="card-specs">
+-                      {Object.entries(product.specs).slice(0, 2).map(([k, v]) => (
+-                        <div key={k} className="spec-item">
+-                          <div className="spec-label">{k}</div>
+-                          <div className="spec-value">{v}</div>
++            {prodLoading ? (
++              <div style={{ display: 'flex', justifyContent: 'center', padding: '100px 0' }}>
++                <Loader2 size={48} color="#0067A4" className="animate-spin" />
++              </div>
++            ) : prodError ? (
++              <div style={{ textAlign: 'center', color: '#D71B32', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
++                Failed to load products. Please try again.
++              </div>
++            ) : paginatedProducts.length === 0 ? (
++              <div style={{ textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
++                No products match the selected filters.
++              </div>
++            ) : (
++              <>
++                <div className="product-grid">
++                  {paginatedProducts.map((product) => (
++                    <motion.div
++                      key={product.id}
++                      onClick={() => navigate(`/products/${slug}/${product.id}`)}
++                      className="premium-product-card"
++                      whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,0,0,0.08)' }}
++                      transition={{ duration: 0.5, ease: "easeOut" }}
++                      style={{ cursor: 'pointer' }}
++                    >
++                      <div className="card-image-wrapper">
++                        {product.image ? (
++                          <motion.img 
++                            src={product.image} 
++                            alt={product.name} 
++                            className="card-image"
++                            whileHover={{ scale: 1.05 }}
++                            transition={{ duration: 0.7 }}
++                          />
++                        ) : (
++                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontFamily: 'var(--font-heading)' }}>
++                            No Image Available
++                          </div>
++                        )}
++                        {/* We hide the brand tag if it doesn't exist, as API doesn't provide it directly */}
++                      </div>
++                      
++                      <div className="card-content">
++                        <h3 className="card-title" dangerouslySetInnerHTML={{ __html: product.name }} />
++                        
++                        <div className="card-specs">
++                           {/* Since the API doesn't provide explicit specs, we will display a short excerpt from description if available */}
++                           <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.5, maxHeight: 60, overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: product.description }} />
+                         </div>
+-                      ))}
+-                    </div>
+-                    
+-                    <div className="card-actions">
+-                      <Link 
+-                        to={`/products/${product.categorySlug}/${product.slug}`}
+-                        onClick={(e) => e.stopPropagation()}
+-                        className="btn-quick-view"
+-                        style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+-                      >
+-                        View Product
+-                      </Link>
++                        
++                        <div className="card-actions">
++                          <Link 
++                            to={`/products/${slug}/${product.id}`}
++                            onClick={(e) => e.stopPropagation()}
++                            className="btn-quick-view"
++                            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
++                          >
++                            View Product
++                          </Link>
++                        </div>
++                      </div>
++                    </motion.div>
++                  ))}
++                </div>
++
++                {/* Pagination Controls */}
++                {pagination.total_pages > 1 && (
++                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginTop: 64, flexWrap: 'wrap' }}>
++                    <button 
++                      onClick={() => handlePageChange(page - 1)}
++                      disabled={page === 1}
++                      style={{
++                        padding: '10px 16px', borderRadius: 8, border: '1px solid #E5E7EB', background: page === 1 ? '#F9FAFB' : '#FFF',
++                        color: page === 1 ? '#9CA3AF' : '#001426', cursor: page === 1 ? 'not-allowed' : 'pointer',
++                        fontFamily: 'var(--font-heading)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8
++                      }}
++                    >
++                      <ArrowLeft size={16} /> Previous
++                    </button>
++
++                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
++                      {(() => {
++                        const total = pagination.total_pages;
++                        const curr = page;
++                        const pages = [];
++                        
++                        if (total <= 7) {
++                          for (let i = 1; i <= total; i++) pages.push(i);
++                        } else {
++                          if (curr <= 4) {
++                            pages.push(1, 2, 3, 4, 5, '...', total);
++                          } else if (curr >= total - 3) {
++                            pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total);
++                          } else {
++                            pages.push(1, '...', curr - 1, curr, curr + 1, '...', total);
++                          }
++                        }
++
++                        return pages.map((p, idx) => (
++                          p === '...' ? (
++                            <span key={`ellipsis-${idx}`} style={{ padding: '8px', color: '#9CA3AF' }}>...</span>
++                          ) : (
++                            <button
++                              key={`page-${p}`}
++                              onClick={() => handlePageChange(p)}
++                              style={{
++                                width: 40, height: 40, borderRadius: 8, border: p === curr ? 'none' : '1px solid #E5E7EB',
++                                background: p === curr ? '#0067A4' : '#FFF', color: p === curr ? '#FFF' : '#374151',
++                                fontFamily: 'var(--font-body)', fontWeight: p === curr ? 700 : 500, cursor: 'pointer',
++                                transition: 'all 0.2s'
++                              }}
++                            >
++                              {p}
++                            </button>
++                          )
++                        ));
++                      })()}
+                     </div>
++
++                    <button 
++                      onClick={() => handlePageChange(page + 1)}
++                      disabled={page === pagination.total_pages}
++                      style={{
++                        padding: '10px 16px', borderRadius: 8, border: '1px solid #E5E7EB', background: page === pagination.total_pages ? '#F9FAFB' : '#FFF',
++                        color: page === pagination.total_pages ? '#9CA3AF' : '#001426', cursor: page === pagination.total_pages ? 'not-allowed' : 'pointer',
++                        fontFamily: 'var(--font-heading)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8
++                      }}
++                    >
++                      Next <ArrowRight size={16} />
++                    </button>
+                   </div>
+-                </motion.div>
+-              ))}
+-            </div>
++                )}
++              </>
++            )}
+           </div>
+         </div>
+       </section>
+ 
+       <style>{`
++        @keyframes spin {
++          from { transform: rotate(0deg); }
++          to { transform: rotate(360deg); }
++        }
++        .animate-spin { animation: spin 1s linear infinite; }
++        
+         /* Global hide scrollbar for horizontal containers and drawer */
+         .scrollbar-hide::-webkit-scrollbar { display: none; }
+         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+ 
+         /* Toolbar Styles */
+         .product-toolbar {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           gap: 24px;

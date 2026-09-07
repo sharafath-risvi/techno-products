@@ -12,7 +12,7 @@ export const foundersData = [
       "Championed the shift towards sustainable engineering"
     ],
     philosophy: "True leadership in engineering is not just about building flawless systems; it's about building an ecosystem of trust, reliability, and social responsibility.",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1200&q=80"
+    image: "/AboutTechno_images/murali_srinivasan.png"
   },
   {
     id: 'shobhana-narayanan',
@@ -27,7 +27,7 @@ export const foundersData = [
       "Established continuous learning programs for engineers"
     ],
     philosophy: "A company's true strength lies in its people. By aligning personal growth with organizational values, we engineer excellence from the inside out.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80"
+    image: "/AboutTechno_images/shobana_narayanan.jpg"
   },
   {
     id: 'sumesh-murali',
@@ -42,6 +42,6 @@ export const foundersData = [
       "Spearheaded the rapid response engineering unit"
     ],
     philosophy: "Sales is not about transactions; it's about forging long-term partnerships built on absolute reliability and uncompromised quality.",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=1200&q=80"
+    image: "/AboutTechno_images/sumesh_murali.jpeg"
   }
 ];

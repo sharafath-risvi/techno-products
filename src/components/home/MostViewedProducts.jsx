@@ -5,43 +5,43 @@ import SectionTag, { RevealText } from '../ui/RevealText';
 
 const featuredProducts = [
   {
-    id: 'drives',
-    name: 'Variable Frequency Drives',
-    shortName: 'Drives',
-    slug: 'drives',
-    tag: 'Most Viewed',
-    description: 'Industry-leading variable frequency drives for precise motor speed control, energy savings, and process optimisation across all industrial applications.',
-    image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&h=420&fit=crop&q=85',
-    brands: ['Danfoss', 'Schneider Electric'],
-    count: '50+',
-  },
-  {
-    id: 'motors',
-    name: 'Electric Motors',
+    id: '11104',
+    name: 'MARATHON 2HP 1500RPM Foot IE2 Motor',
     shortName: 'Motors',
-    slug: 'motors',
+    slug: 'motors/11104',
     tag: 'Top Seller',
-    description: 'High-efficiency electric motors from globally trusted manufacturers for demanding industrial environments — from fractional HP to large horsepower ratings.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=420&fit=crop&q=85',
-    brands: ['Innomotics', 'Motovario'],
+    description: 'M-MARATHON 1.5KW 2HP 4P B3, FOOT MTD., 1440 RPM FRAME 90L IP55 415V, 50HZ, VPI IE2 MOTOR',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/1-SCA.png',
+    brands: ['Marathon'],
     count: '80+',
   },
   {
-    id: 'gearboxes',
-    name: 'Gearboxes',
+    id: '10916',
+    name: 'Bonfiglioli 2HP 20 Ratio Flange Mounting Worm Reduction Gearbox',
     shortName: 'Gearboxes',
-    slug: 'gearboxes',
+    slug: 'gearboxes/10916',
     tag: 'Best Rated',
-    description: 'Precision-engineered gearboxes including helical, bevel, worm, and planetary types for reliable torque multiplication and speed reduction.',
-    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&h=420&fit=crop&q=85',
-    brands: ['Motovario', 'SEW'],
+    description: 'W75 UF 20 P90 B5 B3 WORM REDUCTION GEAR BOX',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/11/W-Series.jpeg',
+    brands: ['Bonfiglioli'],
     count: '40+',
   },
+  {
+    id: '10401',
+    name: 'D-DANFOSS-FC 051 PK37 S2 0.50HP/0.37KW-1PHASE',
+    shortName: 'Drives',
+    slug: 'drives/10401',
+    tag: 'Most Viewed',
+    description: 'D-DANFOSS-FC 051 PK37 S2 0.50HP/0.37KW-1PHASE (200-240V) 132F0002',
+    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/FC051-Danfoss-Drive.jpeg',
+    brands: ['Danfoss'],
+    count: '50+',
+  }
 ];
 
 export default function MostViewedProducts() {
   return (
-    <section style={{ padding: '120px 0', background: '#fff' }}>
+    <section style={{ padding: '80px 0 40px 0', background: '#fff' }}>
       <div className="container">
 
         {/* Section Header */}

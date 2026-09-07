@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { MapPin, Phone, Mail, ArrowRight, Building2, User, Briefcase, Mail as MailIcon, Phone as PhoneIcon, MessageSquare, Send, FileText } from 'lucide-react';
 import SectionTag, { RevealText } from '../components/ui/RevealText';
+import CTASection from '../components/home/CTASection';
 
 export default function ContactPage() {
   const heroRef = useRef(null);
@@ -261,35 +262,35 @@ export default function ContactPage() {
             </motion.div>
             
             {/* Sales Network */}
-            <motion.div className="premium-branch-card sales-network-card" style={{ gridColumn: '1 / -1' }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}>
-              <div className="card-header" style={{ marginBottom: '24px', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '16px' }}>
+            <motion.div className="premium-branch-card" style={{ gridColumn: '1 / -1' }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}>
+              <div className="card-header" style={{ marginBottom: '32px', borderBottom: '1px solid rgba(0,0,0,0.06)', paddingBottom: '20px' }}>
                 <span className="office-type">Regional Representation</span>
                 <h3 className="city-name">Sales Network</h3>
               </div>
-              <div className="sales-network-grid">
-                <div className="sales-mini-item">
-                  <span className="sales-city">Trichy</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 98412-11192</span>
+              <div className="sales-network-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Trichy</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-11192</span>
                 </div>
-                <div className="sales-mini-item">
-                  <span className="sales-city">Dindigul</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 98412-75310</span>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Dindigul</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75310</span>
                 </div>
-                <div className="sales-mini-item">
-                  <span className="sales-city">Erode</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 98418-17058</span>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Erode</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98418-17058</span>
                 </div>
-                <div className="sales-mini-item">
-                  <span className="sales-city">Thoothukudi</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 97109-35725</span>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Thoothukudi</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 97109-35725</span>
                 </div>
-                <div className="sales-mini-item">
-                  <span className="sales-city">Kerala</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 98412-75316</span>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Kerala</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75316</span>
                 </div>
-                <div className="sales-mini-item">
-                  <span className="sales-city">Puducherry</span>
-                  <span className="sales-phone"><Phone size={14}/> +91 98412-75314</span>
+                <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Puducherry</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75314</span>
                 </div>
               </div>
             </motion.div>
@@ -352,19 +353,7 @@ export default function ContactPage() {
       </section>
 
       {/* 6. FINAL CTA */}
-      <section className="final-cta-section">
-        <div className="container">
-          <div className="cta-content-box">
-            <h2 className="cta-heading">Let's Power Your Next Industrial Project</h2>
-            <p className="cta-description">
-              Partner with Techno Products for trusted industrial engineering solutions, technical expertise, and world-class support tailored to your business needs.
-            </p>
-            <div className="cta-buttons">
-              <button className="btn btn-primary">Contact Our Team</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CTASection />
 
       <style>{`
         /* Typography & Colors */
@@ -603,27 +592,7 @@ export default function ContactPage() {
           box-shadow: 0 24px 48px rgba(0, 103, 164, 0.08);
           border-color: rgba(0, 103, 164, 0.2);
         }
-        .sales-network-card {
-          background: #00446F;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-          background-size: 20px 20px;
-          border: none;
-        }
-        .sales-network-card:hover {
-          background-color: #003355;
-          border: none;
-        }
-        .sales-network-card .office-type {
-          color: #88C5E6 !important;
-        }
-        .sales-network-card .city-name {
-          color: #FFFFFF !important;
-        }
-        .sales-network-card .card-header {
-          border-bottom-color: rgba(255,255,255,0.1) !important;
-        }
+
         .premium-branch-card .card-header {
           margin-bottom: 24px;
         }
@@ -667,45 +636,13 @@ export default function ContactPage() {
           color: #444;
           margin: 0;
         }
-        .sales-network-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
-        }
         .sales-mini-item {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          padding: 16px 24px;
-          background: rgba(255,255,255,0.05);
-          border-radius: 40px;
-          border: 1px solid rgba(255,255,255,0.1);
-          transition: all 0.3s ease;
-          align-items: center;
-          text-align: center;
+          /* Inline styles applied above */
         }
         .sales-mini-item:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: rgba(255,255,255,0.25);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-          transform: translateY(-4px);
-        }
-        .sales-city {
-          font-family: var(--font-heading);
-          font-weight: 700;
-          font-size: 16px;
-          color: #FFFFFF;
-        }
-        .sales-phone {
-          font-family: var(--font-body);
-          font-size: 14px;
-          color: rgba(255,255,255,0.8);
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-        .sales-phone svg {
-          color: #88C5E6;
+          background: #FFFFFF !important;
+          border-color: rgba(0,103,164,0.15) !important;
+          box-shadow: 0 12px 30px rgba(0, 103, 164, 0.08) !important;
         }
 
         /* 4. Interactive Map */
@@ -775,46 +712,7 @@ export default function ContactPage() {
           color: #666;
         }
 
-        /* 6. Final CTA */
-        .final-cta-section {
-          padding: 120px 0;
-          background: #FFFFFF;
-        }
-        .cta-content-box {
-          background: #0067A4;
-          border-radius: 32px;
-          padding: 80px 40px;
-          text-align: center;
-          color: #FFFFFF;
-          background-image: radial-gradient(circle at top right, #0081CC, transparent 60%);
-          box-shadow: 0 24px 60px rgba(0, 103, 164, 0.25);
-        }
-        .cta-heading {
-          font-family: var(--font-heading);
-          font-weight: 700;
-          font-size: clamp(32px, 4vw, 48px);
-          margin-bottom: 20px;
-        }
-        .cta-description {
-          font-family: var(--font-body);
-          font-size: 18px;
-          color: rgba(255,255,255,0.85);
-          max-width: 650px;
-          margin: 0 auto 40px;
-          line-height: 1.6;
-        }
-        .cta-buttons {
-          display: flex;
-          justify-content: center;
-          gap: 16px;
-        }
-        .cta-buttons .btn-primary {
-          background: #FFFFFF;
-          color: #0067A4;
-        }
-        .cta-buttons .btn-primary:hover {
-          background: #F5F5F5;
-        }
+
 
         /* Responsive */
         @media (max-width: 1024px) {

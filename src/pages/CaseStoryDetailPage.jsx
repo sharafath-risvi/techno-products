@@ -3,17 +3,16 @@ import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, CheckCircle2, Phone, Mail, Clock, MapPin, 
-  Building2, Calendar, Award, ShieldCheck, FileText, Zap, 
-  Check, ArrowUpRight, Layers, Cpu, Settings, Shield
+  Building2, Calendar, Award, ShieldCheck, Loader2
 } from 'lucide-react';
 import SectionTag, { RevealText, StaggerContainer, StaggerItem } from '../components/ui/RevealText';
-import { caseStoriesData, productCategories } from '../data/siteData';
+import { useApi } from '../hooks/useApi';
 
 export default function CaseStoryDetailPage() {
-  const { slug } = useParams();
+  const { postId } = useParams();
   
-  // Find case story by slug or ID, fallback to first story if not found
-  const story = caseStoriesData.find(s => s.slug === slug || s.id.toString() === slug) || caseStoriesData[0];
+  const { data: apiData, loading, error } = useApi(`https://technoproducts.in/wp-json/api/v1/posts/${postId}`);
+  const story = apiData;
 
   // Form state for sticky panel
   const [formData, setFormData] = useState({
@@ -32,13 +31,31 @@ export default function CaseStoryDetailPage() {
     setTimeout(() => setSubmitted(false), 5000);
   };
 
-  // Find related products based on slugs or default to top 3 products
-  const relatedProducts = story.relatedProductSlugs 
-    ? productCategories.filter(p => story.relatedProductSlugs.includes(p.slug) || story.relatedProductSlugs.includes(p.id)).slice(0, 3)
-    : productCategories.slice(0, 3);
+  if (loading) {
+    return (
+      <main style={{ padding: '140px 0 100px', background: '#FFFFFF', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Loader2 size={48} color="#0067A4" className="animate-spin" />
+      </main>
+    );
+  }
 
-  // Find next case stories (excluding current)
-  const nextStories = caseStoriesData.filter(s => s.id !== story.id).slice(0, 2);
+  if (error || !story) {
+    return (
+      <main style={{ padding: '140px 0 100px', background: '#FFFFFF', minHeight: '80vh', textAlign: 'center' }}>
+        <div className="container" style={{ maxWidth: 600 }}>
+          <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 36, color: '#001426', marginBottom: 16 }}>
+            Case Story Not Found
+          </h1>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#64748B', marginBottom: 32 }}>
+            The case story you are looking for may have been updated or moved.
+          </p>
+          <Link to="/case-stories" className="btn btn-primary" style={{ display: 'inline-flex' }}>
+            Back to Case Stories
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={{ background: '#FFFFFF', minHeight: '100vh', position: 'relative' }}>
@@ -78,19 +95,17 @@ export default function CaseStoryDetailPage() {
             </div>
           </RevealText>
 
-          {/* Hero Two-Column Layout */}
-          <div className="cs-hero-grid" style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 56, alignItems: 'center' }}>
+          {/* Hero Single-Column Layout */}
+          <div className="cs-hero-grid" style={{ maxWidth: 800 }}>
             
-            {/* Left Side Content */}
+            {/* Content */}
             <div>
               <RevealText>
                 <h1 style={{ 
                   fontFamily: 'var(--font-heading)', fontWeight: 700, 
                   fontSize: 'clamp(32px, 3.8vw, 54px)', lineHeight: 1.12, 
                   letterSpacing: '-0.025em', color: '#FFFFFF', marginBottom: 28 
-                }}>
-                  {story.title}
-                </h1>
+                }} dangerouslySetInnerHTML={{ __html: story.title }} />
 
                 {/* Key Metadata Grid */}
                 <div style={{ 
@@ -100,53 +115,17 @@ export default function CaseStoryDetailPage() {
                 }} className="cs-meta-grid">
                   <div>
                     <div style={{ fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Building2 size={14} style={{ color: '#FFFFFF' }} /> Client & Industry
+                       Date
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{story.client}</div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#FFFFFF', fontWeight: 500 }}>{story.industry}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{new Date(story.date).toLocaleDateString()}</div>
                   </div>
 
                   <div>
                     <div style={{ fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <MapPin size={14} style={{ color: '#FFFFFF' }} /> Location
+                       Category
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{story.location}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{story.categories?.[0]?.name || 'Industrial Project'}</div>
                   </div>
-
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Calendar size={14} style={{ color: '#FFFFFF' }} /> Project Duration
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{story.duration}</div>
-                  </div>
-
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 700, color: '#FFFFFF', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <Award size={14} style={{ color: '#FFFFFF' }} /> Client Category
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 15, color: '#FFFFFF' }}>{story.clientCategory}</div>
-                  </div>
-                </div>
-
-                {/* Short Executive Summary */}
-                <p style={{ 
-                  fontFamily: 'var(--font-body)', fontSize: 18, color: '#FFFFFF', 
-                  lineHeight: 1.8, marginBottom: 28 
-                }}>
-                  {story.executiveSummary}
-                </p>
-
-                {/* Project Tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}>
-                  {story.tags.map((tag, idx) => (
-                    <span key={idx} style={{ 
-                      fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, 
-                      color: '#FFFFFF', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255, 255, 255, 0.18)', 
-                      padding: '6px 16px', borderRadius: 30, letterSpacing: '0.03em' 
-                    }}>
-                      #{tag}
-                    </span>
-                  ))}
                 </div>
 
                 {/* CTA Button */}
@@ -158,29 +137,6 @@ export default function CaseStoryDetailPage() {
                 </div>
               </RevealText>
             </div>
-
-            {/* Right Side Clean Single Engineering Image */}
-            <div style={{ position: 'relative', height: 460, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <RevealText>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    width: '100%', height: 440, borderRadius: 24, overflow: 'hidden', 
-                    boxShadow: '0 24px 64px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.15)',
-                    position: 'relative'
-                  }}
-                >
-                  <img 
-                    src={story.heroComposition?.[0] || story.gallery?.[0]} 
-                    alt={story.title} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                  />
-                </motion.div>
-              </RevealText>
-            </div>
-
           </div>
         </div>
       </section>
@@ -196,319 +152,11 @@ export default function CaseStoryDetailPage() {
                 LEFT COLUMN (70%): EDITORIAL SECTIONS & GALLERY
                 ==================================================== */}
             <div style={{ minWidth: 0 }}>
-              
-              {/* Overview Section (Clean Neutral Card) */}
               <RevealText>
                 <div style={{ marginBottom: 48, background: '#FFFFFF', padding: '36px 40px', borderRadius: 24, border: '1px solid #E5E7EB', boxShadow: '0 4px 20px rgba(0,0,0,0.025)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Project Overview
-                    </h2>
-                  </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#444', lineHeight: 1.85, fontWeight: 400, margin: 0 }}>
-                    {story.overview}
-                  </p>
+                  <div className="post-content" dangerouslySetInnerHTML={{ __html: story.content }} />
                 </div>
               </RevealText>
-
-              {/* Challenge Section (Clean Neutral Card, no colored side borders) */}
-              <RevealText>
-                <div style={{ marginBottom: 48, background: '#FFFFFF', padding: '36px 40px', borderRadius: 24, border: '1px solid #E5E7EB', boxShadow: '0 4px 20px rgba(0,0,0,0.025)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(22px, 2.8vw, 28px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      The Engineering Challenge
-                    </h2>
-                  </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#444', lineHeight: 1.85, margin: 0 }}>
-                    {story.challenge}
-                  </p>
-                </div>
-              </RevealText>
-
-              {/* Engineering Solution Section */}
-              <RevealText>
-                <div style={{ marginBottom: 64, background: '#FFFFFF', padding: '36px 40px', borderRadius: 24, border: '1px solid #E5E7EB', boxShadow: '0 4px 20px rgba(0,0,0,0.025)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Our Engineering Solution
-                    </h2>
-                  </div>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#444', lineHeight: 1.85, margin: 0 }}>
-                    {story.engineeringSolution}
-                  </p>
-                </div>
-              </RevealText>
-
-              {/* Implementation Process Section */}
-              <RevealText>
-                <div style={{ marginBottom: 72 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Implementation Process
-                    </h2>
-                  </div>
-                  
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-                    {story.implementationProcess?.map((step, idx) => (
-                      <div key={idx} style={{ 
-                        background: '#FFFFFF', padding: '24px 28px', borderRadius: 18, 
-                        border: '1px solid #E5E7EB', boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
-                        display: 'flex', gap: 20, alignItems: 'flex-start'
-                      }}>
-                        <div style={{ 
-                          width: 40, height: 40, borderRadius: 12, background: '#F5F7FA', border: '1px solid #E8ECF0', color: '#0067A4', 
-                          fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, 
-                          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 
-                        }}>
-                          0{idx + 1}
-                        </div>
-                        <div>
-                          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#001426', marginBottom: 6 }}>
-                            {step.phase}
-                          </h3>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#555', lineHeight: 1.7, margin: 0 }}>
-                            {step.desc}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </RevealText>
-
-              {/* ====================================================
-                  PROJECT GALLERY SECTION
-                  ==================================================== */}
-              <RevealText>
-                <div style={{ marginBottom: 72 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Project Gallery & Execution
-                    </h2>
-                  </div>
-
-                  {/* Large Hero Gallery Image */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ duration: 0.4 }}
-                    style={{ 
-                      borderRadius: 24, overflow: 'hidden', boxShadow: '0 16px 44px rgba(0,20,38,0.08)', 
-                      marginBottom: 20, height: 420, position: 'relative', border: '1px solid #E5E7EB'
-                    }}
-                  >
-                    <img 
-                      src={story.gallery?.[0]} 
-                      alt={`${story.title} - Main Gallery`} 
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    />
-                  </motion.div>
-
-                  {/* Three Smaller Images Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }} className="cs-gallery-grid">
-                    {story.gallery?.slice(1, 4).map((imgUrl, gIdx) => (
-                      <motion.div
-                        key={gIdx}
-                        whileHover={{ scale: 1.03, y: -4, boxShadow: '0 16px 36px rgba(0, 20, 38, 0.08)' }}
-                        transition={{ duration: 0.35 }}
-                        style={{ 
-                          borderRadius: 18, overflow: 'hidden', height: 210, 
-                          boxShadow: '0 4px 16px rgba(0,0,0,0.04)', border: '1px solid #E5E7EB',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        <img 
-                          src={imgUrl} 
-                          alt={`Project execution view ${gIdx + 2}`} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }} 
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </RevealText>
-
-              {/* ====================================================
-                  RESULTS & ACHIEVEMENTS SECTION (NEUTRAL STATISTIC CARDS)
-                  ==================================================== */}
-              <div style={{ marginBottom: 80 }}>
-                <RevealText>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Measurable Results Achieved
-                    </h2>
-                  </div>
-                </RevealText>
-
-                <StaggerContainer>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }} className="cs-stats-grid">
-                    {story.resultsStats?.map((stat, sIdx) => (
-                      <StaggerItem key={sIdx}>
-                        <motion.div
-                          whileHover={{ y: -5, boxShadow: '0 18px 40px rgba(0, 20, 38, 0.06)' }}
-                          transition={{ duration: 0.3 }}
-                          style={{
-                            background: '#FFFFFF', padding: '32px 28px', borderRadius: 20,
-                            border: '1px solid #E5E7EB',
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.025)', height: '100%'
-                          }}
-                        >
-                          <div style={{ 
-                            fontFamily: 'var(--font-heading)', fontWeight: 700, 
-                            fontSize: 'clamp(32px, 4vw, 48px)', color: '#001426', lineHeight: 1, 
-                            marginBottom: 8 
-                          }}>
-                            {stat.value}
-                          </div>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 17, color: '#0067A4', marginBottom: 8 }}>
-                            {stat.label}
-                          </div>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.6, margin: 0 }}>
-                            {stat.desc}
-                          </p>
-                        </motion.div>
-                      </StaggerItem>
-                    ))}
-                  </div>
-                </StaggerContainer>
-              </div>
-
-              {/* ====================================================
-                  RELATED PRODUCTS SECTION
-                  ==================================================== */}
-              <div style={{ marginBottom: 80 }}>
-                <RevealText>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 24 }}>
-                    <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                    <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                      Products Engineered in This Project
-                    </h2>
-                  </div>
-                </RevealText>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="cs-products-grid">
-                  {relatedProducts.map((prod) => (
-                    <motion.div
-                      key={prod.id}
-                      whileHover={{ y: -6, boxShadow: '0 16px 40px rgba(0,0,0,0.06)' }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        background: '#FFFFFF', borderRadius: 20, overflow: 'hidden',
-                        border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column'
-                      }}
-                    >
-                      <div style={{ height: 160, overflow: 'hidden', position: 'relative' }}>
-                        <img 
-                          src={prod.image} 
-                          alt={prod.name} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                        />
-                      </div>
-                      <div style={{ padding: 22, flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                        <div>
-                          {/* Trust Badge */}
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '10px 16px', background: 'var(--color-green-xlight)', borderRadius: 12, border: '1px solid var(--color-green-xlight)' }}>
-                            <Shield size={20} style={{ color: 'var(--color-green)' }} />
-                            <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#001426' }}>
-                              Certified Project Execution
-                            </span>
-                          </div>
-                          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 17, color: '#001426', marginBottom: 8 }}>
-                            {prod.name}
-                          </h3>
-                          <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 16 }}>
-                            {prod.shortDesc}
-                          </p>
-                        </div>
-                        <Link 
-                          to={`/products/${prod.slug}`} 
-                          style={{ 
-                            fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, 
-                            color: '#0067A4', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 
-                          }}
-                        >
-                          View Specifications <ArrowRight size={14} />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* ====================================================
-                  NEXT CASE STORIES SECTION
-                  ==================================================== */}
-              <div>
-                <RevealText>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <div style={{ width: 6, height: 24, background: '#0067A4', borderRadius: 4 }} />
-                      <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 32px)', color: '#001426', letterSpacing: '-0.02em' }}>
-                        Explore Next Case Stories
-                      </h2>
-                    </div>
-                    <Link to="/case-stories" className="btn btn-secondary" style={{ padding: '10px 24px', fontSize: 14 }}>
-                      View All Stories <ArrowRight size={16} />
-                    </Link>
-                  </div>
-                </RevealText>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 28 }} className="cs-next-grid">
-                  {nextStories.map((nextStory) => (
-                    <motion.div
-                      key={nextStory.id}
-                      whileHover={{ y: -6, boxShadow: '0 16px 44px rgba(0,0,0,0.06)' }}
-                      transition={{ duration: 0.35 }}
-                      style={{
-                        background: '#FFFFFF', borderRadius: 22, overflow: 'hidden',
-                        border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.025)'
-                      }}
-                    >
-                      <div style={{ height: 220, overflow: 'hidden', position: 'relative' }}>
-                        <img 
-                          src={nextStory.gallery?.[0] || nextStory.heroComposition?.[0]} 
-                          alt={nextStory.title} 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                        />
-                        <div style={{
-                          position: 'absolute', top: 16, left: 16,
-                          background: '#0067A4', color: '#fff', padding: '6px 14px',
-                          borderRadius: 20, fontFamily: 'var(--font-heading)', fontWeight: 700,
-                          fontSize: 11, letterSpacing: '0.06em', textTransform: 'uppercase'
-                        }}>
-                          {nextStory.industry}
-                        </div>
-                      </div>
-                      <div style={{ padding: '26px 28px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                        <div>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 13, color: '#666', marginBottom: 6, textTransform: 'uppercase' }}>
-                            {nextStory.client}
-                          </div>
-                          <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, color: '#001426', lineHeight: 1.3, marginBottom: 16 }}>
-                            {nextStory.title}
-                          </h3>
-                        </div>
-                        <Link 
-                          to={`/case-stories/${nextStory.slug}`} 
-                          style={{ 
-                            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, 
-                            color: '#0067A4', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 
-                          }}
-                        >
-                          Read Case Story <ArrowRight size={16} />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
             </div>
 
             {/* ====================================================
@@ -665,8 +313,37 @@ export default function CaseStoryDetailPage() {
         </div>
       </section>
 
-      {/* Responsive Styles */}
       <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin { animation: spin 1s linear infinite; }
+        
+        .post-content {
+          font-family: var(--font-body);
+          font-size: 17px;
+          color: #444;
+          line-height: 1.85;
+          font-weight: 400;
+        }
+        .post-content h2, .post-content h3 {
+          font-family: var(--font-heading);
+          color: #001426;
+          margin-top: 32px;
+          margin-bottom: 16px;
+        }
+        .post-content p {
+          margin-bottom: 24px;
+        }
+        .post-content ul, .post-content ol {
+          margin-bottom: 24px;
+          padding-left: 24px;
+        }
+        .post-content li {
+          margin-bottom: 8px;
+        }
+        
         @media (max-width: 1024px) {
           .cs-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .cs-main-layout { grid-template-columns: 1fr !important; gap: 48px !important; }

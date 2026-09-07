@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import SectionTag, { RevealText } from '../ui/RevealText';
 
 const teamMembers = [
-  { name: 'Rajesh Kumar', role: 'Managing Director', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80' },
-  { name: 'Ananya Sharma', role: 'Head of Operations', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80' },
-  { name: 'Vikram Singh', role: 'Technical Director', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80' },
-  { name: 'Priya Patel', role: 'Client Relations', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=80' },
-  { name: 'Arun Krishnan', role: 'Lead Engineer', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80' },
-  { name: 'Neha Gupta', role: 'Supply Chain Head', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80' },
-  { name: 'Sanjay Reddy', role: 'Sales Director', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80' },
-  { name: 'Kavita Menon', role: 'Finance Controller', image: 'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=400&q=80' },
+  { name: 'Abdul Rahman', role: 'Managing Director', image: '/AboutTechno_images/team_images/abdul_rahman.png' },
+  { name: 'Balaji', role: 'Head of Operations', image: '/AboutTechno_images/team_images/balaji.png' },
+  { name: 'Nishanth', role: 'Technical Director', image: '/AboutTechno_images/team_images/nishanth.png' },
+  { name: 'Saravanan', role: 'Client Relations', image: '/AboutTechno_images/team_images/saravanan.png' },
+  { name: 'Sivaraman', role: 'Lead Engineer', image: '/AboutTechno_images/team_images/sivaraman.png' },
+  { name: 'Veerabhatran', role: 'Supply Chain Head', image: '/AboutTechno_images/team_images/veerabhatran.png' },
+  { name: 'Vigneshwaran', role: 'Sales Director', image: '/AboutTechno_images/team_images/vigneshwaran.png' },
+  { name: 'Aarthi', role: 'Finance Controller', image: '/AboutTechno_images/team_images/Aarthi.png' },
 ];
 
 const containerVariants = {
@@ -86,7 +86,7 @@ export default function MeetOurTeam() {
 
       <style>{`
         .meet-our-team-section {
-          padding: 120px 0;
+          padding: 20px 0 120px 0;
           background-color: #FFFFFF;
           position: relative;
           overflow: hidden;

@@ -11,7 +11,7 @@ export default function LeadershipStory() {
     <section style={{ 
       background: '#FFFFFF', 
       paddingTop: 80, 
-      paddingBottom: 160,
+      paddingBottom: 20,
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -47,7 +47,7 @@ export default function LeadershipStory() {
         </div>
 
         {/* Alternating Founder Rows */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 140 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 60 }}>
           {foundersData.map((founder, index) => {
             const isEven = index % 2 === 1; // 0=left, 1=right, 2=left
             

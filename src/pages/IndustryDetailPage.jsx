@@ -3,20 +3,36 @@ import { motion } from 'framer-motion';
 import { ArrowRight, AlertTriangle, CheckCircle2, Zap } from 'lucide-react';
 import SectionTag, { RevealText } from '../components/ui/RevealText';
 import { industriesData, productCategories } from '../data/siteData';
+import { useProducts } from '../context/ProductsContext';
 
 export default function IndustryDetailPage() {
   const { slug } = useParams();
   const industry = industriesData.find(i => i.slug === slug);
   if (!industry) return <Navigate to="/industries" replace />;
 
+  const mappedHeroImage = {
+    'cement-mining': '/industries images/cement_mining.png',
+    'automotive': '/industries images/automative.png',
+    'hvac': '/industries images/HVAC.png',
+    'textile': '/industries images/Textile.png',
+    'infrastructure': '/industries images/infracture.png',
+    'water-treatment': '/industries images/waterTreatment.png',
+    'food-beverage': '/industries images/food_beverage.jpg',
+    'paper-pulp': '/industries images/paper_pulp.jpg'
+  }[industry.slug] || industry.image;
+
+  const { products } = useProducts();
   const relatedCats = productCategories.filter(c => industry.relatedProducts.includes(c.id));
+  const relatedCategorySlugs = relatedCats.map(c => c.slug);
+  const relevantProducts = products.filter(p => relatedCategorySlugs.includes(p.category_slug)).slice(0, 3);
+  const displayProducts = relevantProducts.length === 3 ? relevantProducts : products.slice(0, 3);
 
   return (
     <main>
       {/* Hero */}
       <section style={{ position: 'relative', minHeight: '70vh', display: 'flex', alignItems: 'center', overflow: 'hidden', paddingTop: 84 }}>
         <div style={{ position: 'absolute', inset: 0 }}>
-          <img src={industry.heroImage} alt={industry.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img src={mappedHeroImage} alt={industry.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,10,26,0.9) 50%, rgba(0,10,26,0.3) 100%)' }} />
         </div>
         <div className="container" style={{ position: 'relative', zIndex: 1, paddingTop: 80, paddingBottom: 80 }}>
@@ -141,9 +157,9 @@ export default function IndustryDetailPage() {
               </div>
             </RevealText>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }} className="ind-related-grid">
-              {relatedCats.map((cat, i) => (
+              {displayProducts.map((product, i) => (
                 <motion.div
-                  key={cat.slug}
+                  key={product.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -151,14 +167,14 @@ export default function IndustryDetailPage() {
                   whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0,0,0,0.1)' }}
                   style={{ background: '#fff', borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(0,0,0,0.06)' }}
                 >
-                  <div style={{ height: 160, overflow: 'hidden', background: '#F0F2F5' }}>
-                    <img src={cat.image} alt={cat.name} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                  <div style={{ height: 260, overflow: 'hidden', background: '#F0F2F5' }}>
+                    <img src={product.image} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
                   </div>
-                  <div style={{ padding: 24 }}>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#000', marginBottom: 8 }}>{cat.name}</h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.6, marginBottom: 16 }}>{cat.description.slice(0, 80)}...</p>
-                    <Link to={`/products/${cat.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#00446F', textDecoration: 'none' }}>
-                      View Products <ArrowRight size={13} />
+                  <div style={{ padding: 32 }}>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#000', marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.name}</h3>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', lineHeight: 1.6, marginBottom: 24, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description || 'Industrial product engineered for reliability.'}</p>
+                    <Link to={`/products/${product.category_slug}/${product.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 15, color: '#00446F', textDecoration: 'none' }}>
+                      View Product <ArrowRight size={15} />
                     </Link>
                   </div>
                 </motion.div>

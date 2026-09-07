@@ -2,9 +2,6 @@
   overflow: hidden;
   width: 100%;
   position: relative;
-  /* Premium faded edges for Awwwards style */
-  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .marquee-track {
@@ -52,7 +49,6 @@
 }
 
 .partner-card:hover {
-  transform: scale(1.05) translateZ(0); /* Hardware accelerate scale */
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.06);
 }

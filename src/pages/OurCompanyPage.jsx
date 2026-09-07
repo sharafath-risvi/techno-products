@@ -71,7 +71,7 @@ export default function OurCompanyPage() {
 
       {/* 4. Core Values — premium editorial redesign */}
       <section style={{
-        padding: '120px 0',
+        padding: '60px 0 120px 0',
         background: '#FAFAFA',
         position: 'relative',
         overflow: 'hidden',

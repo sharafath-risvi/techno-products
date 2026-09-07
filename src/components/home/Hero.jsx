@@ -1,51 +1,55 @@
 import { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const dynamicWords = [
-  "Industrial Solutions",
-  "Automation Systems",
-  "Mechanical Excellence",
-  "Electrical Innovation",
-  "Control Solutions"
+const storyContent = [
+  {
+    subtitle: "ESTABLISHED 1999",
+    title: "Engineering With A Higher Purpose",
+    desc: "Delivering world-class industrial automation and mechanical solutions across India."
+  },
+  {
+    subtitle: "AUTHORISED CHANNEL PARTNER",
+    title: "Global Industrial Brands",
+    desc: "Strategic alliances with Danfoss, Innomotics, Schneider Electric, and Motovario."
+  },
+  {
+    subtitle: "END-TO-END CAPABILITY",
+    title: "Mechanical, Electrical & Control",
+    desc: "From concept design to commissioning and lifecycle maintenance support."
+  }
 ];
 
 export default function Hero() {
   const containerRef = useRef();
   const maskLayerRef = useRef();
   const textMaskRef = useRef();
-  const darkOverlayRef = useRef();
-  const contentRef = useRef();
+  const videoRef = useRef();
   
-  const [wordIndex, setWordIndex] = useState(0);
+  const [activeText, setActiveText] = useState(null);
+  const zoomProgressRef = useRef(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % dynamicWords.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
+  // Effect to automatically scroll to the next section when the video finishes,
+  // but ONLY if the user has already manually zoomed in (zoomProgress > 0.5).
+  // We no longer lock the DOM siblings.
+  // Removed unused effect
 
   useGSAP(() => {
-    // Hide text and overlay initially
-    const elements = contentRef.current.children;
-    gsap.set(elements, { y: 60, opacity: 0 });
-    gsap.set(darkOverlayRef.current, { opacity: 0 });
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top top',
-        end: '+=1300', // Reduced scroll distance for faster content reveal
+        end: '+=1500', // Scroll distance for the zoom
         pin: true,
-        scrub: 1.2, // Buttery smooth scrub ensures perfect reverse animation
-        anticipatePin: 1
+        scrub: 1.2, // Smooth scrub
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          zoomProgressRef.current = self.progress;
+        }
       }
     });
     
@@ -53,31 +57,41 @@ export default function Hero() {
     tl.to(textMaskRef.current, {
       scale: 180, // Massive scale to ensure the stroke covers the viewport
       ease: 'power3.in',
-      duration: 1.2
+      duration: 1
     });
 
     // 2. Fade out the mask layer slightly before the text stops scaling to prevent any artifacting
     tl.to(maskLayerRef.current, {
       opacity: 0,
       duration: 0.2
-    }, "-=0.1");
-
-    // 3. Fade in dark overlay
-    tl.to(darkOverlayRef.current, {
-      opacity: 1,
-      duration: 0.4
-    }, "-=0.1");
-
-    // 4. Stagger Content Reveal (Only Headline and Buttons remain)
-    tl.to(elements, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6,
-      stagger: 0.15,
-      ease: 'power2.out'
     }, "-=0.2");
 
   }, { scope: containerRef });
+
+  const handleTimeUpdate = () => {
+    if (!videoRef.current) return;
+    const { currentTime, duration } = videoRef.current;
+    if (!duration) return;
+    
+    const progress = currentTime / duration;
+    
+    // Text logic synced to video timeline
+    // ONLY show if the zoom is mostly complete (zoomProgress >= 0.8) so video is large
+    let newActiveText = null;
+    if (zoomProgressRef.current >= 0.8) {
+      if (progress > 0.10 && progress < 0.35) {
+        newActiveText = 0;
+      } else if (progress > 0.40 && progress < 0.65) {
+        newActiveText = 1;
+      } else if (progress > 0.70 && progress < 0.95) { 
+        newActiveText = 2;
+      }
+    }
+    
+    if (activeText !== newActiveText) {
+      setActiveText(newActiveText);
+    }
+  };
 
   return (
     <section ref={containerRef} style={{
@@ -97,21 +111,123 @@ export default function Hero() {
         zIndex: 0
       }}>
         <video 
-          src="/videos/hero.mp4"
+          ref={videoRef}
+          onTimeUpdate={handleTimeUpdate}
+          src="/videos/download.mp4"
           autoPlay 
-          loop 
+          loop
           muted 
           playsInline
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ 
+            width: '100%', 
+            height: '100%', 
+            objectFit: 'cover'
+          }}
         />
-        
-        {/* Subtle Dark Overlay (fades in later) */}
-        <div ref={darkOverlayRef} style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(0, 16, 31, 0.45)',
-          willChange: 'opacity'
-        }} />
+      </div>
+
+      {/* Storytelling Text Overlay (Z-index 1 places it inside the video world) */}
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pointerEvents: 'none'
+      }}>
+        <AnimatePresence mode="wait">
+          {activeText !== null && (
+            <motion.div
+              key={activeText}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { duration: 0.1 } }, // Fast base entry so children can animate
+                exit: { opacity: 0, transition: { duration: 0.8, delay: 0.4 } } // Ensure parent waits for longest child (0.6s + 0.2s delay)
+              }}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                textAlign: 'center',
+                maxWidth: '960px',
+                padding: '0 24px',
+                position: 'absolute', // Ensures strict stacking
+              }}
+            >
+              {/* Premium Eyebrow */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 15 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 } },
+                  exit: { opacity: 0, y: -10, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 } }
+                }}
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(11px, 1.2vw, 13px)',
+                  letterSpacing: '0.25em',
+                  textTransform: 'uppercase',
+                  color: '#E2E8F0',
+                  marginBottom: '24px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  textShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                }}
+              >
+                <div style={{ width: 32, height: 2, background: '#D71B32' }} /> {/* Brand Accent Red */}
+                {storyContent[activeText].subtitle}
+                <div style={{ width: 32, height: 2, background: '#D71B32' }} />
+              </motion.div>
+              
+              {/* Strong Large Headline (Masked Reveal) */}
+              <div style={{ overflow: 'hidden', paddingBottom: '8px', marginBottom: '24px' }}>
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: '100%' },
+                    visible: { opacity: 1, y: '0%', transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.25 } },
+                    exit: { opacity: 0, y: '-30%', transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 } }
+                  }}
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(36px, 5vw, 76px)',
+                    fontWeight: 800,
+                    color: '#FFFFFF',
+                    lineHeight: 1.08,
+                    letterSpacing: '-0.025em',
+                    textShadow: '0 12px 40px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)',
+                  }}
+                >
+                  {storyContent[activeText].title}
+                </motion.div>
+              </div>
+
+              {/* Short Supporting Copy */}
+              <motion.div
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 } },
+                  exit: { opacity: 0, y: 15, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0 } }
+                }}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'clamp(16px, 1.4vw, 20px)',
+                  color: 'rgba(255,255,255,0.75)',
+                  lineHeight: 1.6,
+                  maxWidth: '640px',
+                  fontWeight: 400,
+                  textShadow: '0 4px 20px rgba(0,0,0,0.6)',
+                }}
+              >
+                {storyContent[activeText].desc}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Mask Layer (mix-blend-mode: multiply) */}
@@ -130,7 +246,7 @@ export default function Hero() {
       }}>
         <h1 ref={textMaskRef} style={{
           fontFamily: 'var(--font-heading)',
-          fontWeight: 700,
+          fontWeight: 900, // Very bold
           fontSize: 'clamp(100px, 22vw, 300px)',
           lineHeight: 1,
           letterSpacing: '-0.02em',
@@ -142,81 +258,6 @@ export default function Hero() {
           TECHNO
         </h1>
       </div>
-
-      {/* Hero Content Container */}
-      <motion.div style={{
-        position: 'relative',
-        zIndex: 10,
-        width: '100%',
-        maxWidth: 1200,
-        margin: '0 auto',
-        padding: '0 24px',
-        textAlign: 'center'
-      }}>
-        <div ref={contentRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          
-          {/* Main Headline with Dynamic Changing Second Line */}
-          <h1 style={{
-            fontFamily: 'var(--font-heading)', fontWeight: 700,
-            fontSize: 'clamp(40px, 6vw, 96px)', lineHeight: 1.1,
-            letterSpacing: '-0.02em', color: '#ffffff', marginBottom: 96,
-            textShadow: '0 12px 40px rgba(0,0,0,0.3)'
-          }}>
-            Engineering Reliable<br />
-            <span style={{ display: 'block', position: 'relative', height: '1.2em', width: '100%' }}>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={wordIndex}
-                  initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  exit={{ opacity: 0, y: -20, filter: 'blur(8px)' }}
-                  transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  style={{ color: '#4F8FBF', position: 'absolute', left: 0, right: 0 }}
-                >
-                  {dynamicWords[wordIndex]}
-                </motion.span>
-              </AnimatePresence>
-            </span>
-          </h1>
-
-          {/* Buttons */}
-          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Link to="/products" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: '#0067A4', color: '#ffffff',
-              padding: '18px 40px', borderRadius: 40,
-              fontFamily: 'var(--font-body)', fontSize: 16, fontWeight: 700,
-              textDecoration: 'none', transition: 'all 0.3s ease',
-              boxShadow: '0 12px 24px rgba(0, 103, 164, 0.3)'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              Explore Products <ArrowRight size={18} />
-            </Link>
-
-            <Link to="/contact" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(255,255,255,0.1)', color: '#ffffff',
-              backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.3)',
-              padding: '18px 40px', borderRadius: 40,
-              fontFamily: 'var(--font-body)', fontSize: 16, fontWeight: 700,
-              textDecoration: 'none', transition: 'all 0.3s ease',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.background = '#ffffff';
-              e.currentTarget.style.color = '#00101F';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            >
-              Contact Our Experts
-            </Link>
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 }

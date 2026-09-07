@@ -1,0 +1,242 @@
+
+/* Masonry */
+
+/* Masonry Metro */
+.iqonic-metro-block .iqonic-project-box{
+    margin-bottom:0;
+}
+.iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item, .iqonic-metro-block .grid-sizer{
+    width: 25%;
+    display: block;
+}
+
+.iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item.s-25.portrait{
+    width: 50%;
+}
+.iqonic-masonry-block .iqonic-masonry-item{
+    position: relative;
+    overflow: hidden;
+}
+.iqonic-masonry-block .owl-carousel .iqonic-project-box{
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+.iqonic-masonry-block .iqonic-port-overlay, .iqonic-masonry-block .owl-carousel .iqonic-project-box .iqonic-port-overlay {
+    position: absolute;
+    left: 0px;
+    bottom: 30px;
+    margin-right: 30px;
+    background: var(--color-theme-white);
+    padding: 20px 25px 20px;
+    -webkit-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+}
+.iqonic-masonry-block .owl-carousel .iqonic-grid-item.s-60.col-md-6:hover .iqonic-project-box .iqonic-port-overlay{
+    left: 15px;
+    opacity: 1;
+}
+.iqonic-masonry-block  .iqonic-masonry-item:hover .iqonic-port-overlay, .iqonic-masonry-block .owl-carousel .iqonic-project-box:hover .iqonic-port-overlay{
+    left: 30px;
+    opacity: 1;
+}
+.iqonic-masonry-block .iqonic-port-overlay .iqonic-port-cat{
+    color: var(--global-font-color);
+    font-weight: var(--font-weight-semi-bold);
+    font-size: var(--font-size-normal);
+    letter-spacing: var(--letter-spacing);
+    text-transform: uppercase;
+}
+.iqonic-masonry-block .iqonic-port-overlay .iqonic-port-name{
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.iqonic-masonry-block .iqonic-masonry-item .iqonic-project-box img{
+    width:100%;
+    -webkit-transform: scale(1.01);
+    -ms-transform: scale(1.01);
+    transform: scale(1.01);
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}
+.iqonic-masonry-block .iqonic-masonry-item .iqonic-project-box:hover img{
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item {
+    background: var(--color-theme-primary);
+}
+.iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item .project-main-details {
+    width: 100%;
+    height: 100%;
+    padding: 100px 50px;
+    position: relative;
+}
+.iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item .left.mill-title-box .mill-subtitle,
+.iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item .left.mill-title-box .mill-heading-title,
+.iqonic-masonry-block .project-main-details .mill_main h5, .iqonic-masonry-block .project-main-details .mill-title-desc p
+{
+    color: var(--color-theme-white);
+}
+.iqonic-masonry-block .project-main-details .mill_main p{
+    margin: 7px 0 10px 0;
+}
+.iqonic-masonry-block .project-main-details .mill_main .mill-client {
+    margin: 7px 0;
+}
+/* .mill_content .mill_main:last-child {
+    margin: 40px 0px 0;
+} */
+.iqonic-pro-slider .mill_content .mill_main{
+    margin-bottom: 25px;
+}
+.iqonic-pro-slider .mill_content .mill_main p.mill-date{margin-bottom: 0; } 
+.iqonic-pro-slider .mill_content .mill_main:last-child{margin-bottom: 0;}
+.iqonic-pro-slider .mill_content .mill_main{display: inline-block;width: 100%;}
+.iqonic-pro-slider .mill_content .mill_main .mill-client ,.iqonic-pro-slider .mill_content .mill_main .mill-date{
+    color: var(--color-theme-secondary);
+    margin-bottom: 0;
+}
+.iqonic-project-box{
+    position: relative;
+    overflow: hidden;
+    z-index: 9;
+}
+.iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item .iqonic-grid-item.s-60.col-md-6{
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* Project Detail */
+
+.iqonic-project-details-block-inner {
+	width: 100%;
+	margin: 0;
+	background: var(--global-font-title);
+	position: relative;
+	padding: 50px;
+    color: var(--color-theme-white);
+}
+
+.iqonic-project-details-block-inner .iqonic-port-name.mill_heading {
+	color: var(--color-theme-white);
+	display: inline-block;
+	vertical-align: top;
+	position: relative;
+	padding-right: 15px;
+}
+
+.iqonic-project-details-block-inner .iqonic-port-name::after {
+	content: "";
+	position: absolute;
+	width: 6px;
+	height: 7px;
+	background: var(--color-theme-secondary);
+	right: 0;
+	bottom: 8px;
+}
+
+.iqonic-project-details-block-inner .mill_heading {
+	color: var(--color-theme-secondary);
+}
+
+.iqonic-project-details-block-inner .mill_content {
+	display: flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;  
+	align-items: center;
+	flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.iqonic-project-details-block-inner .mill_main p {
+	margin: 10px 0 0;
+	font-family: var(--highlight-font-family);
+}
+
+.iqonic-project-details-block-inner .mill_content .mill_main:last-child {
+	margin-top: 0;
+}
+
+.iqonic-project-details-block-inner .mill_content ul.mill-client {
+	display: flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex; 
+	align-items: center;
+	flex-wrap: wrap;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+.iqonic-project-details-block-inner .mill_content ul.mill-client li {
+	list-style: none;
+	width: auto;
+	padding-right: 15px;
+	text-transform: uppercase;
+    position: relative;
+    font-family: var(--highlight-font-family);
+}
+
+.iqonic-project-details-block-inner .mill_content .mill_main {
+	width: 50%;
+}
+.iqonic-masonry-block .iqonic-pro-slider .owl-item .iqonic-grid-item
+{
+    background-size: cover !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+}
+/* responsive */
+@media (max-width:1024px){
+    /* .iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item, .iqonic-metro-block .grid-sizer{
+        width: 50%; 
+    } */
+    .iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item.s-25.portrait{
+        width: 100%;
+    }
+    .iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item.s-25.landscape{width:50%;}
+    .iqonic-masonry-block .owl-carousel.iqonic-grid .owl-item .project-main-details{padding:30px;}
+}
+
+@media (max-width:767px){
+
+    .iqonic-project-details-block-inner .mill_content .mill_main {
+        width: 100%;
+    }
+
+    .iqonic-project-details-block-inner {
+        width: 100%;
+        margin: 30px auto 0;
+        padding: 30px;
+    }
+
+    .iqonic-project-details-block-inner .iqonic-port-name.mill_heading{
+        padding-right: 10px;
+    }
+    .iqonic-masonry-block .iqonic-pro-slider .owl-item .iqonic-grid-item
+    {
+        padding: 200px;
+        background-size: cover!important;
+    }
+
+}
+
+
+@media (max-width:480px){
+    .iqonic-metro-block .iqonic-masonry-grid .iqonic-masonry-item.s-25.landscape{width:100%;}
+    .iqonic-masonry-block .iqonic-masonry-item .iqonic-project-box img{height:300px;object-fit:cover;}
+}
