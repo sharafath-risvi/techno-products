@@ -41,7 +41,7 @@ const featuredProducts = [
 
 export default function MostViewedProducts() {
   return (
-    <section style={{ padding: '80px 0 40px 0', background: '#fff' }}>
+    <section className="most-viewed-section" style={{ padding: '80px 0 40px 0', background: '#fff' }}>
       <div className="container">
 
         {/* Section Header */}
@@ -185,7 +185,10 @@ export default function MostViewedProducts() {
 
       <style>{`
         @media (max-width: 1024px) { .mvp-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 640px) { .mvp-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 640px) { 
+          .mvp-grid { grid-template-columns: 1fr !important; }
+          .most-viewed-section { padding-top: 120px !important; }
+        }
         .mvp-card-img:hover { transform: scale(1.05); }
       `}</style>
     </section>

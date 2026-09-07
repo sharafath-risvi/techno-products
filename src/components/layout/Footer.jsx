@@ -34,8 +34,7 @@ const YoutubeIcon = ({ size = 22 }) => (
 const quickLinks = [
   { label: 'About', href: '/about' },
   { label: 'Products', href: '/products' },
-  { label: 'Services', href: '/services' },
-  { label: 'Case Studies', href: '/case-stories' },
+  { label: 'Case Stories', href: '/case-stories' },
   { label: 'Contact', href: '/contact' }
 ];
 
@@ -79,12 +78,6 @@ export default function Footer() {
             <p className="footer-desc">
               Premier channel partner for top global industrial brands. Delivering reliable engineering solutions and performance-driven products since 1999.
             </p>
-            <div className="footer-socials">
-              <a href="#" aria-label="LinkedIn"><LinkedinIcon size={22} /></a>
-              <a href="#" aria-label="Facebook"><FacebookIcon size={22} /></a>
-              <a href="#" aria-label="Instagram"><InstagramIcon size={22} /></a>
-              <a href="#" aria-label="YouTube"><YoutubeIcon size={22} /></a>
-            </div>
           </motion.div>
 
           {/* Column 2: Quick Links */}
@@ -138,12 +131,8 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container">
           <div className="bottom-bar-inner">
-            <div className="copyright">
+            <div className="copyright" style={{ width: '100%', textAlign: 'center' }}>
               © {new Date().getFullYear()} Techno Products Development Pvt. Ltd. All Rights Reserved.
-            </div>
-            <div className="legal-links">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
             </div>
           </div>
         </div>
@@ -337,6 +326,47 @@ export default function Footer() {
           color: #0067A4;
         }
         
+        @media (max-width: 640px) {
+          .premium-footer {
+            padding-top: 56px;
+          }
+          .footer-main-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            padding-bottom: 48px;
+          }
+          .footer-logo img {
+            height: 80px !important;
+          }
+          .footer-desc {
+            font-size: 15px;
+            margin-bottom: 28px;
+          }
+          .footer-heading {
+            font-size: 14px;
+            margin-bottom: 20px;
+          }
+          .footer-link-list {
+            gap: 12px;
+          }
+          .footer-contact-item {
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .premium-footer {
+            padding-top: 48px;
+          }
+          .footer-socials {
+            gap: 12px;
+          }
+          .footer-socials a {
+            width: 40px;
+            height: 40px;
+          }
+        }
+
         @media (max-width: 640px) {
           .bottom-bar-inner {
             flex-direction: column;

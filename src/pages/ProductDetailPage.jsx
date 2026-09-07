@@ -1055,6 +1055,88 @@ export default function ProductDetailPage() {
           transition: background 0.3s;
         }
         .btn-quick-view:hover { background: #0067A4; }
+
+        /* ── Mobile Responsive ───────────────────── */
+        @media (max-width: 768px) {
+          /* Breadcrumb bar: account for 72px mobile navbar */
+          .breadcrumb-section {
+            padding-top: 90px;
+            padding-bottom: 16px;
+          }
+          /* Truncate long product names in breadcrumb */
+          .truncate-breadcrumb {
+            max-width: 160px;
+            font-size: 12px;
+          }
+          /* Product hero: reduce section padding */
+          .product-hero-section {
+            padding-top: 28px;
+            padding-bottom: 48px;
+          }
+          .main-image-wrapper {
+            padding: 20px;
+          }
+          /* Gallery badge repositioning */
+          .gallery-badge-status {
+            font-size: 10px;
+            padding: 4px 10px;
+            bottom: 12px;
+            right: 12px;
+          }
+          .gallery-badge-brand {
+            font-size: 11px;
+            padding: 4px 10px;
+            top: 12px;
+            left: 12px;
+          }
+          /* Action buttons: stack on mobile */
+          .detail-actions {
+            flex-direction: column;
+          }
+          .detail-actions .btn {
+            width: 100%;
+            justify-content: center;
+          }
+          /* Tab buttons: smaller on mobile */
+          .tab-btn {
+            padding: 10px 14px;
+            font-size: 13px;
+            gap: 6px;
+          }
+          /* Tabs: hide icon labels on tiny screens */
+          .tab-btn-text {
+            display: none;
+          }
+          /* Product title: reduce size */
+          .product-title {
+            font-size: clamp(22px, 6vw, 32px);
+          }
+          /* Quick specs: single column on mobile */
+          .quick-specs-grid {
+            grid-template-columns: 1fr;
+          }
+          .quick-spec-item {
+            border-right: none;
+          }
+          /* Downloads grid: single column */
+          .downloads-grid {
+            grid-template-columns: 1fr;
+          }
+          /* Applications grid: single column */
+          .applications-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .tab-btn {
+            padding: 8px 10px;
+            font-size: 11px;
+          }
+          .product-title {
+            font-size: clamp(20px, 5.5vw, 28px);
+          }
+        }
       `}</style>
     </main>
   );

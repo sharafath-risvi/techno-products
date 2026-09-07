@@ -50,9 +50,9 @@ export default function CertificationsSection() {
   const x = useTransform(scrollYProgress, [0, 1], [0, scrollRange]);
 
   return (
-    <section ref={targetRef} style={{ position: 'relative', height: '350vh', background: '#FAFAFA' }}>
+    <section ref={targetRef} className="cert-section" style={{ position: 'relative', height: '350vh', background: '#FAFAFA' }}>
       {/* Sticky Container - One stable viewport during the entire 350vh scroll */}
-      <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <div className="cert-sticky-wrapper" style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         
         {/* Soft Spotlight from ceiling */}
         <div className="museum-spotlight" />

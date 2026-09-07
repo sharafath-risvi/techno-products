@@ -56,9 +56,9 @@ export default function FounderQuickViewModal({ founder, onClose }) {
           overflow: 'hidden',
           boxShadow: '0 40px 100px rgba(0,0,0,0.3)',
           display: 'flex',
-          flexDirection: 'row',
           zIndex: 1
         }}
+        className="founder-modal-container"
       >
         {/* Close Button */}
         <button 
@@ -86,7 +86,7 @@ export default function FounderQuickViewModal({ founder, onClose }) {
         </button>
 
         {/* LEFT: Tall Image */}
-        <div style={{ width: '40%', flexShrink: 0, position: 'relative' }}>
+        <div className="modal-img-col" style={{ width: '40%', flexShrink: 0, position: 'relative' }}>
           <img 
             src={founder.image} 
             alt={founder.name}
@@ -95,7 +95,7 @@ export default function FounderQuickViewModal({ founder, onClose }) {
         </div>
 
         {/* RIGHT: Scrollable Content */}
-        <div style={{ 
+        <div className="modal-text-col" style={{ 
           width: '60%', 
           padding: '60px 48px',
           overflowY: 'auto',
@@ -144,6 +144,26 @@ export default function FounderQuickViewModal({ founder, onClose }) {
           
         </div>
       </motion.div>
+      <style>{`
+        .founder-modal-container {
+          flex-direction: row;
+        }
+        @media (max-width: 1023px) {
+          .founder-modal-container {
+            flex-direction: column !important;
+          }
+          .modal-img-col {
+            width: 100% !important;
+            height: 40vh !important;
+            min-height: 250px !important;
+          }
+          .modal-text-col {
+            width: 100% !important;
+            padding: 32px 24px !important;
+            gap: 24px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

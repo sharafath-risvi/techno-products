@@ -89,7 +89,7 @@ export default function ProductCategoryPage() {
   // Extract a real product image for the hero section safely
   const heroImage = useMemo(() => {
     if (slug === 'all') {
-      return "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop";
+      return "/industries images/allproducts.webp";
     }
     const productWithImage = allProducts?.find(p => p.category_slug === slug && p.image);
     return productWithImage?.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop";
@@ -169,15 +169,50 @@ export default function ProductCategoryPage() {
 
   return (
     <main style={{ background: '#F5F5F5', minHeight: '100vh', paddingBottom: 120 }}>
+      <style>{`
+        .cat-hero-img-box {
+          position: absolute;
+          right: 0;
+          top: 0;
+          bottom: 0;
+          width: 40%;
+          opacity: 0.3;
+        }
+        .cat-hero-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+        .cat-hero-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to right, #001426 0%, transparent 100%);
+        }
+
+        /* Desktop Only adjustments for All Products if required */
+        @media (min-width: 1024px) {
+          .cat-hero-img-box.is-all-products {
+            /* Keep it consistent with other product pages: full bleed, opacity 0.3, with gradient */
+            width: 45%; 
+            opacity: 0.35;
+          }
+          .cat-hero-img-box.is-all-products .cat-hero-img {
+            object-fit: cover;
+            object-position: center center;
+          }
+        }
+      `}</style>
+
       {/* 1. Category Hero (Unchanged) */}
-      <section style={{ 
+      <section className="category-hero-section" style={{ 
         background: '#001426', 
         paddingTop: 140, paddingBottom: 80, 
         position: 'relative', overflow: 'hidden' 
       }}>
-        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '40%', opacity: 0.3 }}>
-          <img src={heroImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, #001426 0%, transparent 100%)' }} />
+        <div className={`cat-hero-img-box ${slug === 'all' ? 'is-all-products' : ''}`}>
+          <img src={heroImage} alt="" className="cat-hero-img" />
+          <div className="cat-hero-overlay" />
         </div>
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
@@ -193,7 +228,7 @@ export default function ProductCategoryPage() {
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: 40 }}>
               {category.description}
             </p>
-            <div style={{ display: 'flex', gap: 24 }}>
+            <div className="category-stats-row" style={{ display: 'flex', gap: 24 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#fff' }}>{category.count}</span>
                 <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Models Available</span>
@@ -210,7 +245,7 @@ export default function ProductCategoryPage() {
 
       {/* 2. Layout with Sidebar Filter and Product Grid */}
       <section style={{ paddingTop: 40, paddingBottom: 64, background: '#FFFFFF', minHeight: '100vh' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32, alignItems: 'start' }}>
+        <div className="container products-layout-grid" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32, alignItems: 'start' }}>
           
           {/* Left Sidebar: Sticky Filter */}
           <div style={{ position: 'sticky', top: 24, maxHeight: 'calc(100vh - 48px)', overflowY: 'auto' }} className="scrollbar-hide filter-sidebar">
@@ -300,6 +335,16 @@ export default function ProductCategoryPage() {
 
           {/* Right Area: Product Grid */}
           <div>
+            {/* Mobile-only filter bar */}
+            <div className="mobile-filter-bar">
+              <input
+                type="text"
+                className="mobile-search-input"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
               <div className="product-count">
                 Showing Page <span>{pagination.page}</span> of <span>{pagination.total_pages}</span> ({pagination.total} Products Total)
@@ -846,6 +891,100 @@ export default function ProductCategoryPage() {
           .toolbar-left, .toolbar-right { flex-direction: column; align-items: stretch; }
           .filter-drawer { width: 100%; }
         }
+
+        /* ── Mobile-only layout ───────────────────── */
+        @media (max-width: 768px) {
+          /* Hero: reduce padding-top for mobile navbar */
+          .category-hero-section {
+            padding-top: 90px !important;
+            padding-bottom: 48px !important;
+          }
+          /* Hero stats row: wrap */
+          .category-stats-row {
+            flex-wrap: wrap;
+            gap: 16px;
+          }
+          /* Sidebar: hide on mobile */
+          .filter-sidebar {
+            display: none !important;
+          }
+          /* Layout grid: full width on mobile */
+          .products-layout-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0 !important;
+          }
+          /* Product grid: 2-column on mobile */
+          .product-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+          }
+          /* Card image: shorter on mobile */
+          .card-image-wrapper {
+            height: 180px !important;
+            padding: 16px !important;
+          }
+          /* Card content: reduce padding */
+          .card-content {
+            padding: 16px !important;
+          }
+          /* Card title: smaller font */
+          .card-title {
+            font-size: 13px !important;
+            margin-bottom: 12px !important;
+          }
+          /* View Product button: smaller */
+          .btn-quick-view {
+            padding: 10px 0 !important;
+            font-size: 12px !important;
+          }
+          /* Mobile filter bar at top */
+          .mobile-filter-bar {
+            display: flex !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .product-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .card-image-wrapper {
+            height: 200px !important;
+          }
+        }
+
+        /* Mobile filter bar - hidden by default (desktop) */
+        .mobile-filter-bar {
+          display: none;
+          align-items: center;
+          justify-content: space-between;
+          padding: 12px 0 20px;
+          gap: 12px;
+        }
+        .mobile-filter-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: #001426;
+          color: #FFF;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 10px;
+          font-family: var(--font-heading);
+          font-weight: 700;
+          font-size: 13px;
+          cursor: pointer;
+        }
+        .mobile-search-input {
+          flex: 1;
+          padding: 10px 14px;
+          background: #F8F9FA;
+          border: 1px solid #E5E7EB;
+          border-radius: 10px;
+          font-family: var(--font-body);
+          font-size: 14px;
+          outline: none;
+        }
+        .mobile-search-input:focus { border-color: #0067A4; }
       `}</style>
     </main>
   );

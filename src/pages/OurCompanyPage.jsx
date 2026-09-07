@@ -304,6 +304,27 @@ export default function OurCompanyPage() {
         secondaryBtnText="Contact Our Experts"
         secondaryBtnLink="/contact"
       />
+      
+      <style>{`
+        @media (max-width: 1023px) {
+          .values-grid-company {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+          .cv-card {
+            padding: 32px 24px !important;
+            min-height: auto !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .cv-card h3 {
+            font-size: 20px !important;
+          }
+          .cv-card p {
+            font-size: 15px !important;
+          }
+        }
+      `}</style>
     </main>
   );
 }

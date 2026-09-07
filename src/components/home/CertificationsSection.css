@@ -127,7 +127,7 @@
 }
 
 .cert-gsap-track-wrapper {
-  width: 100vw;
+  width: 100%;
   margin: 40px 0;
   position: relative;
   left: 50%;
@@ -149,4 +149,16 @@
 
 .cert-link:hover {
   transform: translateY(-8px);
+}
+
+/* --- Mobile Sizing Overrides --- */
+@media (max-width: 768px) {
+  .cert-gsap-slide-item img {
+    height: 240px !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+  }
+  .cert-sticky-wrapper h2 {
+    font-size: clamp(28px, 6vw, 40px) !important;
+  }
 }

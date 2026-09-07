@@ -189,8 +189,14 @@ export default function IndustriesPage() {
 
       <style>{`
         @media (max-width: 1024px) { .industries-hub-grid { grid-template-columns: repeat(3, 1fr) !important; } }
-        @media (max-width: 768px) { .industries-hub-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 480px) { .industries-hub-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 768px) { 
+          .industries-hub-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+          .industries-sector-section { padding: 64px 0 !important; }
+        }
+        @media (max-width: 480px) { 
+          .industries-hub-grid { grid-template-columns: 1fr !important; }
+          .industries-cta-section { padding: 56px 0 !important; }
+        }
 
         /* Hover effects */
         .ind-card:hover .ind-card-img { transform: scale(1.07); }

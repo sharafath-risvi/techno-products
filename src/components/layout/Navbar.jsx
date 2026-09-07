@@ -138,7 +138,7 @@ export default function Navbar() {
         }}
         role="navigation" aria-label="Main navigation"
       >
-        <div className="container" style={{ display: 'flex', alignItems: 'center', height: 112 }}>
+        <div className="container nav-container" style={{ display: 'flex', alignItems: 'center', height: 112 }}>
 
           {/* Logo */}
           <div style={{ flex: '0 0 auto', paddingLeft: 8, paddingRight: 24 }}>
@@ -150,7 +150,7 @@ export default function Navbar() {
           </div>
 
           {/* Center Nav */}
-          <div className="hidden md:flex" style={{ display: 'flex', alignItems: 'center', gap: 40, flex: 1, paddingLeft: 16 }}>
+          <div className="nav-center-cluster" style={{ alignItems: 'center', gap: 40, flex: 1, paddingLeft: 16 }}>
             {navItems.map((item) => {
               const hasDropdown = item.dropdown || item.mega || item.industries || item.solutionsMega || item.insightsMega;
               const isOpen = openDropdown === item.label;
@@ -546,9 +546,9 @@ export default function Navbar() {
         </div>
 
         {/* Right: Phone + CTA — absolutely pinned to right edge, outside container */}
-        <div className="hidden md:flex" style={{
+        <div className="nav-right-cluster" style={{
           position: 'absolute', top: 0, right: 24, height: 112,
-          display: 'flex', alignItems: 'center', gap: 4,
+          alignItems: 'center', gap: 4,
         }}>
           <a
             href="tel:+914448555333"
@@ -606,43 +606,79 @@ export default function Navbar() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.35 }}
                 >
-                  <Link to={item.href} onClick={() => setMobileOpen(false)}
-                    style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#fff', display: 'block', paddingBlock: 12, borderBottom: '1px solid rgba(255,255,255,0.08)', textDecoration: 'none' }}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.dropdown && (
-                    <div style={{ paddingLeft: 16, paddingBottom: 8 }}>
-                      {item.dropdown.map(child => (
-                        <Link key={child.href} to={child.href} onClick={() => setMobileOpen(false)}
-                          style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.6)', display: 'block', paddingBlock: 6, textDecoration: 'none' }}
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                  {item.industries && (
-                    <div style={{ paddingLeft: 16, paddingBottom: 8 }}>
-                      {industriesData.map(ind => (
-                        <Link key={ind.slug} to={`/industries/${ind.slug}`} onClick={() => setMobileOpen(false)}
-                          style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(255,255,255,0.6)', display: 'block', paddingBlock: 6, textDecoration: 'none' }}
-                        >
-                          {ind.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <MobileNavItem item={item} onClickMain={() => setMobileOpen(false)} products={products} apiCategories={apiCategories} staticProductCategories={staticProductCategories} solutions={solutions} industriesData={industriesData} />
                 </motion.div>
               ))}
             </nav>
-            <div style={{ marginTop: 'auto', paddingBottom: 48, paddingTop: 32 }}>
-              <a href="tel:+914448555333" style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', fontSize: 14, display: 'block', marginBottom: 8, textDecoration: 'none' }}>+91 44 4855 5333</a>
-              <a href="mailto:info@technoproducts.in" style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', fontSize: 14, textDecoration: 'none' }}>info@technoproducts.in</a>
+            <div style={{ marginTop: 24, paddingBottom: 48, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Link to="/contact" onClick={() => setMobileOpen(false)} style={{ width: '100%', fontFamily: 'var(--font-heading)', color: '#fff', fontSize: 18, fontWeight: 600, display: 'block', marginBottom: 24, textDecoration: 'none', background: activeBlue, padding: '12px 24px', borderRadius: 40, textAlign: 'center' }}>
+                Speak to an Expert
+              </Link>
+              <a href="tel:+914448555333" style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.7)', fontSize: 16, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}><Phone size={16} /> +91 44 4855 5333</a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+      <style>{`
+        .nav-center-cluster {
+          display: flex;
+        }
+        .nav-right-cluster {
+          display: flex;
+        }
+        @media (max-width: 1023px) {
+          .nav-center-cluster {
+            display: none !important;
+          }
+          .nav-right-cluster {
+            display: none !important;
+          }
+          .nav-container {
+            justify-content: space-between !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
+
+const MobileNavItem = ({ item, onClickMain, products, apiCategories, staticProductCategories, solutions, industriesData }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const hasChildren = item.dropdown || item.mega || item.solutionsMega || item.industries || item.insightsMega;
+
+  let childrenLinks = [];
+  if (item.dropdown) childrenLinks = item.dropdown;
+  else if (item.children) childrenLinks = item.children; 
+  else if (item.industries) childrenLinks = industriesData.map(i => ({ label: i.name, href: `/industries/${i.slug}` }));
+  else if (item.solutionsMega) childrenLinks = solutions.map(s => ({ label: s.title, href: `/solutions/${s.slug}` }));
+  else if (item.insightsItems) childrenLinks = item.insightsItems;
+
+  return (
+    <div>
+      <div 
+        onClick={() => { if (!item.href && hasChildren) setIsOpen(!isOpen); }}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBlock: 16, cursor: (!item.href && hasChildren) ? 'pointer' : 'default' }}
+      >
+         {item.href ? (
+           <Link to={item.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#fff', textDecoration: 'none', flex: 1 }}>{item.label}</Link>
+         ) : (
+           <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#fff', flex: 1 }}>{item.label}</span>
+         )}
+         {hasChildren && (
+           <div style={{ background: 'none', border: 'none', color: '#fff', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+             <ChevronDown size={20} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(-90deg)', transition: 'transform 0.2s' }} />
+           </div>
+         )}
+      </div>
+      {hasChildren && isOpen && (
+         <div style={{ paddingLeft: 16, paddingBlock: 12, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {childrenLinks.map(child => (
+               <Link key={child.label || child.name} to={child.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+                  {child.label || child.name}
+               </Link>
+            ))}
+         </div>
+      )}
+    </div>
+  );
+};

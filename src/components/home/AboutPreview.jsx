@@ -142,43 +142,9 @@ export default function AboutPreview() {
       // TABLET & MOBILE: TAILORED PROGRESSIVE REVEALS
       // ==========================================
       mm.add('(max-width: 1023px)', () => {
-        // Parallax reveal for hero image
-        gsap.fromTo(
-          imageFrameRef.current,
-          { scale: 0.95, y: 30, opacity: 0.2 },
-          {
-            scale: 1.0,
-            y: 0,
-            opacity: 1,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: imageFrameRef.current,
-              start: 'top 85%',
-              end: 'top 40%',
-              scrub: 1,
-            },
-          }
-        );
-
-        // Fade-up animation for each of the 3 premium cards
-        storyBlocksRef.current.forEach((block) => {
-          if (!block) return;
-          gsap.fromTo(
-            block,
-            { opacity: 0, y: 42 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.8,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: block,
-                start: 'top 86%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        });
+        // We do not apply scroll-trigger pinning or complex scrub animations
+        // on mobile to ensure a clean, reliable CSS-based vertical stack.
+        // The components will just fall back to standard CSS layout flow.
       });
 
       return () => mm.revert();
@@ -590,42 +556,52 @@ export default function AboutPreview() {
         @media (max-width: 1023px) {
           .story-pinned-stage {
             min-height: auto;
-            padding: 100px 5%;
-            gap: 60px;
+            padding: 80px 4% 60px;
+            gap: 40px;
           }
 
           .story-screen-1 {
             position: relative;
             top: auto;
-            margin-bottom: 24px;
+            margin-bottom: 0;
+            padding: 0 12px;
           }
 
           .sticky-image-frame {
-            height: 440px;
-            border-radius: 24px;
+            height: clamp(280px, 45vh, 440px);
+            border-radius: 20px;
           }
 
           .story-content-chapters {
             grid-template-columns: 1fr;
-            gap: 24px;
+            gap: 20px;
           }
 
           .story-chapter-card {
-            min-height: 280px;
-            padding: 30px 28px;
+            min-height: 240px;
+            padding: 28px 24px;
+            border-radius: 20px;
           }
         }
 
         @media (max-width: 640px) {
           .story-pinned-stage {
-            padding: 80px 5%;
+            padding: 60px 4% 48px;
+            gap: 32px;
           }
 
-          .sticky-image-frame {
-            height: 320px;
+          .screen-1-heading {
+            font-size: clamp(28px, 7vw, 42px);
+          }
+
+          .screen-1-intro {
+            font-size: 16px;
           }
 
           .apple-story-btn {
+            font-size: 11px;
+            padding: 10px 20px;
+            gap: 6px;
             width: 100%;
             justify-content: center;
           }

@@ -138,6 +138,12 @@ ul, ol {
   max-width: 1600px;
 }
 
+@media (max-width: 1023px) {
+  .page-wrapper {
+    padding-top: 112px;
+  }
+}
+
 /* ============================================
    TYPOGRAPHY SYSTEM
    ============================================ */
@@ -1217,5 +1223,179 @@ ul, ol {
   height: 80px;
   background: linear-gradient(to bottom, transparent, var(--color-grey-light));
   pointer-events: none;
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS — ALL RULES BELOW ARE
+   MOBILE-ONLY (max-width). Desktop is untouched.
+   ============================================ */
+
+/* ── Viewport & overflow prevention ─────────── */
+html, body {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --container-pad: 16px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 72px;
+    --space-5xl: 80px;
+  }
+
+  /* Hard-stop horizontal overflow */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* All sections get sensible mobile vertical padding */
+  .section {
+    padding-block: 56px;
+  }
+  .section--sm {
+    padding-block: 40px;
+  }
+  .section--lg {
+    padding-block: 64px;
+  }
+
+  /* Page hero: account for mobile navbar ~72px height */
+  .page-hero {
+    padding-top: 100px;
+    padding-bottom: 48px;
+  }
+
+  /* Buttons: touch-friendly on mobile */
+  .btn {
+    padding: 14px 28px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Button groups: stack vertically if too tight */
+  .btn-group-mobile-stack {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+  }
+  .btn-group-mobile-stack .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Product cards: fix any overflowing content */
+  .product-card__img-wrap {
+    aspect-ratio: 4/3;
+  }
+
+  /* Service cards: reduce padding */
+  .service-card {
+    padding: 28px 24px;
+  }
+
+  /* Stat numbers: ensure they don't overflow */
+  .stat-number {
+    font-size: clamp(32px, 8vw, 48px);
+  }
+
+  /* Hero: prevent height issues on mobile */
+  .hero {
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  /* Mega menu: never show on mobile */
+  .mega-menu {
+    display: none !important;
+  }
+
+  /* Trust stats: guarantee single column on small mobile */
+  .trust-stats-layout {
+    flex-direction: column !important;
+    gap: 32px !important;
+    align-items: center !important;
+  }
+  .trust-divider {
+    display: none !important;
+  }
+
+  /* Values grid: 1 column on mobile */
+  .values-grid-company {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Generic 2-col grids → 1-col on mobile */
+  .grid-2 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-pad: 16px;
+  }
+
+  .btn {
+    padding: 13px 22px;
+    font-size: 12px;
+  }
+
+  /* Floating action buttons: reduce size */
+  .whatsapp-float {
+    width: 48px;
+    height: 48px;
+    bottom: 20px;
+    right: 16px;
+  }
+  .phone-float {
+    width: 48px;
+    height: 48px;
+    bottom: 80px;
+    right: 16px;
+  }
+  .schedule-float {
+    width: 48px;
+    height: 48px;
+    bottom: 140px;
+    right: 16px;
+  }
+  .schedule-float__icon {
+    width: 48px;
+    height: 48px;
+  }
+  .schedule-float:hover {
+    width: 196px;
+  }
+}
+
+/* ── Images: responsive safeguards ───────────── */
+@media (max-width: 768px) {
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ── CTA section padding ─────────────────────── */
+@media (max-width: 768px) {
+  /* CTASection inline padding shrink */
+  .cta-inner-padding {
+    padding: 72px 0 !important;
+  }
+}
+
+/* ── Mobile-only utility classes ─────────────── */
+@media (max-width: 768px) {
+  .mobile-hide { display: none !important; }
+  .mobile-show { display: block !important; }
+  .mobile-flex { display: flex !important; }
+  .mobile-center { text-align: center !important; }
+  .mobile-full-width { width: 100% !important; max-width: 100% !important; }
+}
+
+@media (min-width: 769px) {
+  .desktop-hide { display: none !important; }
 }
 

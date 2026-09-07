@@ -128,6 +128,7 @@ export default function App() {
               exit="out"
               variants={pageVariants}
               transition={pageTransition}
+              className="page-wrapper"
             >
               <Routes location={location} key={location.pathname}>
                 {/* Existing pages – untouched */}

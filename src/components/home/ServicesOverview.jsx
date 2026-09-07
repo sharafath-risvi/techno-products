@@ -15,7 +15,7 @@ const SERVICES_DATA = [
     desc: 'Complete industrial maintenance, installation, and optimization for reliable engineering performance.',
     mainImage: '/images/mechanical_service.webp',
     smallImage: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=400&q=80',
-    link: '/services',
+    link: '/contact',
   },
   {
     id: '02',
@@ -24,7 +24,7 @@ const SERVICES_DATA = [
     desc: 'Professional diagnostics, drive servicing, and preventive maintenance for maximum uptime.',
     mainImage: '/images/electrical_service.jpeg',
     smallImage: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=400&q=80',
-    link: '/services',
+    link: '/contact',
   },
   {
     id: '03',
@@ -33,7 +33,7 @@ const SERVICES_DATA = [
     desc: 'Bespoke manufacturing and maintenance of industrial control panels for reliable automation.',
     mainImage: '/images/control_panel.png',
     smallImage: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400&q=80',
-    link: '/services',
+    link: '/contact',
   },
 ];
 
@@ -45,88 +45,55 @@ export default function ServicesOverview() {
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
-
-      // Desktop: Cinematic Card Transition
-      mm.add('(min-width: 1024px)', () => {
-        const panels = panelsRef.current;
-        
-        // Setup initial states for stacking
-        // First panel is visible at center. Subsequent panels are pushed offscreen to the right.
-        gsap.set(panels, { 
-          zIndex: (i) => i,
-          xPercent: (i) => i === 0 ? 0 : 100 
-        });
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            pin: false, // Use CSS sticky instead of GSAP pin
-            scrub: 1,
-            start: 'top top',
-            end: 'bottom bottom',
-            snap: {
-              snapTo: 'labels',
-              duration: { min: 0.4, max: 0.8 },
-              ease: 'power2.inOut',
-            }
-          },
-        });
-
-        tl.addLabel('panel0');
-
-        // Transition 1: Panel 0 exits, Panel 1 enters
-        tl.to(
-          panels[0],
-          { opacity: 0, filter: 'blur(8px)', xPercent: -15, ease: 'power2.inOut' },
-          'panel0+=0.01' // Start immediately after label
-        ).to(
-          panels[1],
-          { xPercent: 0, ease: 'power2.inOut' },
-          '<'
-        );
-
-        tl.addLabel('panel1');
-
-        // Transition 2: Panel 1 exits, Panel 2 enters
-        tl.to(
-          panels[1],
-          { opacity: 0, filter: 'blur(8px)', xPercent: -15, ease: 'power2.inOut' },
-          'panel1+=0.01'
-        ).to(
-          panels[2],
-          { xPercent: 0, ease: 'power2.inOut' },
-          '<'
-        );
-
-        tl.addLabel('panel2');
+      // Use GSAP timeline for all viewports
+      const panels = panelsRef.current;
+      
+      // Setup initial states for stacking
+      gsap.set(panels, { 
+        zIndex: (i) => i,
+        xPercent: (i) => i === 0 ? 0 : 100 
       });
 
-      // Mobile/Tablet: Standard Vertical Reveal
-      mm.add('(max-width: 1023px)', () => {
-        // Reset properties that might have been applied by desktop
-        gsap.set(panelsRef.current, { clearProps: 'all' });
-        
-        panelsRef.current.forEach((panel) => {
-          gsap.fromTo(
-            panel,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 1,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: panel,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapperRef.current,
+          pin: false, // Use CSS sticky instead of GSAP pin
+          scrub: 1,
+          start: 'top top',
+          end: 'bottom bottom',
+          snap: {
+            snapTo: 'labels',
+            duration: { min: 0.4, max: 0.8 },
+            ease: 'power2.inOut',
+          }
+        },
       });
 
-      return () => mm.revert();
+      tl.addLabel('panel0');
+
+      tl.to(
+        panels[0],
+        { opacity: 0, filter: 'blur(8px)', xPercent: -15, ease: 'power2.inOut' },
+        'panel0+=0.01'
+      ).to(
+        panels[1],
+        { xPercent: 0, ease: 'power2.inOut' },
+        '<'
+      );
+
+      tl.addLabel('panel1');
+
+      tl.to(
+        panels[1],
+        { opacity: 0, filter: 'blur(8px)', xPercent: -15, ease: 'power2.inOut' },
+        'panel1+=0.01'
+      ).to(
+        panels[2],
+        { xPercent: 0, ease: 'power2.inOut' },
+        '<'
+      );
+
+      tl.addLabel('panel2');
     },
     { scope: sectionRef }
   );
@@ -203,24 +170,15 @@ export default function ServicesOverview() {
         .expertise-wrapper {
           position: relative;
           width: 100%;
-        }
-
-        @media (min-width: 1024px) {
-          .expertise-wrapper {
-            height: 300vh; /* Allow enough scroll distance for 3 panels */
-          }
-          
-          .editorial-expertise-section {
-            position: sticky !important;
-            top: 0;
-            height: 100vh;
-          }
+          height: 300vh;
         }
 
         .editorial-expertise-section {
+          position: sticky !important;
+          top: 0;
+          height: 100vh;
           background: #FFFFFF;
           overflow: hidden;
-          position: relative;
           -webkit-font-smoothing: antialiased;
         }
 
@@ -257,30 +215,23 @@ export default function ServicesOverview() {
 
         .editorial-scroll-container {
           position: relative;
-          width: 100vw;
+          width: 100%;
           height: 100vh;
           overflow: hidden;
         }
 
         .editorial-panel {
-          position: relative;
-          width: 100vw;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
           height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 220px 4% 60px;
-          background: #FFFFFF; /* Essential for overlaying the outgoing card */
+          background: #FFFFFF;
           will-change: transform, opacity, filter;
-        }
-
-        /* Desktop specific absolute stacking */
-        @media (min-width: 1024px) {
-          .editorial-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-          }
         }
 
         .editorial-inner {
@@ -344,7 +295,7 @@ export default function ServicesOverview() {
           transform: rotate(180deg);
           font-family: var(--font-heading);
           font-weight: 700;
-          font-size: clamp(20px, 3.5vh, 48px); /* Unified size ensuring all text fits within container */
+          font-size: clamp(20px, 3.5vh, 48px);
           line-height: 0.85;
           color: #00101F;
           letter-spacing: -0.02em;
@@ -439,13 +390,11 @@ export default function ServicesOverview() {
           position: relative;
           overflow: hidden;
           background: #F8FAFC;
-          /* Base masking setup for smooth edges */
           -webkit-mask-image: -webkit-radial-gradient(white, black);
           transform: translateZ(0);
           box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1);
         }
 
-        /* Editorial Asymmetric Geometries */
         .clip-style-0 {
           clip-path: polygon(0 0, 100% 8%, 100% 100%, 6% 100%);
           border-radius: 32px 16px 24px 48px;
@@ -474,33 +423,39 @@ export default function ServicesOverview() {
         }
 
         @media (max-width: 1023px) {
+          .expertise-wrapper {
+            margin-top: 64px;
+          }
           .expertise-intro-heading {
             position: relative;
-            top: 0;
+            top: 120px;
             left: 0;
             transform: none;
-            text-align: left;
-            margin: 0 auto 60px auto;
+            text-align: center;
+            margin: 0 0 24px 0;
             max-width: 100%;
+            padding: 0 20px;
           }
-          .editorial-expertise-section {
-            padding: 80px 5%;
-          }
-          .editorial-scroll-container {
-            width: 100%;
-            height: auto;
-            flex-direction: column;
-            gap: 80px;
+          .expertise-intro-desc {
+            display: block !important;
+            font-size: 15px !important;
+            margin-top: 8px !important;
+            line-height: 1.5 !important;
+            max-width: 100% !important;
           }
           .editorial-panel {
-            width: 100%;
-            height: auto;
-            padding: 0;
+            padding: 180px 20px 40px;
           }
           .editorial-inner {
-            grid-template-columns: 1fr;
-            grid-template-rows: auto auto auto;
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #F8FAFC;
+            padding: 24px 24px 0 24px;
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.04);
+            height: 75vh;
+            max-height: 600px;
           }
           .editorial-left {
             flex-direction: row;
@@ -508,38 +463,52 @@ export default function ServicesOverview() {
             border-right: none;
             border-bottom: 1px solid rgba(0,0,0,0.06);
             padding-right: 0;
-            padding-bottom: 20px;
+            padding-bottom: 16px;
             height: auto;
+            flex-shrink: 0;
           }
           .small-image-wrap {
-            display: none; /* Hide small image on mobile for cleaner layout */
+            display: none;
           }
           .editorial-center {
             flex-direction: column;
             align-items: flex-start;
             height: auto;
-            gap: 24px;
+            gap: 16px;
+            flex-shrink: 0;
           }
           .vertical-title {
             writing-mode: horizontal-tb;
             transform: none;
-            font-size: 42px;
+            font-size: 28px;
+            letter-spacing: -0.02em;
           }
           .vertical-title-long {
-            font-size: 36px;
+            font-size: 24px;
           }
           .center-content {
             max-width: 100%;
           }
+          .editorial-desc {
+            margin-bottom: 16px;
+            font-size: 15px;
+          }
           .editorial-right {
-            height: 400px;
+            flex: 1;
+            height: auto;
             padding-left: 0;
+            margin-top: 12px;
+            margin-inline: -24px; /* negate inner padding to hit edge */
+            overflow: hidden;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
           }
           .premium-image-wrap {
-            border-radius: 24px;
-            clip-path: none !important; /* Standardize on mobile */
+            border-radius: 0 !important;
+            clip-path: none !important;
           }
         }
+
       `}</style>
       </section>
     </div>

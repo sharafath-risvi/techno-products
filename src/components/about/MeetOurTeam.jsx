@@ -173,6 +173,9 @@ export default function MeetOurTeam() {
             grid-template-columns: repeat(2, 1fr);
             gap: 24px;
           }
+          .meet-our-team-section {
+            padding-top: 64px;
+          }
         }
 
         @media (max-width: 640px) {

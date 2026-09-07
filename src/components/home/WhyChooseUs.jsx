@@ -1,5 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import SectionTag from '../ui/RevealText';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const reasons = [
   {
@@ -42,9 +47,86 @@ const reasons = [
 
 export default function WhyChooseUs() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  const targetRef = useRef(null);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useGSAP(
+    () => {
+      if (!isMobile || !trackRef.current || !targetRef.current) return;
+      
+      const getScrollAmount = () => {
+        let trackWidth = trackRef.current.scrollWidth;
+        return -(trackWidth - window.innerWidth);
+      };
+
+      const tween = gsap.to(trackRef.current, {
+        x: getScrollAmount,
+        ease: "none"
+      });
+
+      ScrollTrigger.create({
+        trigger: targetRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        animation: tween,
+        scrub: 1,
+        invalidateOnRefresh: true,
+      });
+    },
+    { scope: targetRef, dependencies: [isMobile] }
+  );
+
+  if (isMobile) {
+    return (
+      <section ref={targetRef} className="why-mobile-pinned-section" style={{ height: '350vh', position: 'relative', background: '#FFFFFF' }}>
+        <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          
+          {/* Mobile Header */}
+          <div style={{ textAlign: 'center', marginBottom: 40, padding: '0 20px', position: 'relative', zIndex: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+              <SectionTag>Why Choose Us</SectionTag>
+            </div>
+            <h2 style={{ fontSize: 'clamp(32px, 6vw, 40px)', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 16px', lineHeight: 1.1, color: '#000' }}>
+              The <span style={{ color: '#00446F' }}>TECHNO</span> Advantage
+            </h2>
+            <p style={{ fontSize: 16, fontFamily: 'var(--font-body)', color: '#555555', margin: 0, lineHeight: 1.6 }}>
+               We don't just supply products; we engineer complete industrial solutions.
+            </p>
+          </div>
+
+          {/* Mobile GSAP-style Track */}
+          <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+            <div ref={trackRef} style={{ display: 'flex', gap: 16, width: 'max-content', padding: '0 20px' }}>
+               {reasons.map(item => (
+                  <div key={item.number} style={{ width: '85vw', height: 420, borderRadius: 24, overflow: 'hidden', position: 'relative', flexShrink: 0, boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
+                     <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,16,31,0.95) 0%, rgba(0,16,31,0.2) 100%)' }} />
+                     <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: 24 }}>
+                       <div style={{ fontSize: 40, fontWeight: 700, color: '#D32F2F', marginBottom: 8, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>{item.number}</div>
+                       <h3 style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 12, fontFamily: 'var(--font-heading)', lineHeight: 1.2 }}>{item.title}</h3>
+                       <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.85)', fontFamily: 'var(--font-body)', lineHeight: 1.5, margin: 0 }}>{item.desc}</p>
+                     </div>
+                  </div>
+               ))}
+            </div>
+          </div>
+
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="why-choose-section">
+    <section className="why-choose-section desktop-only">
       <div className="container">
         
         {/* Static Header Elements */}
@@ -360,38 +442,7 @@ export default function WhyChooseUs() {
           .card-active-title { font-size: 26px; }
         }
 
-        @media (max-width: 768px) {
-          .horizontal-accordion-container { 
-            flex-direction: column; 
-            height: auto; 
-            gap: 24px; 
-          }
-          .horizontal-card { 
-            flex: auto; 
-            margin-left: 0; 
-            height: 480px; 
-            border-radius: 24px; 
-            box-shadow: 0 16px 40px rgba(0,0,0,0.06); 
-            cursor: default;
-          }
-          .card-inactive-content { display: none; }
-          
-          .horizontal-card.active { box-shadow: 0 16px 40px rgba(0,0,0,0.06); }
-          
-          .card-active-text-panel {
-            width: 100%;
-            height: auto;
-            bottom: 0;
-            top: auto;
-            opacity: 1;
-            padding: 32px;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-          }
-          
-          .card-active-number { font-size: 40px; margin-bottom: 12px; }
-          .card-active-title { font-size: 24px; }
-        }
+        /* Mobile layout overrides are removed here because we render a completely distinct component structure for mobile viewports using framer-motion sticky scrolling */
       `}</style>
     </section>
   );

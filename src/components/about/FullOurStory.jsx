@@ -11,7 +11,8 @@ const TIMELINE_DATA = [
 
 export default function FullOurStory() {
   return (
-    <section style={{ 
+    <>
+      <section style={{ 
       position: 'relative', 
       background: '#FAFAFA', 
       paddingTop: 160, 
@@ -20,7 +21,7 @@ export default function FullOurStory() {
     }}>
       <div className="container" style={{ position: 'relative' }}>
         
-        <div style={{
+        <div className="our-story-grid" style={{
           display: 'grid',
           gridTemplateColumns: '48% 1fr',
           gap: '7%',
@@ -28,7 +29,7 @@ export default function FullOurStory() {
         }}>
           
           {/* LEFT: Sticky Image */}
-          <div style={{
+          <div className="our-story-image-wrap" style={{
             position: 'sticky',
             top: 120,
             height: 'calc(100vh - 200px)',
@@ -190,5 +191,22 @@ export default function FullOurStory() {
         </div>
       </div>
     </section>
+      
+      <style>{`
+        @media (max-width: 1023px) {
+          .our-story-grid {
+            grid-template-columns: 1fr !important;
+            gap: 40px !important;
+          }
+          .our-story-image-wrap {
+            position: relative !important;
+            top: auto !important;
+            height: 480px !important;
+            min-height: auto !important;
+            border-radius: 20px !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }

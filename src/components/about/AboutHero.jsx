@@ -50,21 +50,23 @@ export default function AboutHero() {
   });
 
   return (
-    <section ref={containerRef} style={{ height: '280vh', position: 'relative' }}>
+    <section ref={containerRef} className="about-hero-section" style={{ height: '280vh', position: 'relative' }}>
       
       {/* 100vh Sticky Viewport */}
-      <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden', background: '#00101F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="about-hero-sticky" style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden', background: '#00101F', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         
         {/* Pure White Background Fade */}
         <motion.div 
+          className="about-hero-bg-fade"
           style={{ position: 'absolute', inset: 0, background: '#FFFFFF', zIndex: 1, opacity: bgOpacity }} 
         />
 
         {/* The Transforming Cinematic Image */}
         <motion.div
+          className="about-hero-image-wrap"
           style={{
             position: 'absolute',
-            width: '100vw',
+            width: '100%',
             height: '100vh',
             scale: imageScale,
             x: imageX,
@@ -101,6 +103,7 @@ export default function AboutHero() {
 
         {/* Editorial Identity Heading */}
         <motion.div
+          className="about-hero-identity-heading"
           initial={{ opacity: 0, y: 20, x: "-50%" }}
           animate={{ opacity: showEditorial ? 0.12 : 0, y: showEditorial ? 0 : 20, x: "-50%" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -129,6 +132,7 @@ export default function AboutHero() {
 
         {/* The Splitting Heading */}
         <motion.div
+          className="about-hero-split-heading"
           style={{
             position: 'absolute',
             zIndex: 3,
@@ -167,6 +171,7 @@ export default function AboutHero() {
 
         {/* Minimalist Our Story Editorial Content */}
         <motion.div
+          className="about-hero-editorial-content"
           style={{
             position: 'absolute',
             right: '8%',
@@ -223,6 +228,62 @@ export default function AboutHero() {
         </motion.div>
 
       </div>
+      
+      <style>{`
+        @media (max-width: 1023px) {
+          .about-hero-section {
+            height: auto !important;
+            padding-top: 24px;
+            padding-bottom: 60px;
+            background: #FFFFFF !important;
+          }
+          .about-hero-sticky {
+            position: relative !important;
+            height: auto !important;
+            flex-direction: column !important;
+            overflow: visible !important;
+            background: #FFFFFF !important;
+            padding: 0 4%;
+          }
+          .about-hero-bg-fade {
+            display: none !important;
+          }
+          .about-hero-identity-heading {
+            display: none !important;
+          }
+          
+          /* Hide the split heading completely on mobile */
+          .about-hero-split-heading {
+            display: none !important;
+          }
+          
+          /* Hero image is static but premium sized */
+          .about-hero-image-wrap {
+            position: relative !important;
+            width: 100% !important;
+            height: auto !important;
+            aspect-ratio: 4 / 5 !important;
+            max-height: 500px;
+            transform: none !important;
+            scale: 1 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+            margin-bottom: 40px;
+          }
+          
+          /* Story content flows below image */
+          .about-hero-editorial-content {
+            position: relative !important;
+            width: 100% !important;
+            right: auto !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
+          .about-hero-editorial-content h2 {
+            font-size: clamp(28px, 6vw, 36px) !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

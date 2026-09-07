@@ -132,7 +132,12 @@ export default function SolutionsPage() {
 
       <style>{`
         @media (max-width: 1024px) { .solutions-grid { grid-template-columns: 1fr 1fr !important; } }
-        @media (max-width: 768px) { .solutions-grid, .why-grid { grid-template-columns: 1fr !important; gap: 48px !important; } }
+        @media (max-width: 768px) { 
+          .solutions-grid, .why-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+          .solutions-main-section { padding: 64px 0 !important; }
+          .solutions-why-section { padding: 64px 0 !important; }
+          .solutions-cta-section { padding: 56px 0 !important; }
+        }
         @media (max-width: 600px) { .solutions-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </main>

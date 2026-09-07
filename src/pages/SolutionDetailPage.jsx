@@ -236,8 +236,24 @@ export default function SolutionDetailPage() {
 
       <style>{`
         @media (max-width: 900px) {
-          .overview-grid, .benefits-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .overview-grid, .benefits-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .related-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width: 768px) {
+          /* Hero: padding-top for 72px mobile navbar */
+          .sol-detail-hero {
+            padding-top: 72px !important;
+            min-height: 55vh !important;
+          }
+          .sol-detail-hero .container {
+            padding-top: 40px !important;
+            padding-bottom: 48px !important;
+          }
+          /* Overview: reduce padding */
+          .sol-overview-section { padding: 56px 0 !important; }
+          .sol-benefits-section { padding: 56px 0 !important; }
+          .sol-products-section { padding: 56px 0 !important; }
+          .sol-cta-section { padding: 56px 0 !important; }
         }
         @media (max-width: 600px) {
           .related-grid { grid-template-columns: 1fr !important; }

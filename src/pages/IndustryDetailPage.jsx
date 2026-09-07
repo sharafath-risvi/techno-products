@@ -209,6 +209,33 @@ export default function IndustryDetailPage() {
           .challenge-grid { grid-template-columns: 1fr !important; }
           .ind-related-grid { grid-template-columns: 1fr 1fr !important; }
         }
+        @media (max-width: 768px) {
+          /* Hero: adjust padding-top for 72px mobile navbar */
+          .ind-hero-section {
+            padding-top: 72px !important;
+            min-height: 60vh !important;
+          }
+          .ind-hero-section .container {
+            padding-top: 48px !important;
+            padding-bottom: 48px !important;
+          }
+          /* Overview section: reduce padding */
+          .ind-overview-section {
+            padding: 56px 0 !important;
+          }
+          /* Challenges section: reduce padding */
+          .ind-challenges-section {
+            padding: 56px 0 !important;
+          }
+          /* CTA section: reduce padding */
+          .ind-cta-section {
+            padding: 56px 0 !important;
+          }
+          /* Related section: reduce padding */
+          .ind-related-section {
+            padding: 56px 0 !important;
+          }
+        }
         @media (max-width: 600px) { .ind-related-grid { grid-template-columns: 1fr !important; } }
       `}</style>
     </main>

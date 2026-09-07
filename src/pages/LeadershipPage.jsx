@@ -45,7 +45,7 @@ function LeadershipHero() {
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'stretch',
-        paddingTop: 84, /* navbar offset */
+        paddingTop: 24, /* navbar offset handled globally */
       }}
     >
 
@@ -151,7 +151,7 @@ function LeadershipHero() {
       />
 
       {/* ── 7. Main two-column layout ── */}
-      <div className="container" style={{
+      <div className="container lh-layout" style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: '5%',
@@ -257,6 +257,7 @@ function LeadershipHero() {
             </Link>
             <Link
               to="/careers"
+              className="btn-careers"
               style={{
                 fontFamily: 'var(--font-heading)',
                 fontWeight: 700, fontSize: 14,
@@ -372,6 +373,7 @@ function LeadershipHero() {
       <style>{`
         @media (max-width: 900px) {
           .lh-layout { grid-template-columns: 1fr !important; gap: 48px !important; }
+          .btn-careers { display: none !important; }
         }
       `}</style>
     </section>

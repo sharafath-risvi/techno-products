@@ -23,7 +23,7 @@ export default function ContactPage() {
           <div className="contact-hero-content">
             <RevealText>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#D71B32' }} />
+                <div className="hero-tagline-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#D71B32' }} />
                 <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#0067A4' }}>
                   CONTACT US
                 </span>
@@ -734,6 +734,83 @@ export default function ContactPage() {
           .branch-grid-premium { grid-template-columns: 1fr; }
           .sales-network-grid { grid-template-columns: 1fr; }
           .cta-buttons { flex-direction: column; }
+
+          /* Hero: reduce padding for mobile navbar */
+          .contact-hero {
+            padding: 92px 0 48px;
+          }
+          /* Hide red dot on mobile tagline */
+          .hero-tagline-dot {
+            display: none !important;
+          }
+          /* Hero image: hide on small mobile to avoid height overflow */
+          .contact-hero-image-wrapper {
+            height: 260px !important;
+          }
+          /* Info section: reduce padding */
+          .contact-info-section {
+            padding: 56px 0;
+          }
+          /* Form: reduce padding inside */
+          .premium-contact-form {
+            padding: 28px 20px;
+          }
+          /* Branch section: reduce padding */
+          .branch-network-section {
+            padding: 56px 0;
+          }
+          /* Branch cards: reduce padding */
+          .premium-branch-card {
+            padding: 28px 20px;
+          }
+          /* City name: reduce size */
+          .city-name {
+            font-size: 22px !important;
+          }
+          /* Map: reduce height */
+          .map-container iframe {
+            height: 300px !important;
+          }
+          /* Quick strip: single column */
+          .quick-contact-strip {
+            padding: 0 0 56px;
+          }
+          /* Hero heading: reduce size */
+          .hero-heading {
+            font-size: clamp(28px, 7vw, 44px) !important;
+          }
+          /* Hero description: smaller */
+          .hero-description {
+            font-size: 15px !important;
+            margin-bottom: 28px;
+          }
+          /* Section title: smaller */
+          .section-title {
+            font-size: clamp(24px, 6vw, 36px) !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .contact-hero {
+            padding: 88px 0 40px;
+          }
+          .contact-hero-image-wrapper {
+            display: none !important;
+          }
+          .premium-contact-form {
+            padding: 20px 16px;
+          }
+          .premium-branch-card {
+            padding: 20px 16px;
+          }
+          .quick-card {
+            padding: 16px;
+            gap: 12px;
+          }
+          .quick-icon {
+            width: 44px;
+            height: 44px;
+          }
         }
       `}</style>
     </main>

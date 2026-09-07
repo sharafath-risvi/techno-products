@@ -69,11 +69,14 @@ export default function CTASection({
       </div>
 
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div style={{
-          padding: '140px 0',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', textAlign: 'center',
-        }}>
+        <div
+          className="cta-mobile-padding"
+          style={{
+            padding: '140px 0',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', textAlign: 'center',
+          }}
+        >
           {/* Eyebrow */}
           <RevealText>
             <div style={{
@@ -121,7 +124,7 @@ export default function CTASection({
 
           {/* CTA + contact strip */}
           <RevealText delay={0.2}>
-            <div style={{
+            <div className="cta-btn-group" style={{
               display: 'flex', flexDirection: 'row',
               alignItems: 'center', gap: 24, flexWrap: 'wrap', justifyContent: 'center'
             }}>
@@ -133,7 +136,7 @@ export default function CTASection({
               </Link>
 
               {secondaryBtnText && (
-                <Link to={secondaryBtnLink} style={{
+                <Link to={secondaryBtnLink} className="btn-secondary" style={{
                   padding: '14px 32px',
                   fontSize: 14,
                   letterSpacing: '0.1em',
@@ -165,6 +168,48 @@ export default function CTASection({
 
       <style>{`
         .cta-contact-link:hover { color: #fff !important; }
+        
+        @media (max-width: 768px) {
+          /* Reduce CTA section padding significantly on mobile */
+          .cta-mobile-padding {
+            padding: 72px 0 !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .cta-mobile-padding {
+            padding: 56px 0 !important;
+          }
+        }
+      `}</style>
+      <style>{`
+        @media (max-width: 768px) {
+          .cta-mobile-padding {
+            padding: 80px 16px !important;
+          }
+          .cta-mobile-padding h2 {
+            font-size: clamp(28px, 6vw, 40px) !important;
+            margin-bottom: 32px !important;
+          }
+          .cta-mobile-padding p {
+            font-size: 15px !important;
+            margin-bottom: 32px !important;
+          }
+          .cta-btn-group {
+            flex-direction: column !important;
+            gap: 16px !important;
+            width: 100%;
+            align-items: center;
+          }
+          .cta-btn-group .btn-primary, .cta-btn-group .btn-secondary {
+            padding: 16px 12px !important;
+            font-size: clamp(12px, 3.8vw, 14px) !important;
+            width: 100% !important;
+            max-width: 340px !important;
+            text-align: center;
+            justify-content: center;
+            white-space: nowrap !important;
+          }
+        }
       `}</style>
     </section>
   );

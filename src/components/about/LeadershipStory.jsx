@@ -52,7 +52,7 @@ export default function LeadershipStory() {
             const isEven = index % 2 === 1; // 0=left, 1=right, 2=left
             
             return (
-              <div key={founder.id} style={{
+              <div key={founder.id} className="founder-grid-row" style={{
                 display: 'grid',
                 // Reduce Image Size (0.7fr) and give Text more space (1.3fr)
                 gridTemplateColumns: isEven ? '1.3fr 0.7fr' : '0.7fr 1.3fr',
@@ -63,6 +63,7 @@ export default function LeadershipStory() {
                 
                 {/* Image Side */}
                 <motion.div 
+                  className="founder-img-col"
                   initial={{ opacity: 0, scale: 0.95, x: isEven ? 40 : -40 }}
                   whileInView={{ opacity: 1, scale: 1, x: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
@@ -85,6 +86,7 @@ export default function LeadershipStory() {
 
                 {/* Content Side */}
                 <motion.div 
+                  className="founder-text-col"
                   initial={{ opacity: 0, x: isEven ? -40 : 40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
@@ -156,7 +158,21 @@ export default function LeadershipStory() {
           />
         )}
       </AnimatePresence>
-
+      <style>{`
+        @media (max-width: 1023px) {
+          .founder-grid-row {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          .founder-img-col {
+            order: 1 !important;
+            aspect-ratio: 1/1 !important;
+          }
+          .founder-text-col {
+            order: 2 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
