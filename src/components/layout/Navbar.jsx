@@ -109,6 +109,17 @@ export default function Navbar() {
 
   useEffect(() => { setMobileOpen(false); setOpenDropdown(null); }, [location]);
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   function openDrop(key) {
     clearTimeout(dropdownTimers.current[key]);
     setOpenDropdown(key);
@@ -123,17 +134,29 @@ export default function Navbar() {
     exit: { opacity: 0, y: 6, scale: 0.98, transition: { duration: 0.15 } },
   };
 
+  const isLightHero = () => {
+    const p = location.pathname;
+    if (p === '/contact' || p === '/careers' || p === '/about/leadership') return true;
+    if (p.startsWith('/case-stories/') && p.split('/').length === 3) return true;
+    if (p.startsWith('/products/') && p.split('/').length === 4) return true;
+    return false;
+  };
+  const lightHero = isLightHero();
+
+  const currentTextColor = (!scrolled && !mobileOpen) ? (lightHero ? '#0F172A' : '#FFFFFF') : textColor;
+  const currentActiveColor = (!scrolled && !mobileOpen) ? (lightHero ? activeBlue : '#FFFFFF') : activeBlue;
+
   return (
     <>
       <nav
         style={{
           position: 'fixed', top: 0, left: 0, right: 0,
-          background: scrolled ? 'rgba(255,255,255,0.97)' : '#FFFFFF',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: scrolled ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
-          transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease',
+          background: mobileOpen ? 'transparent' : (scrolled ? 'rgba(255,255,255,0.97)' : 'transparent'),
+          backdropFilter: (scrolled && !mobileOpen) ? 'blur(16px)' : 'none',
+          borderBottom: (scrolled && !mobileOpen) ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent',
+          boxShadow: (scrolled && !mobileOpen) ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
+          transform: (showNavbar || mobileOpen) ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'background 0.3s ease, border-color 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease',
           zIndex: 1000,
         }}
         role="navigation" aria-label="Main navigation"
@@ -169,7 +192,7 @@ export default function Navbar() {
                         <div style={{
                           display: 'flex', alignItems: 'center', gap: 4,
                           fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 16,
-                          color: isActive || isOpen ? activeBlue : textColor,
+                          color: isActive || isOpen ? currentActiveColor : currentTextColor,
                           padding: '8px 0', position: 'relative',
                           transition: 'color 0.2s ease', cursor: 'pointer',
                         }}>
@@ -189,7 +212,7 @@ export default function Navbar() {
                     <div style={{
                       display: 'flex', alignItems: 'center', gap: 4,
                       fontFamily: 'var(--font-heading)', fontWeight: 500, fontSize: 16,
-                      color: isOpen ? activeBlue : textColor,
+                      color: isOpen ? currentActiveColor : currentTextColor,
                       padding: '8px 0', position: 'relative',
                       transition: 'color 0.2s ease', cursor: 'default',
                       userSelect: 'none',
@@ -538,7 +561,7 @@ export default function Navbar() {
           <button
             className="block md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
-            style={{ color: textColor, padding: 8, zIndex: 1000, background: 'none', border: 'none', cursor: 'pointer' }}
+            style={{ color: mobileOpen ? '#001426' : currentTextColor, padding: 8, zIndex: 1000, background: 'none', border: 'none', cursor: 'pointer' }}
             aria-label="Toggle mobile menu"
           >
             {mobileOpen ? <X size={28} /> : <Menu size={28} />}
@@ -555,9 +578,11 @@ export default function Navbar() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               height: 44, padding: '0 20px', borderRadius: 40,
-              background: '#FFFFFF', border: '1px solid #E5E7EB',
+              background: scrolled ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent'), 
+              border: scrolled ? '1px solid #E5E7EB' : (lightHero ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.4)'),
               fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 600,
-              color: '#001426', textDecoration: 'none', letterSpacing: '0.02em',
+              color: scrolled ? '#001426' : (lightHero ? '#001426' : '#FFFFFF'), 
+              textDecoration: 'none', letterSpacing: '0.02em',
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={e => {
@@ -566,9 +591,9 @@ export default function Navbar() {
               e.currentTarget.style.color = '#0067A4';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = '#E5E7EB';
-              e.currentTarget.style.background = '#FFFFFF';
-              e.currentTarget.style.color = '#001426';
+              e.currentTarget.style.borderColor = scrolled ? '#E5E7EB' : (lightHero ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.4)');
+              e.currentTarget.style.background = scrolled ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent');
+              e.currentTarget.style.color = scrolled ? '#001426' : (lightHero ? '#001426' : '#FFFFFF');
             }}
           >
             <Phone size={14} style={{ color: 'inherit' }} />
@@ -593,11 +618,8 @@ export default function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            style={{ position: 'fixed', inset: 0, background: '#001426', zIndex: 999, display: 'flex', flexDirection: 'column', paddingTop: 80, paddingInline: 32, overflowY: 'auto' }}
+            style={{ position: 'fixed', inset: 0, background: '#FFFFFF', zIndex: 999, display: 'flex', flexDirection: 'column', paddingTop: 130, paddingInline: 32, overflowY: 'auto' }}
           >
-            <button onClick={() => setMobileOpen(false)} style={{ position: 'absolute', top: 20, right: 24, color: '#fff', padding: 8, background: 'none', border: 'none', cursor: 'pointer' }}>
-              <X size={28} />
-            </button>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {navItems.map((item, i) => (
                 <motion.div
@@ -614,7 +636,7 @@ export default function Navbar() {
               <Link to="/contact" onClick={() => setMobileOpen(false)} style={{ width: '100%', fontFamily: 'var(--font-heading)', color: '#fff', fontSize: 18, fontWeight: 600, display: 'block', marginBottom: 24, textDecoration: 'none', background: activeBlue, padding: '12px 24px', borderRadius: 40, textAlign: 'center' }}>
                 Speak to an Expert
               </Link>
-              <a href="tel:+914448555333" style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.7)', fontSize: 16, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}><Phone size={16} /> +91 44 4855 5333</a>
+              <a href="tel:+914448555333" style={{ fontFamily: 'var(--font-body)', color: '#001426', fontSize: 16, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}><Phone size={16} /> +91 44 4855 5333</a>
             </div>
           </motion.div>
         )}
@@ -657,15 +679,15 @@ const MobileNavItem = ({ item, onClickMain, products, apiCategories, staticProdu
     <div>
       <div 
         onClick={() => { if (!item.href && hasChildren) setIsOpen(!isOpen); }}
-        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBlock: 16, cursor: (!item.href && hasChildren) ? 'pointer' : 'default' }}
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBlock: 16, cursor: (!item.href && hasChildren) ? 'pointer' : 'default' }}
       >
          {item.href ? (
-           <Link to={item.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#fff', textDecoration: 'none', flex: 1 }}>{item.label}</Link>
+           <Link to={item.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', textDecoration: 'none', flex: 1 }}>{item.label}</Link>
          ) : (
-           <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#fff', flex: 1 }}>{item.label}</span>
+           <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', flex: 1 }}>{item.label}</span>
          )}
          {hasChildren && (
-           <div style={{ background: 'none', border: 'none', color: '#fff', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+           <div style={{ background: 'none', border: 'none', color: '#001426', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
              <ChevronDown size={20} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(-90deg)', transition: 'transform 0.2s' }} />
            </div>
          )}
@@ -673,7 +695,7 @@ const MobileNavItem = ({ item, onClickMain, products, apiCategories, staticProdu
       {hasChildren && isOpen && (
          <div style={{ paddingLeft: 16, paddingBlock: 12, display: 'flex', flexDirection: 'column', gap: 16 }}>
             {childrenLinks.map(child => (
-               <Link key={child.label || child.name} to={child.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>
+               <Link key={child.label || child.name} to={child.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#001426', textDecoration: 'none' }}>
                   {child.label || child.name}
                </Link>
             ))}

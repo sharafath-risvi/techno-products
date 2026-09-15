@@ -369,7 +369,7 @@ export default function ContactPage() {
 
         /* 1. Hero Section */
         .contact-hero {
-          padding: 140px 0 100px;
+          padding: 140px 0 40px;
           background: #FFFFFF;
           overflow: hidden;
         }
@@ -417,7 +417,7 @@ export default function ContactPage() {
 
         /* 2. Contact Info & Form */
         .contact-info-section {
-          padding: 100px 0;
+          padding: 40px 0;
           background: #FAFAFA;
         }
         .contact-split-layout {
@@ -568,7 +568,7 @@ export default function ContactPage() {
 
         /* 3. Branch Network */
         .branch-network-section {
-          padding: 100px 0;
+          padding: 40px 0;
           background: #FFFFFF;
         }
         .branch-grid-premium {
@@ -647,7 +647,7 @@ export default function ContactPage() {
 
         /* 4. Interactive Map */
         .map-section {
-          padding: 80px 0 40px;
+          padding: 40px 0;
           background: #FAFAFA;
         }
         .map-container {
@@ -663,7 +663,7 @@ export default function ContactPage() {
 
         /* 5. Quick Contact Strip */
         .quick-contact-strip {
-          padding: 0 0 100px;
+          padding: 0 0 40px;
           background: #FAFAFA;
         }
         .quick-strip-grid {
@@ -737,7 +737,7 @@ export default function ContactPage() {
 
           /* Hero: reduce padding for mobile navbar */
           .contact-hero {
-            padding: 92px 0 48px;
+            padding: 92px 0 40px;
           }
           /* Hide red dot on mobile tagline */
           .hero-tagline-dot {
@@ -749,7 +749,7 @@ export default function ContactPage() {
           }
           /* Info section: reduce padding */
           .contact-info-section {
-            padding: 56px 0;
+            padding: 40px 0;
           }
           /* Form: reduce padding inside */
           .premium-contact-form {
@@ -757,7 +757,7 @@ export default function ContactPage() {
           }
           /* Branch section: reduce padding */
           .branch-network-section {
-            padding: 56px 0;
+            padding: 40px 0;
           }
           /* Branch cards: reduce padding */
           .premium-branch-card {
@@ -773,7 +773,7 @@ export default function ContactPage() {
           }
           /* Quick strip: single column */
           .quick-contact-strip {
-            padding: 0 0 56px;
+            padding: 0 0 40px;
           }
           /* Hero heading: reduce size */
           .hero-heading {

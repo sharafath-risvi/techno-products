@@ -314,7 +314,7 @@ export default function AboutPreview() {
           flex-direction: column;
           justify-content: flex-start;
           align-items: center;
-          padding: 86px 4% 60px;
+          padding: 40px 4%;
           max-width: 1680px;
           margin: 0 auto;
         }
@@ -556,7 +556,7 @@ export default function AboutPreview() {
         @media (max-width: 1023px) {
           .story-pinned-stage {
             min-height: auto;
-            padding: 80px 4% 60px;
+            padding: 40px 4%;
             gap: 40px;
           }
 
@@ -586,7 +586,7 @@ export default function AboutPreview() {
 
         @media (max-width: 640px) {
           .story-pinned-stage {
-            padding: 60px 4% 48px;
+            padding: 40px 4%;
             gap: 32px;
           }
 

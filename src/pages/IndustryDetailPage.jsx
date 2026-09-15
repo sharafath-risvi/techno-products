@@ -58,7 +58,7 @@ export default function IndustryDetailPage() {
       </section>
 
       {/* Overview */}
-      <section style={{ padding: '90px 0', background: '#fff' }}>
+      <section style={{ padding: '40px 0', background: '#fff' }}>
         <div className="container" style={{ maxWidth: 940 }}>
           <RevealText>
             <SectionTag>SECTOR OVERVIEW</SectionTag>
@@ -73,7 +73,7 @@ export default function IndustryDetailPage() {
       </section>
 
       {/* Challenges & Solutions */}
-      <section style={{ padding: '100px 0', background: '#F8F9FA' }}>
+      <section style={{ padding: '40px 0', background: '#F8F9FA' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48 }} className="challenge-grid">
             {/* Challenges */}
@@ -120,7 +120,7 @@ export default function IndustryDetailPage() {
       </section>
 
       {/* Applications */}
-      <section style={{ padding: '80px 0', background: '#fff' }}>
+      <section style={{ padding: '40px 0', background: '#fff' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -148,7 +148,7 @@ export default function IndustryDetailPage() {
 
       {/* Related Products */}
       {relatedCats.length > 0 && (
-        <section style={{ padding: '100px 0', background: '#F8F9FA' }}>
+        <section style={{ padding: '40px 0', background: '#F8F9FA' }}>
           <div className="container">
             <RevealText>
               <div style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -185,7 +185,7 @@ export default function IndustryDetailPage() {
       )}
 
       {/* CTA */}
-      <section style={{ padding: '100px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container">
           <RevealText>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 48px)', color: '#fff', marginBottom: 20 }}>
@@ -221,19 +221,19 @@ export default function IndustryDetailPage() {
           }
           /* Overview section: reduce padding */
           .ind-overview-section {
-            padding: 56px 0 !important;
+            padding: 40px 0 !important;
           }
           /* Challenges section: reduce padding */
           .ind-challenges-section {
-            padding: 56px 0 !important;
+            padding: 40px 0 !important;
           }
           /* CTA section: reduce padding */
           .ind-cta-section {
-            padding: 56px 0 !important;
+            padding: 40px 0 !important;
           }
           /* Related section: reduce padding */
           .ind-related-section {
-            padding: 56px 0 !important;
+            padding: 40px 0 !important;
           }
         }
         @media (max-width: 600px) { .ind-related-grid { grid-template-columns: 1fr !important; } }

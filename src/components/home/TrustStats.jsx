@@ -48,7 +48,7 @@ export default function TrustStats() {
   return (
     <section ref={sectionRef} style={{
       background: '#FFFFFF', // Pure white
-      padding: '60px 0', // Reduced for compact layout
+      padding: '40px 0',
       position: 'relative',
       overflow: 'hidden',
     }}>

@@ -72,7 +72,7 @@ export default function CTASection({
         <div
           className="cta-mobile-padding"
           style={{
-            padding: '140px 0',
+            padding: '40px 0',
             display: 'flex', flexDirection: 'column',
             alignItems: 'center', textAlign: 'center',
           }}
@@ -172,19 +172,19 @@ export default function CTASection({
         @media (max-width: 768px) {
           /* Reduce CTA section padding significantly on mobile */
           .cta-mobile-padding {
-            padding: 72px 0 !important;
+            padding: 40px 16px !important;
           }
         }
         @media (max-width: 480px) {
           .cta-mobile-padding {
-            padding: 56px 0 !important;
+            padding: 40px 16px !important;
           }
         }
       `}</style>
       <style>{`
         @media (max-width: 768px) {
           .cta-mobile-padding {
-            padding: 80px 16px !important;
+            padding: 40px 16px !important;
           }
           .cta-mobile-padding h2 {
             font-size: clamp(28px, 6vw, 40px) !important;

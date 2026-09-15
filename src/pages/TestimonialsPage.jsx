@@ -78,7 +78,7 @@ export default function TestimonialsPage() {
           backgroundSize: '60px 60px',
         }} />
 
-        <div className="container" style={{ position: 'relative', zIndex: 3, padding: '160px var(--container-pad) 140px' }}>
+        <div className="container" style={{ position: 'relative', zIndex: 3, padding: '160px var(--container-pad) 40px' }}>
           <RevealText>
             {/* Eyebrow */}
             <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 28 }}>
@@ -129,7 +129,7 @@ export default function TestimonialsPage() {
 
 
       {/* ─── TESTIMONIAL CARDS (WRITTEN - KEEP EXACTLY AS THEY ARE) ─── */}
-      <section style={{ padding: '100px 0', background: '#F8F9FA' }}>
+      <section style={{ padding: '40px 0', background: '#F8F9FA' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -233,7 +233,7 @@ export default function TestimonialsPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: '100px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container">
           <RevealText>
             <h2 style={{

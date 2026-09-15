@@ -48,6 +48,9 @@ export default function ProductCategoryPage() {
   const perPage = 12;
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState({});
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [mobilePendingFilters, setMobilePendingFilters] = useState({});
+  const [mobileSearchQuery, setMobileSearchQuery] = useState('');
 
   useEffect(() => {
     setActiveFilters({});
@@ -151,6 +154,37 @@ export default function ProductCategoryPage() {
     setPage(1);
   };
 
+  const handleOpenMobileFilter = () => {
+    setMobilePendingFilters(activeFilters);
+    setMobileSearchQuery(searchQuery);
+    setIsMobileFilterOpen(true);
+  };
+
+  const toggleMobileFilter = (key, value) => {
+    setMobilePendingFilters(prev => {
+      const current = prev[key] || [];
+      const updated = current.includes(value) 
+        ? current.filter(v => v !== value)
+        : [...current, value];
+      return { ...prev, [key]: updated };
+    });
+  };
+
+  const handleMobileReset = () => {
+    setMobileSearchQuery('');
+    setMobilePendingFilters({});
+    setSearchQuery('');
+    setActiveFilters({});
+    setPage(1);
+  };
+
+  const handleShowResults = () => {
+    setSearchQuery(mobileSearchQuery);
+    setActiveFilters(mobilePendingFilters);
+    setPage(1);
+    setIsMobileFilterOpen(false);
+  };
+
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= pagination.total_pages) {
       setPage(newPage);
@@ -207,7 +241,7 @@ export default function ProductCategoryPage() {
       {/* 1. Category Hero (Unchanged) */}
       <section className="category-hero-section" style={{ 
         background: '#001426', 
-        paddingTop: 140, paddingBottom: 80, 
+        paddingTop: 140, paddingBottom: 40, 
         position: 'relative', overflow: 'hidden' 
       }}>
         <div className={`cat-hero-img-box ${slug === 'all' ? 'is-all-products' : ''}`}>
@@ -244,7 +278,7 @@ export default function ProductCategoryPage() {
       </section>
 
       {/* 2. Layout with Sidebar Filter and Product Grid */}
-      <section style={{ paddingTop: 40, paddingBottom: 64, background: '#FFFFFF', minHeight: '100vh' }}>
+      <section style={{ paddingTop: 40, paddingBottom: 40, background: '#FFFFFF', minHeight: '100vh' }}>
         <div className="container products-layout-grid" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32, alignItems: 'start' }}>
           
           {/* Left Sidebar: Sticky Filter */}
@@ -344,6 +378,9 @@ export default function ProductCategoryPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+              <button className="mobile-filter-btn" onClick={handleOpenMobileFilter}>
+                <SlidersHorizontal size={16} /> Filter
+              </button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
               <div className="product-count">
@@ -897,7 +934,7 @@ export default function ProductCategoryPage() {
           /* Hero: reduce padding-top for mobile navbar */
           .category-hero-section {
             padding-top: 90px !important;
-            padding-bottom: 48px !important;
+            padding-bottom: 40px !important;
           }
           /* Hero stats row: wrap */
           .category-stats-row {
@@ -986,6 +1023,114 @@ export default function ProductCategoryPage() {
         }
         .mobile-search-input:focus { border-color: #0067A4; }
       `}</style>
+
+      {/* Mobile Filter Drawer */}
+      <AnimatePresence>
+        {isMobileFilterOpen && (
+          <>
+            <motion.div 
+              className="drawer-backdrop"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsMobileFilterOpen(false)}
+            />
+            <motion.div 
+              className="filter-drawer"
+              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              style={{ right: 0, left: 'auto' }}
+            >
+              <div className="drawer-header">
+                <div className="drawer-title">
+                  <SlidersHorizontal size={20} />
+                  <h2>Filters</h2>
+                </div>
+                <button className="drawer-close" onClick={() => setIsMobileFilterOpen(false)}>
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="drawer-content scrollbar-hide">
+                <div className="filter-group">
+                  <h3>Categories</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <Link 
+                      to="/products/all"
+                      onClick={() => { setSearchQuery(''); setPage(1); setIsMobileFilterOpen(false); }} 
+                      style={{
+                        padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
+                        background: slug === 'all' ? '#0067A4' : '#F8F9FA',
+                        color: slug === 'all' ? '#FFF' : '#333',
+                        textDecoration: 'none', fontWeight: slug === 'all' ? 700 : 400
+                      }}
+                    >
+                      All Products
+                    </Link>
+                    {categories.map(cat => (
+                      <Link 
+                        key={cat.slug} 
+                        to={`/products/${cat.slug}`} 
+                        onClick={() => { setSearchQuery(''); setPage(1); setIsMobileFilterOpen(false); }} 
+                        style={{
+                          padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
+                          background: slug === cat.slug ? '#0067A4' : '#F8F9FA',
+                          color: slug === cat.slug ? '#FFF' : '#333',
+                          textDecoration: 'none', fontWeight: slug === cat.slug ? 700 : 400
+                        }}
+                      >
+                        {cat.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {FILTER_CONFIG[slug] && Object.keys(FILTER_CONFIG[slug]).map(filterKey => (
+                  <div className="filter-group" key={filterKey}>
+                    <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
+                    <div className="checkbox-list">
+                      {FILTER_CONFIG[slug][filterKey].map(val => (
+                        <label key={val} className="checkbox-label">
+                          <input 
+                            type="checkbox" 
+                            checked={mobilePendingFilters[filterKey]?.includes(val) || false}
+                            onChange={() => toggleMobileFilter(filterKey, val)}
+                          />
+                          <span>{val}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="drawer-footer" style={{ display: 'flex', gap: '16px' }}>
+                <button 
+                  className="btn btn-outline" 
+                  onClick={handleMobileReset} 
+                  style={{ 
+                    flex: 1, padding: '14px', borderRadius: '10px', border: 'none', 
+                    background: '#000000', color: '#FFFFFF', fontFamily: 'var(--font-heading)', 
+                    fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Reset
+                </button>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={handleShowResults} 
+                  style={{ 
+                    flex: 1, padding: '14px', borderRadius: '10px', border: 'none', 
+                    background: '#0067A4', color: '#FFFFFF', fontFamily: 'var(--font-heading)', 
+                    fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Show Results
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

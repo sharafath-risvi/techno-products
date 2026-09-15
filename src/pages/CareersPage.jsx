@@ -154,7 +154,7 @@ export default function CareersPage() {
       {/* ====================================================
           2. APPLY FOR OPPORTUNITIES (NEW PREMIUM SECTION)
           ==================================================== */}
-      <section id="apply-opportunities" style={{ padding: '110px 0', background: '#F8FAFC' }}>
+      <section id="apply-opportunities" style={{ padding: '40px 0', background: '#F8FAFC' }}>
         <div className="container" style={{ maxWidth: 1340 }}>
           <div className="apply-opportunities-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'start' }}>
             
@@ -420,7 +420,7 @@ export default function CareersPage() {
       {/* ====================================================
           4. CULTURE CTA / HR CONTACT SECTION
           ==================================================== */}
-      <section style={{ padding: '110px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container" style={{ maxWidth: 900 }}>
           <RevealText>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 48px)', color: '#fff', marginBottom: 20 }}>

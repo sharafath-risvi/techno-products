@@ -33,7 +33,7 @@ export default function CaseStoryDetailPage() {
 
   if (loading) {
     return (
-      <main style={{ padding: '140px 0 100px', background: '#FFFFFF', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <main style={{ padding: '140px 0 40px', background: '#FFFFFF', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Loader2 size={48} color="#0067A4" className="animate-spin" />
       </main>
     );
@@ -41,7 +41,7 @@ export default function CaseStoryDetailPage() {
 
   if (error || !story) {
     return (
-      <main style={{ padding: '140px 0 100px', background: '#FFFFFF', minHeight: '80vh', textAlign: 'center' }}>
+      <main style={{ padding: '140px 0 40px', background: '#FFFFFF', minHeight: '80vh', textAlign: 'center' }}>
         <div className="container" style={{ maxWidth: 600 }}>
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 36, color: '#001426', marginBottom: 16 }}>
             Case Story Not Found
@@ -144,7 +144,7 @@ export default function CaseStoryDetailPage() {
       {/* ====================================================
           2. MAIN PAGE CONTENT: TWO-COLUMN LAYOUT (70% / 30%)
           ==================================================== */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '80px 0 120px' }}>
+      <section style={{ position: 'relative', zIndex: 1, padding: '40px 0' }}>
         <div className="container" style={{ maxWidth: 1340 }}>
           <div className="cs-main-layout" style={{ display: 'grid', gridTemplateColumns: '7fr 3fr', gap: 56, alignItems: 'start' }}>
             

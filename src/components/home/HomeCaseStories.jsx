@@ -9,7 +9,7 @@ export default function HomeCaseStories() {
   const caseStories = apiData?.data || [];
 
   return (
-    <section style={{ padding: '120px 0', background: '#F8F9FA' }}>
+    <section style={{ padding: '40px 0', background: '#F8F9FA' }}>
       <div className="container">
 
         {/* Section Header */}

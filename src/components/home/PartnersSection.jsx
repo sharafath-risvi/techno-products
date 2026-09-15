@@ -45,7 +45,7 @@ function PartnerCard({ partner }) {
 
 export default function PartnersSection() {
   return (
-    <section style={{ background: '#FFFFFF', padding: '120px 0 80px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#FFFFFF', padding: '40px 0', position: 'relative', overflow: 'hidden' }}>
       
       {/* Animated Premium Header exactly matching Why Choose Us */}
       <div style={{ textAlign: 'center', maxWidth: 800, margin: '0 auto', marginBottom: 60, padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

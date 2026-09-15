@@ -1382,7 +1382,7 @@ html, body {
 @media (max-width: 768px) {
   /* CTASection inline padding shrink */
   .cta-inner-padding {
-    padding: 72px 0 !important;
+    padding: 40px 0 !important;
   }
 }
 

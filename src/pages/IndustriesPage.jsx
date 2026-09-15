@@ -43,7 +43,7 @@ export default function IndustriesPage() {
       </section>
 
       {/* ─── SECTOR OVERVIEW (Enhanced) ─── */}
-      <section style={{ padding: '120px 0', background: '#F8FAFC', position: 'relative' }}>
+      <section style={{ padding: '40px 0', background: '#F8FAFC', position: 'relative' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 76 }}>
@@ -164,7 +164,7 @@ export default function IndustriesPage() {
       </section>
 
       {/* ─── CTA ─── */}
-      <section style={{ padding: '100px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container">
           <RevealText>
             <h2 style={{
@@ -191,11 +191,11 @@ export default function IndustriesPage() {
         @media (max-width: 1024px) { .industries-hub-grid { grid-template-columns: repeat(3, 1fr) !important; } }
         @media (max-width: 768px) { 
           .industries-hub-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
-          .industries-sector-section { padding: 64px 0 !important; }
+          .industries-sector-section { padding: 40px 0 !important; }
         }
         @media (max-width: 480px) { 
           .industries-hub-grid { grid-template-columns: 1fr !important; }
-          .industries-cta-section { padding: 56px 0 !important; }
+          .industries-cta-section { padding: 40px 0 !important; }
         }
 
         /* Hover effects */

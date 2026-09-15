@@ -190,7 +190,7 @@ export default function WhyChooseUs() {
 
       <style>{`
         .why-choose-section {
-          padding: 40px 0 120px 0;
+          padding: 40px 0;
           background: #FFFFFF;
           overflow: hidden;
         }

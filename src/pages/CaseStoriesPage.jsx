@@ -24,7 +24,7 @@ export default function CaseStoriesPage() {
       {/* 1. Page Hero */}
       <section style={{ 
         background: '#001426', 
-        paddingTop: 160, paddingBottom: 100, 
+        paddingTop: 160, paddingBottom: 40, 
         position: 'relative', overflow: 'hidden' 
       }}>
         <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '50%', opacity: 0.35 }}>
@@ -58,7 +58,7 @@ export default function CaseStoriesPage() {
       </section>
 
       {/* 2. Featured Case Stories (List View) */}
-      <section style={{ padding: '120px 0', background: '#F5F5F5' }}>
+      <section style={{ padding: '40px 0', background: '#F5F5F5' }}>
         <div className="container">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
             {loading ? (
@@ -175,7 +175,7 @@ export default function CaseStoriesPage() {
       </section>
 
       {/* 3. CTA */}
-      <section style={{ padding: '100px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container">
           <RevealText>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 36, color: '#fff', marginBottom: 24 }}>

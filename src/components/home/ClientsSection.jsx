@@ -22,7 +22,7 @@ function ClientCard({ clientData }) {
 
 export default function ClientsSection() {
   return (
-    <section style={{ background: '#FFFFFF', padding: '80px 0 160px 0', position: 'relative' }}>
+    <section style={{ background: '#FFFFFF', padding: '40px 0', position: 'relative' }}>
       
       {/* Animated Premium Header exactly matching Why Choose Us */}
       <div style={{ textAlign: 'center', maxWidth: 800, margin: '0 auto', marginBottom: 80, padding: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

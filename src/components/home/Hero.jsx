@@ -26,9 +26,8 @@ const storyContent = [
 
 export default function Hero() {
   const containerRef = useRef();
-  const maskLayerRef = useRef();
-  const textMaskRef = useRef();
   const videoRef = useRef();
+  const videoBgWrapperRef = useRef();
   
   const [activeText, setActiveText] = useState(null);
   const zoomProgressRef = useRef(0);
@@ -52,19 +51,14 @@ export default function Hero() {
         }
       }
     });
-    
-    // 1. Scale the text massively (Zooming into the solid white stroke of 'H')
-    tl.to(textMaskRef.current, {
-      scale: 180, // Massive scale to ensure the stroke covers the viewport
-      ease: 'power3.in',
-      duration: 1
-    });
 
-    // 2. Fade out the mask layer slightly before the text stops scaling to prevent any artifacting
-    tl.to(maskLayerRef.current, {
-      opacity: 0,
-      duration: 0.2
-    }, "-=0.2");
+    // 0. Cinematic background zoom: video scales subtly from 1 → 1.25 over the full scroll
+    //    This runs in parallel with the TECHNO text reveal, giving a premium depth effect.
+    tl.fromTo(videoBgWrapperRef.current,
+      { scale: 1 },
+      { scale: 1.25, ease: 'none', duration: 1 },
+      0 // starts at the very beginning of the timeline
+    );
 
   }, { scope: containerRef });
 
@@ -76,16 +70,13 @@ export default function Hero() {
     const progress = currentTime / duration;
     
     // Text logic synced to video timeline
-    // ONLY show if the zoom is mostly complete (zoomProgress >= 0.8) so video is large
     let newActiveText = null;
-    if (zoomProgressRef.current >= 0.8) {
-      if (progress > 0.10 && progress < 0.35) {
-        newActiveText = 0;
-      } else if (progress > 0.40 && progress < 0.65) {
-        newActiveText = 1;
-      } else if (progress > 0.70 && progress < 0.95) { 
-        newActiveText = 2;
-      }
+    if (progress > 0.10 && progress < 0.35) {
+      newActiveText = 0;
+    } else if (progress > 0.40 && progress < 0.65) {
+      newActiveText = 1;
+    } else if (progress > 0.70 && progress < 0.95) { 
+      newActiveText = 2;
     }
     
     if (activeText !== newActiveText) {
@@ -99,31 +90,42 @@ export default function Hero() {
       height: '100svh',
       width: '100%',
       overflow: 'hidden',
-      background: '#000000', // Solid black base
+      background: '#FFFFFF', // Solid white base
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
     }}>
-      {/* Background Video */}
+      {/* Background Video — wrapped in a zoom container for the scroll-driven scale effect */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        zIndex: 0
+        zIndex: 0,
+        overflow: 'hidden'
       }}>
-        <video 
-          ref={videoRef}
-          onTimeUpdate={handleTimeUpdate}
-          src="/videos/download.mp4"
-          autoPlay 
-          loop
-          muted 
-          playsInline
-          style={{ 
-            width: '100%', 
-            height: '100%', 
-            objectFit: 'cover'
+        <div
+          ref={videoBgWrapperRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            willChange: 'transform',
+            transformOrigin: 'center center',
           }}
-        />
+        >
+          <video 
+            ref={videoRef}
+            onTimeUpdate={handleTimeUpdate}
+            src="/videos/download.mp4"
+            autoPlay 
+            loop
+            muted 
+            playsInline
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover'
+            }}
+          />
+        </div>
       </div>
 
       {/* Storytelling Text Overlay (Z-index 1 places it inside the video world) */}
@@ -230,34 +232,6 @@ export default function Hero() {
         </AnimatePresence>
       </div>
 
-      {/* Mask Layer (mix-blend-mode: multiply) */}
-      <div ref={maskLayerRef} style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 5,
-        background: '#000000', // Black background
-        color: '#ffffff', // White text
-        mixBlendMode: 'multiply', // Video shines only through white
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        pointerEvents: 'none',
-        willChange: 'opacity'
-      }}>
-        <h1 ref={textMaskRef} style={{
-          fontFamily: 'var(--font-heading)',
-          fontWeight: 900, // Very bold
-          fontSize: 'clamp(100px, 22vw, 300px)',
-          lineHeight: 1,
-          letterSpacing: '-0.02em',
-          margin: 0,
-          whiteSpace: 'nowrap',
-          transformOrigin: '58% 50%', // Targets the thick crossbar of the 'H'
-          willChange: 'transform'
-        }}>
-          TECHNO
-        </h1>
-      </div>
     </section>
   );
 }

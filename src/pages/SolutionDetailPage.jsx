@@ -53,7 +53,7 @@ export default function SolutionDetailPage() {
       </section>
 
       {/* Overview */}
-      <section style={{ padding: '100px 0', background: '#fff' }}>
+      <section style={{ padding: '40px 0', background: '#fff' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="overview-grid">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
@@ -73,7 +73,7 @@ export default function SolutionDetailPage() {
       </section>
 
       {/* Benefits */}
-      <section style={{ padding: '120px 0', background: '#F8FAFC', position: 'relative' }}>
+      <section style={{ padding: '40px 0', background: '#F8FAFC', position: 'relative' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 72 }}>
@@ -154,7 +154,7 @@ export default function SolutionDetailPage() {
       </section>
 
       {/* Industries Served */}
-      <section style={{ padding: '80px 0', background: '#fff' }}>
+      <section style={{ padding: '40px 0', background: '#fff' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -181,7 +181,7 @@ export default function SolutionDetailPage() {
 
       {/* Related Products */}
       {relatedCats.length > 0 && (
-        <section style={{ padding: '100px 0', background: '#F8F9FA' }}>
+        <section style={{ padding: '40px 0', background: '#F8F9FA' }}>
           <div className="container">
             <RevealText>
               <div style={{ textAlign: 'center', marginBottom: 56 }}>
@@ -218,7 +218,7 @@ export default function SolutionDetailPage() {
       )}
 
       {/* CTA */}
-      <section style={{ padding: '100px 0', background: '#001426', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#001426', textAlign: 'center' }}>
         <div className="container">
           <RevealText>
             <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 52px)', color: '#fff', marginBottom: 20, maxWidth: 700, margin: '0 auto 20px' }}>
@@ -250,10 +250,10 @@ export default function SolutionDetailPage() {
             padding-bottom: 48px !important;
           }
           /* Overview: reduce padding */
-          .sol-overview-section { padding: 56px 0 !important; }
-          .sol-benefits-section { padding: 56px 0 !important; }
-          .sol-products-section { padding: 56px 0 !important; }
-          .sol-cta-section { padding: 56px 0 !important; }
+          .sol-overview-section { padding: 40px 0 !important; }
+          .sol-benefits-section { padding: 40px 0 !important; }
+          .sol-products-section { padding: 40px 0 !important; }
+          .sol-cta-section { padding: 40px 0 !important; }
         }
         @media (max-width: 600px) {
           .related-grid { grid-template-columns: 1fr !important; }

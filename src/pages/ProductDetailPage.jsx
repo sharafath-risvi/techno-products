@@ -119,7 +119,7 @@ export default function ProductDetailPage() {
       </section>
 
       {/* 2. Main Product Hero Section */}
-      <section style={{ padding: '56px 0 80px' }}>
+      <section style={{ padding: '40px 0' }}>
         <div className="container">
           <div className="product-detail-hero">
             
@@ -206,7 +206,7 @@ export default function ProductDetailPage() {
       </section>
 
       {/* 3. Detailed Tabs Section */}
-      <section style={{ background: '#F8FAFC', padding: '64px 0', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
+      <section style={{ background: '#F8FAFC', padding: '40px 0', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
         <div className="container">
           
           {/* Tab Headers */}
@@ -255,7 +255,7 @@ export default function ProductDetailPage() {
       </section>
 
       {/* 4. Product Enquiry & Consultation Section */}
-      <section id="product-enquiry" style={{ padding: '80px 0', background: '#FFFFFF' }}>
+      <section id="product-enquiry" style={{ padding: '40px 0', background: '#FFFFFF' }}>
         <div className="container">
           <div className="enquiry-container">
             
@@ -396,7 +396,7 @@ export default function ProductDetailPage() {
 
       {/* 5. Related Products Section */}
       {relatedProducts.length > 0 && (
-        <section style={{ padding: '80px 0', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+        <section style={{ padding: '40px 0', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
           <div className="container">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 40, flexWrap: 'wrap', gap: 16 }}>
               <div>

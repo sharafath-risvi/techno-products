@@ -28,7 +28,7 @@ export default function SolutionsPage() {
       </section>
 
       {/* Solutions Grid */}
-      <section style={{ padding: '100px 0', background: '#fff' }}>
+      <section style={{ padding: '40px 0', background: '#fff' }}>
         <div className="container">
           <RevealText>
             <div style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -76,7 +76,7 @@ export default function SolutionsPage() {
       </section>
 
       {/* Why Choose */}
-      <section style={{ padding: '100px 0', background: '#001426' }}>
+      <section style={{ padding: '40px 0', background: '#001426' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }} className="why-grid">
             <RevealText>
@@ -116,7 +116,7 @@ export default function SolutionsPage() {
       </section>
 
       {/* CTA */}
-      <section style={{ padding: '80px 0', background: '#F8F9FA', textAlign: 'center' }}>
+      <section style={{ padding: '40px 0', background: '#F8F9FA', textAlign: 'center' }}>
         <div className="container">
           <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 40px)', color: '#000', marginBottom: 16 }}>
             Not Sure Which Solution You Need?
@@ -134,9 +134,9 @@ export default function SolutionsPage() {
         @media (max-width: 1024px) { .solutions-grid { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 768px) { 
           .solutions-grid, .why-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
-          .solutions-main-section { padding: 64px 0 !important; }
-          .solutions-why-section { padding: 64px 0 !important; }
-          .solutions-cta-section { padding: 56px 0 !important; }
+          .solutions-main-section { padding: 40px 0 !important; }
+          .solutions-why-section { padding: 40px 0 !important; }
+          .solutions-cta-section { padding: 40px 0 !important; }
         }
         @media (max-width: 600px) { .solutions-grid { grid-template-columns: 1fr !important; } }
       `}</style>
