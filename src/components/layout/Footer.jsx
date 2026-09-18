@@ -78,6 +78,20 @@ export default function Footer() {
             <p className="footer-desc">
               Premier channel partner for top global industrial brands. Delivering reliable engineering solutions and performance-driven products since 1999.
             </p>
+            <div className="footer-socials">
+              <a href="https://www.instagram.com/techno_products_in/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <InstagramIcon size={20} />
+              </a>
+              <a href="https://www.facebook.com/technoproductsdevelopment" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <FacebookIcon size={20} />
+              </a>
+              <a href="https://www.linkedin.com/company/techno-products-development-pvt-ltd" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <LinkedinIcon size={20} />
+              </a>
+              <a href="https://www.youtube.com/@technoproducts" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                <YoutubeIcon size={20} />
+              </a>
+            </div>
           </motion.div>
 
           {/* Column 2: Quick Links */}
@@ -131,8 +145,12 @@ export default function Footer() {
       <div className="footer-bottom-bar">
         <div className="container">
           <div className="bottom-bar-inner">
-            <div className="copyright" style={{ width: '100%', textAlign: 'center' }}>
-              © {new Date().getFullYear()} Techno Products Development Pvt. Ltd. All Rights Reserved.
+            <div className="copyright" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px', width: '100%', textAlign: 'left' }}>
+              <span>© 2026 Techno Products Development</span>
+              <div className="legal-links" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                <Link to="/privacy-policy" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Privacy Policy</Link>
+                <Link to="/cookies-policy" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Cookies Policy</Link>
+              </div>
             </div>
           </div>
         </div>

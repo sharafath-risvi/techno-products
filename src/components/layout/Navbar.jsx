@@ -11,10 +11,13 @@ const logoBlue = '#0067A4';
 const activeBlue = '#00446F';
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = useRef(0);
+  const pastHeroRef = useRef(false);
+  const showNavbarRef = useRef(true);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [hoveredIndustry, setHoveredIndustry] = useState(industriesData[0]);
   const [hoveredSolution, setHoveredSolution] = useState(solutions[0]);
@@ -35,25 +38,25 @@ export default function Navbar() {
     image: '/industries images/allproducts.webp',
   };
 
-  const dynamicProductChildren = apiCategories.length > 0 
-    ? [allProductsItem, ...apiCategories.map((cat) => {
-        // Use an ORIGINAL REAL PRODUCT IMAGE from that category's actual products
-        const realProductForCat = products.find(p => p.category_slug === cat.slug);
-        const catImage = realProductForCat?.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop';
-        
-        return {
-          label: cat.name,
-          desc: cat.description || `Explore ${cat.name}`,
-          href: `/products/${cat.slug}`,
-          image: catImage,
-        };
-      })]
-    : [allProductsItem, ...staticProductCategories.map((cat) => ({
-        label: cat.shortName,
-        desc: cat.tag,
+  const dynamicProductChildren = apiCategories.length > 0
+    ? apiCategories.map((cat) => {
+      // Use an ORIGINAL REAL PRODUCT IMAGE from that category's actual products
+      const realProductForCat = products.find(p => p.category_slug === cat.slug);
+      const catImage = realProductForCat?.image || 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop';
+
+      return {
+        label: cat.name,
+        desc: cat.description || `Explore ${cat.name}`,
         href: `/products/${cat.slug}`,
-        image: cat.image,
-      }))];
+        image: catImage,
+      };
+    })
+    : staticProductCategories.map((cat) => ({
+      label: cat.shortName,
+      desc: cat.tag,
+      href: `/products/${cat.slug}`,
+      image: cat.image,
+    }));
 
   const navItems = [
     {
@@ -63,6 +66,8 @@ export default function Navbar() {
         { label: 'Our Company', desc: 'History, values & philosophy', href: '/about/company' },
         { label: 'Leadership', desc: 'Meet our founders & team', href: '/about/leadership' },
         { label: 'Careers', desc: 'Join our growing team', href: '/careers' },
+        { label: 'Spiritual', desc: 'Infinitheism & a new way of life', href: '/about/spiritual' },
+        { label: 'MeeRaMaya', desc: 'Giving More & Receiving Less', href: '/about/meeramaya' },
       ],
     },
     {
@@ -94,18 +99,54 @@ export default function Navbar() {
   ];
 
   useEffect(() => {
+    let ticking = false;
+    let heroEl = null;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY < 40) { setScrolled(false); setShowNavbar(true); }
-      else {
-        setScrolled(true);
-        setShowNavbar(currentScrollY <= lastScrollY || currentScrollY <= 100);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+
+          let isPastHero = false;
+          if (!heroEl) {
+            heroEl = document.querySelector('main > section:first-of-type') || document.querySelector('main > div:first-of-type') || document.getElementById('hero') || document.querySelector('.hero-section');
+          }
+
+          if (heroEl) {
+            const heroBottom = heroEl.getBoundingClientRect().bottom;
+            isPastHero = heroBottom <= 112;
+          } else {
+            isPastHero = currentScrollY > window.innerHeight - 112;
+          }
+          
+          if (isPastHero !== pastHeroRef.current) {
+            pastHeroRef.current = isPastHero;
+            setPastHero(isPastHero);
+          }
+
+          let shouldShow = showNavbarRef.current;
+          if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
+            shouldShow = false;
+          } else if (currentScrollY < lastScrollYRef.current || currentScrollY <= 100) {
+            shouldShow = true;
+          }
+          
+          if (shouldShow !== showNavbarRef.current) {
+            showNavbarRef.current = shouldShow;
+            setShowNavbar(shouldShow);
+          }
+          
+          lastScrollYRef.current = currentScrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      setLastScrollY(currentScrollY);
     };
+
+    handleScroll(); // Check immediately on mount
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   useEffect(() => { setMobileOpen(false); setOpenDropdown(null); }, [location]);
 
@@ -143,20 +184,37 @@ export default function Navbar() {
   };
   const lightHero = isLightHero();
 
-  const currentTextColor = (!scrolled && !mobileOpen) ? (lightHero ? '#0F172A' : '#FFFFFF') : textColor;
-  const currentActiveColor = (!scrolled && !mobileOpen) ? (lightHero ? activeBlue : '#FFFFFF') : activeBlue;
+  const isTransparentState = !pastHero && !lightHero && !mobileOpen;
+  const applyWhiteState = pastHero || (isTransparentState && isHovered);
+
+  const currentTextColor = mobileOpen ? textColor : (applyWhiteState || lightHero ? '#0F172A' : '#FFFFFF');
+  const currentActiveColor = mobileOpen ? activeBlue : (applyWhiteState || lightHero ? activeBlue : '#FFFFFF');
+
+  const isHoverWhite = isTransparentState && isHovered;
+  const navBackground = mobileOpen 
+    ? 'transparent' 
+    : (isHoverWhite 
+        ? 'rgba(255,255,255,1)' 
+        : (pastHero 
+            ? 'rgba(255,255,255,0.85)' 
+            : (lightHero 
+                ? 'rgba(255,255,255,0.1)' 
+                : 'rgba(0, 0, 0, 0.25)')));
 
   return (
     <>
       <nav
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0,
-          background: mobileOpen ? 'transparent' : (scrolled ? 'rgba(255,255,255,0.97)' : 'transparent'),
-          backdropFilter: (scrolled && !mobileOpen) ? 'blur(16px)' : 'none',
-          borderBottom: (scrolled && !mobileOpen) ? '1px solid rgba(0,0,0,0.06)' : '1px solid transparent',
-          boxShadow: (scrolled && !mobileOpen) ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
-          transform: (showNavbar || mobileOpen) ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'background 0.3s ease, border-color 0.3s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease',
+          background: navBackground,
+          backdropFilter: mobileOpen ? 'none' : (applyWhiteState ? 'blur(10px)' : 'blur(10px)'),
+          WebkitBackdropFilter: mobileOpen ? 'none' : (applyWhiteState ? 'blur(16px)' : 'blur(12px)'),
+          borderBottom: 'none',
+          boxShadow: (applyWhiteState && !mobileOpen) ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
+          transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease',
           zIndex: 1000,
         }}
         role="navigation" aria-label="Main navigation"
@@ -200,7 +258,7 @@ export default function Navbar() {
                           {hasDropdown && <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />}
                           <motion.div
                             initial={false}
-                            animate={{ scaleX: isActive || isOpen ? 1 : 0 }}
+                            animate={{ scaleX: (isActive || isOpen) && !(isTransparentState && isHovered) ? 1 : 0 }}
                             transition={{ duration: 0.25, ease: 'easeOut' }}
                             style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: activeBlue, transformOrigin: 'center' }}
                           />
@@ -221,7 +279,7 @@ export default function Navbar() {
                       {hasDropdown && <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />}
                       <motion.div
                         initial={false}
-                        animate={{ scaleX: isOpen ? 1 : 0 }}
+                        animate={{ scaleX: isOpen && !(isTransparentState && isHovered) ? 1 : 0 }}
                         transition={{ duration: 0.25, ease: 'easeOut' }}
                         style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: activeBlue, transformOrigin: 'center' }}
                       />
@@ -320,14 +378,14 @@ export default function Navbar() {
                                 style={{ borderRadius: 16, overflow: 'hidden', background: '#F5F5F5' }}
                               >
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                  <img 
+                                  <img
                                     src={{
                                       'electrical-systems': '/industries images/electricalImages.webp',
                                       'maintenance-support': '/industries images/maintanence_support.webp',
                                       'control-panel-solutions': '/industries images/control_panel.webp'
-                                    }[hoveredSolution.slug] || hoveredSolution.image} 
-                                    alt={hoveredSolution.title} 
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                    }[hoveredSolution.slug] || hoveredSolution.image}
+                                    alt={hoveredSolution.title}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                   />
                                 </div>
                                 <div style={{ padding: '16px' }}>
@@ -461,6 +519,14 @@ export default function Navbar() {
                             </Link>
                           ))}
                         </div>
+                        {/* View All Products Bottom Link */}
+                        <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(0,0,0,0.06)', display: 'flex', justifyContent: 'center' }}>
+                          <Link to="/products/all" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: activeBlue, textDecoration: 'none', transition: 'transform 0.2s' }}
+                            onMouseEnter={e => e.currentTarget.style.transform = 'translateX(4px)'}
+                            onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+                            View All Products <ArrowRight size={14} />
+                          </Link>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -523,7 +589,7 @@ export default function Navbar() {
                                 style={{ borderRadius: 16, overflow: 'hidden', background: '#F5F5F5' }}
                               >
                                 <div style={{ aspectRatio: '16/9', overflow: 'hidden' }}>
-                                  <img 
+                                  <img
                                     src={{
                                       'cement-mining': '/industries images/cement_mining.webp',
                                       'automotive': '/industries images/automative.webp',
@@ -533,9 +599,9 @@ export default function Navbar() {
                                       'water-treatment': '/industries images/waterTreatment.webp',
                                       'food-beverage': '/industries images/food_beverage.webp',
                                       'paper-pulp': '/industries images/paper_pulp.webp'
-                                    }[hoveredIndustry.slug] || hoveredIndustry.image} 
-                                    alt={hoveredIndustry.name} 
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                    }[hoveredIndustry.slug] || hoveredIndustry.image}
+                                    alt={hoveredIndustry.name}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                   />
                                 </div>
                                 <div style={{ padding: '16px' }}>
@@ -578,10 +644,10 @@ export default function Navbar() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               height: 44, padding: '0 20px', borderRadius: 40,
-              background: scrolled ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent'), 
-              border: scrolled ? '1px solid #E5E7EB' : (lightHero ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.4)'),
+              background: applyWhiteState ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent'),
+              border: applyWhiteState ? '1px solid #E5E7EB' : (lightHero ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.4)'),
               fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 600,
-              color: scrolled ? '#001426' : (lightHero ? '#001426' : '#FFFFFF'), 
+              color: applyWhiteState ? '#001426' : (lightHero ? '#001426' : '#FFFFFF'),
               textDecoration: 'none', letterSpacing: '0.02em',
               transition: 'all 0.2s ease',
             }}
@@ -591,9 +657,9 @@ export default function Navbar() {
               e.currentTarget.style.color = '#0067A4';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = scrolled ? '#E5E7EB' : (lightHero ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.4)');
-              e.currentTarget.style.background = scrolled ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent');
-              e.currentTarget.style.color = scrolled ? '#001426' : (lightHero ? '#001426' : '#FFFFFF');
+              e.currentTarget.style.borderColor = applyWhiteState ? '#E5E7EB' : (lightHero ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.4)');
+              e.currentTarget.style.background = applyWhiteState ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent');
+              e.currentTarget.style.color = applyWhiteState ? '#001426' : (lightHero ? '#001426' : '#FFFFFF');
             }}
           >
             <Phone size={14} style={{ color: 'inherit' }} />
@@ -670,36 +736,41 @@ const MobileNavItem = ({ item, onClickMain, products, apiCategories, staticProdu
 
   let childrenLinks = [];
   if (item.dropdown) childrenLinks = item.dropdown;
-  else if (item.children) childrenLinks = item.children; 
+  else if (item.children) childrenLinks = item.children;
   else if (item.industries) childrenLinks = industriesData.map(i => ({ label: i.name, href: `/industries/${i.slug}` }));
   else if (item.solutionsMega) childrenLinks = solutions.map(s => ({ label: s.title, href: `/solutions/${s.slug}` }));
   else if (item.insightsItems) childrenLinks = item.insightsItems;
 
   return (
     <div>
-      <div 
+      <div
         onClick={() => { if (!item.href && hasChildren) setIsOpen(!isOpen); }}
         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBlock: 16, cursor: (!item.href && hasChildren) ? 'pointer' : 'default' }}
       >
-         {item.href ? (
-           <Link to={item.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', textDecoration: 'none', flex: 1 }}>{item.label}</Link>
-         ) : (
-           <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', flex: 1 }}>{item.label}</span>
-         )}
-         {hasChildren && (
-           <div style={{ background: 'none', border: 'none', color: '#001426', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-             <ChevronDown size={20} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(-90deg)', transition: 'transform 0.2s' }} />
-           </div>
-         )}
+        {item.href ? (
+          <Link to={item.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', textDecoration: 'none', flex: 1 }}>{item.label}</Link>
+        ) : (
+          <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#001426', flex: 1 }}>{item.label}</span>
+        )}
+        {hasChildren && (
+          <div style={{ background: 'none', border: 'none', color: '#001426', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <ChevronDown size={20} style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(-90deg)', transition: 'transform 0.2s' }} />
+          </div>
+        )}
       </div>
       {hasChildren && isOpen && (
-         <div style={{ paddingLeft: 16, paddingBlock: 12, display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {childrenLinks.map(child => (
-               <Link key={child.label || child.name} to={child.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#001426', textDecoration: 'none' }}>
-                  {child.label || child.name}
-               </Link>
-            ))}
-         </div>
+        <div style={{ paddingLeft: 16, paddingBlock: 12, display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {childrenLinks.map(child => (
+            <Link key={child.label || child.name} to={child.href} onClick={onClickMain} style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#001426', textDecoration: 'none' }}>
+              {child.label || child.name}
+            </Link>
+          ))}
+          {item.mega && (
+            <Link to="/products/all" onClick={onClickMain} style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 16, color: '#0067A4', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
+              View All Products <ArrowRight size={16} />
+            </Link>
+          )}
+        </div>
       )}
     </div>
   );

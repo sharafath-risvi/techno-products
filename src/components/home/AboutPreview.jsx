@@ -232,7 +232,7 @@ export default function AboutPreview() {
           <div ref={ctaRef} className="story-end-cta">
             <Link to="/about" className="apple-story-btn">
               <span>Explore Our Full Story</span>
-              <ArrowRight size={18} className="btn-icon" strokeWidth={2.5} />
+              <ArrowRight size={14} className="btn-icon" strokeWidth={2} />
             </Link>
           </div>
 
@@ -314,7 +314,7 @@ export default function AboutPreview() {
           flex-direction: column;
           justify-content: flex-start;
           align-items: center;
-          padding: 40px 4%;
+          padding: 30px 4%;
           max-width: 1680px;
           margin: 0 auto;
         }
@@ -385,7 +385,7 @@ export default function AboutPreview() {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 40px;
+          gap: 24px;
         }
 
         /* Screen 2: Expansive Hero Image (60vh immersive height) */
@@ -393,7 +393,7 @@ export default function AboutPreview() {
           position: relative;
           width: 100%;
           max-width: 1540px;
-          height: clamp(400px, 60vh, 680px);
+          height: clamp(320px, 48vh, 560px);
           border-radius: 32px;
           overflow: hidden;
           -webkit-mask-image: -webkit-radial-gradient(white, black);
@@ -432,19 +432,19 @@ export default function AboutPreview() {
           max-width: 1540px;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 28px;
-          padding: 6px 0;
+          gap: 24px;
+          padding: 0;
         }
 
         .story-chapter-card {
           position: relative;
-          min-height: 340px;
+          min-height: 260px;
           border-radius: 28px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          padding: 38px 36px;
+          padding: 28px 24px;
           box-shadow: 0 18px 48px -12px rgba(0, 16, 31, 0.12);
           border: 1px solid rgba(255, 255, 255, 0.12);
           transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
@@ -494,23 +494,23 @@ export default function AboutPreview() {
           font-weight: 700;
           color: #38BDF8;
           letter-spacing: 0.14em;
-          margin-bottom: 14px;
+          margin-bottom: 10px;
         }
 
         .chapter-title {
           font-family: var(--font-heading);
           font-weight: 700;
-          font-size: clamp(20px, 1.4vw, 24px);
+          font-size: clamp(18px, 1.2vw, 22px);
           color: #FFFFFF;
           line-height: 1.25;
-          margin: 0 0 14px 0;
+          margin: 0 0 10px 0;
           letter-spacing: -0.015em;
         }
 
         .chapter-text {
           font-family: var(--font-body);
-          font-size: 15px;
-          line-height: 1.75;
+          font-size: 14px;
+          line-height: 1.6;
           color: #E2E8F0;
           margin: 0;
           font-weight: 400;
@@ -518,7 +518,7 @@ export default function AboutPreview() {
 
         /* End CTA Button */
         .story-end-cta {
-          margin-top: 10px;
+          margin-top: 4px;
           will-change: transform, opacity;
         }
 
@@ -531,7 +531,7 @@ export default function AboutPreview() {
           font-family: var(--font-heading);
           font-weight: 700;
           font-size: 13px;
-          padding: 13px 28px;
+          padding: 10px 24px;
           border-radius: 9999px;
           text-decoration: none;
           box-shadow: 0 12px 30px -6px rgba(0, 16, 31, 0.3);

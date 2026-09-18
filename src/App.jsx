@@ -28,6 +28,8 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import CaseStoriesPage from './pages/CaseStoriesPage';
 import CaseStoryDetailPage from './pages/CaseStoryDetailPage';
 import CareersPage from './pages/CareersPage';
+import SpiritualPage from './pages/SpiritualPage';
+import MeeRaMayaPage from './pages/MeeRaMayaPage';
 
 import { ProductsProvider } from './context/ProductsContext';
 
@@ -142,6 +144,8 @@ export default function App() {
                 {/* Phase 2 – About sub-pages */}
                 <Route path="/about/company" element={<OurCompanyPage />} />
                 <Route path="/about/leadership" element={<LeadershipPage />} />
+                <Route path="/about/spiritual" element={<SpiritualPage />} />
+                <Route path="/about/meeramaya" element={<MeeRaMayaPage />} />
 
                 {/* Phase 2 – Solutions */}
                 <Route path="/solutions/:slug" element={<SolutionDetailPage />} />

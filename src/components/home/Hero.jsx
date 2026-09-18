@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,37 +31,7 @@ export default function Hero() {
   const videoBgWrapperRef = useRef();
   
   const [activeText, setActiveText] = useState(null);
-  const zoomProgressRef = useRef(0);
 
-  // Effect to automatically scroll to the next section when the video finishes,
-  // but ONLY if the user has already manually zoomed in (zoomProgress > 0.5).
-  // We no longer lock the DOM siblings.
-  // Removed unused effect
-
-  useGSAP(() => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top top',
-        end: '+=1500', // Scroll distance for the zoom
-        pin: true,
-        scrub: 1.2, // Smooth scrub
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          zoomProgressRef.current = self.progress;
-        }
-      }
-    });
-
-    // 0. Cinematic background zoom: video scales subtly from 1 → 1.25 over the full scroll
-    //    This runs in parallel with the TECHNO text reveal, giving a premium depth effect.
-    tl.fromTo(videoBgWrapperRef.current,
-      { scale: 1 },
-      { scale: 1.25, ease: 'none', duration: 1 },
-      0 // starts at the very beginning of the timeline
-    );
-
-  }, { scope: containerRef });
 
   const handleTimeUpdate = () => {
     if (!videoRef.current) return;
@@ -230,6 +201,44 @@ export default function Hero() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Scroll Down Indicator */}
+      <div 
+        style={{
+          position: 'absolute',
+          bottom: '32px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          const nextSection = containerRef.current?.nextElementSibling;
+          if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+          }
+        }}
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid rgba(255,255,255,0.2)',
+          }}
+        >
+          <ChevronDown color="#FFFFFF" size={24} />
+        </motion.div>
       </div>
 
     </section>
