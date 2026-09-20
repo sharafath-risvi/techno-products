@@ -62,6 +62,38 @@ export default function ProductCategoryPage() {
   const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
   const categories = apiCategoriesData?.data || [];
 
+  const orderedCategories = useMemo(() => {
+    if (!categories || categories.length === 0) return [];
+    
+    const displayOrder = [
+      'Motors',
+      'Drives',
+      'Gearboxes',
+      'Switchgears',
+      'Enclosures',
+      'Cables'
+    ];
+    
+    const ordered = [];
+    
+    displayOrder.forEach(orderName => {
+      const match = categories.find(c => {
+        const catName = c.name.toLowerCase();
+        const targetName = orderName.toLowerCase();
+        return catName === targetName || catName === targetName.replace(/es$/, '') || catName === targetName.replace(/s$/, '');
+      });
+      if (match) ordered.push(match);
+    });
+    
+    categories.forEach(c => {
+      if (!ordered.find(o => o.id === c.id)) {
+        ordered.push(c);
+      }
+    });
+    
+    return ordered;
+  }, [categories]);
+
   // Fetch all products from context
   const { products: allProducts, loading: prodLoading, error: prodError } = useProducts();
 
@@ -92,8 +124,26 @@ export default function ProductCategoryPage() {
   // Extract a real product image for the hero section safely
   const heroImage = useMemo(() => {
     if (slug === 'all') {
-      return "/industries images/allproducts.webp";
+      return "/industries images/allproducts.png";
     }
+    
+    const heroImageMap = {
+      'drives': '/products_bghero/drives.png',
+      'motors': '/products_bghero/motors.png',
+      'gearbox': '/products_bghero/gearbox.png',
+      'gearboxes': '/products_bghero/gearbox.png',
+      'switchgears': '/products_bghero/switchgears.png',
+      'switchgear': '/products_bghero/switchgears.png',
+      'enclosure': '/products_bghero/Enclosure.png',
+      'enclosures': '/products_bghero/Enclosure.png',
+      'cables': '/products_bghero/cables.png',
+      'cable': '/products_bghero/cables.png'
+    };
+
+    if (heroImageMap[slug]) {
+      return heroImageMap[slug];
+    }
+
     const productWithImage = allProducts?.find(p => p.category_slug === slug && p.image);
     return productWithImage?.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop";
   }, [allProducts, slug]);
@@ -224,58 +274,29 @@ export default function ProductCategoryPage() {
           background: linear-gradient(to right, #001426 0%, transparent 100%);
         }
 
-        /* Desktop Only adjustments for All Products if required */
-        @media (min-width: 1024px) {
-          .cat-hero-img-box.is-all-products {
-            /* Keep it consistent with other product pages: full bleed, opacity 0.3, with gradient */
-            width: 45%; 
-            opacity: 0.35;
-          }
-          .cat-hero-img-box.is-all-products .cat-hero-img {
-            object-fit: cover;
-            object-position: center center;
-          }
-        }
+
       `}</style>
 
-      {/* 1. Category Hero (Unchanged) */}
-      <section className="category-hero-section" style={{ 
-        background: '#001426', 
-        paddingTop: 140, paddingBottom: 40, 
-        position: 'relative', overflow: 'hidden' 
-      }}>
-        <div className={`cat-hero-img-box ${slug === 'all' ? 'is-all-products' : ''}`}>
-          <img src={heroImage} alt="" className="cat-hero-img" />
-          <div className="cat-hero-overlay" />
-        </div>
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
-            <Link to="/products" style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, color: '#4F8FBF', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Products</Link>
-            <ChevronRight size={14} color="#4F8FBF" />
-            <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, color: '#fff', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{category.shortName}</span>
-          </div>
-          <div style={{ maxWidth: 700 }}>
-
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(36px, 5vw, 64px)', color: '#fff', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: 24 }}>
-              {category.name}
-            </h1>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginBottom: 40 }}>
-              {category.description}
-            </p>
-            <div className="category-stats-row" style={{ display: 'flex', gap: 24 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#fff' }}>{category.count}</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Models Available</span>
-              </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.2)' }} />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#fff' }}>Official</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Distributor</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 1. Category Hero */}
+      <>
+        {/* Unified Clean Hero for all categories */}
+        <section className="all-products-hero-section" style={{
+          position: 'relative',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'hidden',
+          paddingTop: slug !== 'all' ? '100px' : '0'
+        }}>
+          <img src={heroImage} alt={category.name || "Product Category"} style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block',
+            marginTop: slug === 'motors' ? '-35px' : (slug === 'cables' || slug === 'switchgears') ? '15px' : (slug === 'enclosures' ? '45px' : ((slug === 'gearboxes' || slug === 'gearbox') ? '10px' : (slug !== 'all' ? '-20px' : '0')))
+          }} />
+        </section>
+      </>
 
       {/* 2. Layout with Sidebar Filter and Product Grid */}
       <section style={{ paddingTop: 40, paddingBottom: 40, background: '#FFFFFF', minHeight: '100vh' }}>
@@ -323,7 +344,7 @@ export default function ProductCategoryPage() {
                   {catLoading ? (
                     <div style={{ padding: 16, textAlign: 'center' }}><Loader2 size={24} className="animate-spin" color="#0067A4" /></div>
                   ) : (
-                    categories.map(cat => (
+                    orderedCategories.map(cat => (
                       <Link 
                         key={cat.slug} 
                         to={`/products/${cat.slug}`} 
@@ -1065,7 +1086,7 @@ export default function ProductCategoryPage() {
                     >
                       All Products
                     </Link>
-                    {categories.map(cat => (
+                    {orderedCategories.map(cat => (
                       <Link 
                         key={cat.slug} 
                         to={`/products/${cat.slug}`} 

@@ -35,10 +35,16 @@ export default function Navbar() {
     label: 'All Products',
     desc: 'Browse our complete industrial catalogue',
     href: '/products/all',
-    image: '/industries images/allproducts.webp',
+    image: '/industries images/allproducts.png',
   };
 
-  const dynamicProductChildren = apiCategories.length > 0
+  const productOrder = ['Motors', 'Drives', 'Gearboxes', 'Switchgears', 'Enclosures', 'Cables'];
+  const getProductOrderIndex = (label) => {
+    const idx = productOrder.findIndex(o => label.toLowerCase() === o.toLowerCase() || label.toLowerCase() === o.toLowerCase().replace(/es$/, '') || label.toLowerCase() === o.toLowerCase().replace(/s$/, ''));
+    return idx === -1 ? 999 : idx;
+  };
+
+  const dynamicProductChildren = (apiCategories.length > 0
     ? apiCategories.map((cat) => {
       // Use an ORIGINAL REAL PRODUCT IMAGE from that category's actual products
       const realProductForCat = products.find(p => p.category_slug === cat.slug);
@@ -56,7 +62,7 @@ export default function Navbar() {
       desc: cat.tag,
       href: `/products/${cat.slug}`,
       image: cat.image,
-    }));
+    }))).sort((a, b) => getProductOrderIndex(a.label) - getProductOrderIndex(b.label));
 
   const navItems = [
     {
@@ -93,50 +99,53 @@ export default function Navbar() {
       insightsItems: [
         { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.webp' },
         { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.webp' },
+        { label: 'Galleries', desc: 'Explore moments, milestones and experiences from Techno Products', href: '/insights/galleries', image: '/galleries/47cbc571-551f-4b9b-a2e3-705139c7d396.JPG' },
       ],
     },
     { label: 'Contact', href: '/contact' },
   ];
 
+  const checkScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    let isPastHero = false;
+    // Dynamically query heroEl so we don't hold a stale reference from a previous route
+    const heroEl = document.querySelector('main > section:first-of-type') || document.querySelector('main > div:first-of-type') || document.getElementById('hero') || document.querySelector('.hero-section');
+
+    if (heroEl) {
+      const heroBottom = heroEl.getBoundingClientRect().bottom;
+      isPastHero = heroBottom <= 112;
+    } else {
+      isPastHero = currentScrollY > window.innerHeight - 112;
+    }
+    
+    if (isPastHero !== pastHeroRef.current) {
+      pastHeroRef.current = isPastHero;
+      setPastHero(isPastHero);
+    }
+
+    let shouldShow = showNavbarRef.current;
+    if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
+      shouldShow = false;
+    } else if (currentScrollY < lastScrollYRef.current || currentScrollY <= 100) {
+      shouldShow = true;
+    }
+    
+    if (shouldShow !== showNavbarRef.current) {
+      showNavbarRef.current = shouldShow;
+      setShowNavbar(shouldShow);
+    }
+    
+    lastScrollYRef.current = currentScrollY;
+  };
+
   useEffect(() => {
     let ticking = false;
-    let heroEl = null;
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-
-          let isPastHero = false;
-          if (!heroEl) {
-            heroEl = document.querySelector('main > section:first-of-type') || document.querySelector('main > div:first-of-type') || document.getElementById('hero') || document.querySelector('.hero-section');
-          }
-
-          if (heroEl) {
-            const heroBottom = heroEl.getBoundingClientRect().bottom;
-            isPastHero = heroBottom <= 112;
-          } else {
-            isPastHero = currentScrollY > window.innerHeight - 112;
-          }
-          
-          if (isPastHero !== pastHeroRef.current) {
-            pastHeroRef.current = isPastHero;
-            setPastHero(isPastHero);
-          }
-
-          let shouldShow = showNavbarRef.current;
-          if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
-            shouldShow = false;
-          } else if (currentScrollY < lastScrollYRef.current || currentScrollY <= 100) {
-            shouldShow = true;
-          }
-          
-          if (shouldShow !== showNavbarRef.current) {
-            showNavbarRef.current = shouldShow;
-            setShowNavbar(shouldShow);
-          }
-          
-          lastScrollYRef.current = currentScrollY;
+          checkScroll();
           ticking = false;
         });
         ticking = true;
@@ -148,7 +157,17 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => { setMobileOpen(false); setOpenDropdown(null); }, [location]);
+  useEffect(() => { 
+    setMobileOpen(false); 
+    setOpenDropdown(null); 
+    // Evaluate scroll position immediately on route change
+    checkScroll();
+    // Also check after a very short delay to allow the new page's DOM to mount
+    const timeoutId = setTimeout(() => {
+      checkScroll();
+    }, 50);
+    return () => clearTimeout(timeoutId);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (mobileOpen) {
@@ -179,27 +198,33 @@ export default function Navbar() {
     const p = location.pathname;
     if (p === '/contact' || p === '/careers' || p === '/about/leadership') return true;
     if (p.startsWith('/case-stories/') && p.split('/').length === 3) return true;
-    if (p.startsWith('/products/') && p.split('/').length === 4) return true;
     return false;
   };
   const lightHero = isLightHero();
 
-  const isTransparentState = !pastHero && !lightHero && !mobileOpen;
-  const applyWhiteState = pastHero || (isTransparentState && isHovered);
+  const isTransparentAllowed = () => {
+    const p = location.pathname;
+    if (p === '/') return true;
+    if (p === '/about/company') return true;
+    if (p.startsWith('/solutions')) return true;
+    if (p.startsWith('/industries')) return true;
+    if (p.startsWith('/insights')) return true;
+    return false;
+  };
+
+  const isTransparentState = !pastHero && !lightHero && !mobileOpen && isTransparentAllowed();
+  const applyWhiteState = pastHero || (!isTransparentAllowed() && !lightHero);
 
   const currentTextColor = mobileOpen ? textColor : (applyWhiteState || lightHero ? '#0F172A' : '#FFFFFF');
   const currentActiveColor = mobileOpen ? activeBlue : (applyWhiteState || lightHero ? activeBlue : '#FFFFFF');
 
-  const isHoverWhite = isTransparentState && isHovered;
   const navBackground = mobileOpen 
     ? 'transparent' 
-    : (isHoverWhite 
-        ? 'rgba(255,255,255,1)' 
-        : (pastHero 
-            ? 'rgba(255,255,255,0.85)' 
-            : (lightHero 
-                ? 'rgba(255,255,255,0.1)' 
-                : 'rgba(0, 0, 0, 0.25)')));
+    : (applyWhiteState 
+        ? 'rgba(255,255,255,0.85)' 
+        : (lightHero 
+            ? 'rgba(255,255,255,0.1)' 
+            : 'rgba(0, 0, 0, 0.25)'));
 
   return (
     <>
@@ -258,7 +283,7 @@ export default function Navbar() {
                           {hasDropdown && <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />}
                           <motion.div
                             initial={false}
-                            animate={{ scaleX: (isActive || isOpen) && !(isTransparentState && isHovered) ? 1 : 0 }}
+                            animate={{ scaleX: (isActive || isOpen) ? 1 : 0 }}
                             transition={{ duration: 0.25, ease: 'easeOut' }}
                             style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: activeBlue, transformOrigin: 'center' }}
                           />
@@ -279,7 +304,7 @@ export default function Navbar() {
                       {hasDropdown && <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: isOpen ? 'rotate(180deg)' : 'none' }} />}
                       <motion.div
                         initial={false}
-                        animate={{ scaleX: isOpen && !(isTransparentState && isHovered) ? 1 : 0 }}
+                        animate={{ scaleX: isOpen ? 1 : 0 }}
                         transition={{ duration: 0.25, ease: 'easeOut' }}
                         style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 2, background: activeBlue, transformOrigin: 'center' }}
                       />

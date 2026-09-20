@@ -45,8 +45,8 @@ export default function ContactPage() {
           <div className="contact-hero-image-wrapper">
             <motion.div style={{ y, width: '100%', height: '120%' }}>
               <img 
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80" 
-                alt="Industrial Engineering" 
+                src="/products_bghero/contacthero.png" 
+                alt="Contact Techno Products" 
                 className="hero-image"
               />
             </motion.div>
@@ -379,7 +379,7 @@ export default function ContactPage() {
           gap: 60px;
         }
         .contact-hero-content {
-          flex: 0 0 50%;
+          flex: 0 0 46%;
         }
         .hero-heading {
           font-family: var(--font-heading);
@@ -403,7 +403,7 @@ export default function ContactPage() {
           gap: 16px;
         }
         .contact-hero-image-wrapper {
-          flex: 0 0 calc(50% - 60px);
+          flex: 0 0 calc(54% - 60px);
           height: 600px;
           border-radius: 24px;
           overflow: hidden;

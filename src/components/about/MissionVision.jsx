@@ -31,10 +31,25 @@ export default function MissionVision() {
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <h3 className="content-title">Our <span style={{ color: '#00446F' }}>Mission</span></h3>
-              <p className="content-text">
-                At Techno Products, we integrate technology, engineering expertise, and customer-focused solutions to deliver measurable success. Through innovation, quality, and reliability, we build lasting partnerships and create long-term value for our customers.
-              </p>
+              <div style={{ marginBottom: '48px' }}>
+                <h3 className="content-title">01 — <span style={{ color: '#00446F' }}>Innovation</span></h3>
+                <ul className="content-text" style={{ paddingLeft: '24px', margin: '20px 0 0 0' }}>
+                  <li>Continuous Improvement</li>
+                  <li>Creative Solution Providing</li>
+                  <li>Customer-Centric Approach</li>
+                  <li>Adaptability</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="content-title">02 — <span style={{ color: '#00446F' }}>Value Addition</span></h3>
+                <ul className="content-text" style={{ paddingLeft: '24px', margin: '20px 0 0 0' }}>
+                  <li>Understanding Customer Needs</li>
+                  <li>Enhancing Service Support</li>
+                  <li>Upgrading Efficiency</li>
+                  <li>Continuous relationship</li>
+                </ul>
+              </div>
             </motion.div>
           </div>
         </motion.div>
@@ -55,10 +70,25 @@ export default function MissionVision() {
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <h3 className="content-title">Our <span style={{ color: '#00446F' }}>Vision</span></h3>
-              <p className="content-text">
-                Our vision is to empower industries through innovative engineering solutions, trusted expertise, and reliable execution. By fostering collaboration, creativity, and long-term partnerships, we help our customers achieve sustainable growth and operational excellence.
-              </p>
+              <div style={{ marginBottom: '48px' }}>
+                <h3 className="content-title">03 — <span style={{ color: '#00446F' }}>Commitment</span></h3>
+                <ul className="content-text" style={{ paddingLeft: '24px', margin: '20px 0 0 0' }}>
+                  <li>Accountability</li>
+                  <li>Long-term Focus</li>
+                  <li>Adherence to Values</li>
+                  <li>Product on Wheels</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h3 className="content-title">04 — <span style={{ color: '#00446F' }}>Excellence</span></h3>
+                <ul className="content-text" style={{ paddingLeft: '24px', margin: '20px 0 0 0' }}>
+                  <li>Consistency and Reliability</li>
+                  <li>Seamless Service</li>
+                  <li>One Stop Solution</li>
+                  <li>Happiness Guaranteed</li>
+                </ul>
+              </div>
             </motion.div>
           </div>
           

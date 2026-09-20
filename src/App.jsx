@@ -26,6 +26,7 @@ import IndustryDetailPage from './pages/IndustryDetailPage';
 import BlogPage from './pages/BlogPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import CaseStoriesPage from './pages/CaseStoriesPage';
+import GalleriesPage from './pages/GalleriesPage';
 import CaseStoryDetailPage from './pages/CaseStoryDetailPage';
 import CareersPage from './pages/CareersPage';
 import SpiritualPage from './pages/SpiritualPage';
@@ -156,6 +157,7 @@ export default function App() {
                 {/* Phase 2 – Insights */}
                 <Route path="/insights/blog" element={<BlogPage />} />
                 <Route path="/insights/testimonials" element={<TestimonialsPage />} />
+                <Route path="/insights/galleries" element={<GalleriesPage />} />
                 <Route path="/case-stories" element={<CaseStoriesPage />} />
                 <Route path="/case-stories/:postId" element={<CaseStoryDetailPage />} />
 

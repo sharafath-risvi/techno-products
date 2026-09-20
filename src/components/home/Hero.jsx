@@ -85,7 +85,7 @@ export default function Hero() {
           <video 
             ref={videoRef}
             onTimeUpdate={handleTimeUpdate}
-            src="/videos/download.mp4"
+            src="/videos/products_video.mp4"
             autoPlay 
             loop
             muted 

@@ -77,7 +77,6 @@ export default function MeetOurTeam() {
               </div>
               <div className="team-card-content">
                 <h3 className="team-member-name">{member.name}</h3>
-                <p className="team-member-role">{member.role}</p>
               </div>
             </motion.div>
           ))}
