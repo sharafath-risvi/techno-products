@@ -23,7 +23,6 @@ export default function ContactPage() {
           <div className="contact-hero-content">
             <RevealText>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
-                <div className="hero-tagline-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: '#D71B32' }} />
                 <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#0067A4' }}>
                   CONTACT US
                 </span>

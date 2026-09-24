@@ -374,11 +374,11 @@ export default function ProductDetailPage() {
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label>GST</label>
+                      <label>GST *</label>
                       <div className="input-with-icon">
                         <FileText size={18} className="input-icon" />
                         <input 
-                          type="text" placeholder="e.g. 22AAAAA0000A1Z5" 
+                          type="text" required placeholder="e.g. 22AAAAA0000A1Z5" 
                           value={formData.gst} onChange={e => setFormData({...formData, gst: e.target.value})}
                         />
                       </div>
