@@ -7,22 +7,9 @@ import { ChevronDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const storyContent = [
-  {
-    subtitle: "ESTABLISHED 1999",
-    title: "Engineering With A Higher Purpose",
-    desc: "Delivering world-class industrial automation and mechanical solutions across India."
-  },
-  {
-    subtitle: "AUTHORISED CHANNEL PARTNER",
-    title: "Global Industrial Brands",
-    desc: "Strategic alliances with Danfoss, Innomotics, Schneider Electric, and Motovario."
-  },
-  {
-    subtitle: "END-TO-END CAPABILITY",
-    title: "Mechanical, Electrical & Control",
-    desc: "From concept design to commissioning and lifecycle maintenance support."
-  }
+const dynamicPhrases = [
+  "Mechanical Things",
+  "Global Industries"
 ];
 
 export default function Hero() {
@@ -42,12 +29,10 @@ export default function Hero() {
     
     // Text logic synced to video timeline
     let newActiveText = null;
-    if (progress > 0.10 && progress < 0.35) {
+    if (progress > 0.05 && progress < 0.48) {
       newActiveText = 0;
-    } else if (progress > 0.40 && progress < 0.65) {
+    } else if (progress > 0.52 && progress < 0.95) {
       newActiveText = 1;
-    } else if (progress > 0.70 && progress < 0.95) { 
-      newActiveText = 2;
     }
     
     if (activeText !== newActiveText) {
@@ -105,102 +90,60 @@ export default function Hero() {
         inset: 0,
         zIndex: 1,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        padding: '0 24px',
       }}>
-        <AnimatePresence mode="wait">
-          {activeText !== null && (
-            <motion.div
-              key={activeText}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1, transition: { duration: 0.1 } }, // Fast base entry so children can animate
-                exit: { opacity: 0, transition: { duration: 0.8, delay: 0.4 } } // Ensure parent waits for longest child (0.6s + 0.2s delay)
-              }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                maxWidth: '960px',
-                padding: '0 24px',
-                position: 'absolute', // Ensures strict stacking
-              }}
-            >
-              {/* Premium Eyebrow */}
-              <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: 15 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 } },
-                  exit: { opacity: 0, y: -10, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 } }
-                }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(11px, 1.2vw, 13px)',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: '#E2E8F0',
-                  marginBottom: '24px',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  textShadow: '0 4px 12px rgba(0,0,0,0.5)',
-                }}
-              >
-                <div style={{ width: 32, height: 2, background: '#D71B32' }} /> {/* Brand Accent Red */}
-                {storyContent[activeText].subtitle}
-                <div style={{ width: 32, height: 2, background: '#D71B32' }} />
-              </motion.div>
-              
-              {/* Strong Large Headline (Masked Reveal) */}
-              <div style={{ overflow: 'hidden', paddingBottom: '8px', marginBottom: '24px' }}>
-                <motion.div
-                  variants={{
-                    hidden: { opacity: 0, y: '100%' },
-                    visible: { opacity: 1, y: '0%', transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.25 } },
-                    exit: { opacity: 0, y: '-30%', transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 } }
-                  }}
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(36px, 5vw, 76px)',
-                    fontWeight: 800,
-                    color: '#FFFFFF',
-                    lineHeight: 1.08,
-                    letterSpacing: '-0.025em',
-                    textShadow: '0 12px 40px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)',
-                  }}
-                >
-                  {storyContent[activeText].title}
-                </motion.div>
-              </div>
 
-              {/* Short Supporting Copy */}
+        {/* STATIC HIGHLIGHTED TITLE with Premium Industrial Design */}
+        <div style={{ position: 'relative', marginBottom: 40, textAlign: 'center', padding: '0 24px', maxWidth: 1200 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(40px, 6vw, 96px)',
+              fontWeight: 800,
+              color: '#FFFFFF',
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              textShadow: '0 12px 40px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)',
+              textTransform: 'uppercase', // Premium editorial/industrial feel
+            }}
+          >
+            Engineering With A Higher Purpose
+          </motion.div>
+        </div>
+
+        {/* ROTATING CONTENT WRAPPER */}
+        <div style={{ position: 'relative', width: '100%', height: '60px', display: 'flex', justifyContent: 'center' }}>
+          <AnimatePresence mode="wait">
+            {activeText !== null && (
               <motion.div
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 } },
-                  exit: { opacity: 0, y: 15, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0 } }
-                }}
+                key={activeText}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                 style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(16px, 1.4vw, 20px)',
-                  color: 'rgba(255,255,255,0.75)',
-                  lineHeight: 1.6,
-                  maxWidth: '640px',
+                  position: 'absolute',
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(20px, 2.5vw, 36px)',
                   fontWeight: 400,
-                  textShadow: '0 4px 20px rgba(0,0,0,0.6)',
+                  color: '#E2E8F0', // Slightly muted compared to the bold white title
+                  letterSpacing: '0.04em',
+                  textShadow: '0 4px 12px rgba(0,0,0,0.6)',
+                  textTransform: 'uppercase'
                 }}
               >
-                {storyContent[activeText].desc}
+                {dynamicPhrases[activeText]}
               </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Scroll Down Indicator */}

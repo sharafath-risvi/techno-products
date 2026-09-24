@@ -4,9 +4,9 @@ const STORY_IMG = '/Background_wallpapers/our_story.jpg';
 
 const TIMELINE_DATA = [
   { year: '1999', title: 'Company Founded', desc: 'Started with a vision to deliver dependable engineering solutions to local industries.' },
-  { year: '2005', title: 'Industrial Expansion', desc: 'Expanded our footprint into heavy machinery and complete mechanical systems.' },
+  { year: '2005', title: 'Industrial Expansion', desc: 'Footprint in India Dubai and Jakarta across Tamil Nadu with complete Mechanical system solution' },
   { year: '2015', title: 'Automation Solutions', desc: 'Launched our electrical and control panel division, pioneering factory automation.' },
-  { year: '2025', title: 'Trusted Partner', desc: 'Recognized as India’s premier partner for precision engineering and manufacturing excellence.' }
+  { year: '2025', title: 'Trusted Partner', desc: 'Expanded our wing to Middle East and Indonesia' }
 ];
 
 export default function FullOurStory() {
@@ -149,42 +149,32 @@ export default function FullOurStory() {
             </div>
 
             {/* Achievement Statistics Grid */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 24
-            }}>
-              {[
-                { val: '26+', label: 'Years' },
-                { val: '5000+', label: 'Projects' },
-                { val: 'ISO', label: 'Certified' },
-                { val: '100%', label: 'Commitment' }
-              ].map((stat, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-50px' }}
-                  transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
-                  style={{
-                    background: '#FFFFFF',
-                    padding: 32,
-                    borderRadius: 24,
-                    boxShadow: '0 20px 40px -10px rgba(0,0,0,0.05)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-start',
-                    border: '1px solid rgba(0,0,0,0.03)'
-                  }}
-                >
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3vw, 48px)', color: '#00101F', lineHeight: 1, marginBottom: 8 }}>
-                    {stat.val}
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, color: '#777777', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 40 }}>
+              {/* Certifications Section */}
+              <div className="cert-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+                {[
+                  { logo: '/Certified/ISO_CERTIFIED.png', label: 'ISO Certified' },
+                  { logo: '/Certified/crisil.png', label: 'CRISIL' },
+                  { logo: '/Certified/dun&bradstreet.png', label: 'Dun & Bradstreet' }
+                ].map((cert, i) => (
+                  <motion.div 
+                    key={cert.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.6, delay: i * 0.1, ease: 'easeOut' }}
+                    style={{
+                      padding: '0 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: 180
+                    }}
+                  >
+                    <img src={cert.logo} alt={`${cert.label} Logo`} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                  </motion.div>
+                ))}
+              </div>
             </div>
 
           </div>
@@ -204,6 +194,16 @@ export default function FullOurStory() {
             height: 480px !important;
             min-height: auto !important;
             border-radius: 20px !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .cert-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .cert-grid > div {
+            height: 140px !important;
+            padding: 0 16px !important;
           }
         }
       `}</style>

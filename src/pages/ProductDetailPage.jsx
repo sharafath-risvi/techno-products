@@ -24,6 +24,9 @@ export default function ProductDetailPage() {
     companyName: '',
     email: '',
     phone: '',
+    gst: '',
+    address: '',
+    industryType: '',
     message: ''
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -294,7 +297,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Email Technical Support</div>
-                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquiry@technoproducts.com</div>
+                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquiry@technoproducts.in</div>
                   </div>
                 </div>
               </div>
@@ -367,6 +370,46 @@ export default function ProductDetailPage() {
                         />
                       </div>
                     </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>GST</label>
+                      <div className="input-with-icon">
+                        <FileText size={18} className="input-icon" />
+                        <input 
+                          type="text" placeholder="e.g. 22AAAAA0000A1Z5" 
+                          value={formData.gst} onChange={e => setFormData({...formData, gst: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>Industry Type / Application</label>
+                      <div className="input-with-icon">
+                        <Settings size={18} className="input-icon" />
+                        <input 
+                          type="text" placeholder="e.g. Manufacturing, HVAC" 
+                          value={formData.industryType} onChange={e => setFormData({...formData, industryType: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Address</label>
+                    <textarea 
+                      rows="2" 
+                      placeholder="Your Company Address"
+                      value={formData.address} 
+                      onChange={e => setFormData({...formData, address: e.target.value})}
+                      style={{
+                        width: '100%', padding: '14px 16px', background: '#F8FAFC',
+                        border: '1px solid #E2E8F0', borderRadius: '12px',
+                        fontFamily: 'var(--font-body)', fontSize: '15px', color: '#0F172A',
+                        outline: 'none', transition: 'border-color 0.2s',
+                        resize: 'vertical'
+                      }}
+                    />
                   </div>
 
                   <div className="form-group">

@@ -8,15 +8,15 @@ import { useProducts } from '../context/ProductsContext';
 // Filter Configurations based on User Prompt
 const FILTER_CONFIG = {
   motors: {
+    brand: ["Siemens", "Crompton", "Havells", "Bharat Bijlee", "Marathon"],
     hp: ["0.16", "0.25", "0.35", "0.5", "0.75", "1", "1.5", "2", "3", "4", "5", "7.5", "10", "12.5", "15", "20", "25", "30", "40", "50", "60", "75", "100", "120", "150", "170", "180", "200", "215", "220", "240", "270", "300", "335", "340", "370", "425", "473", "500"],
     rpm: ["3000 2 Pole", "1500 4 Pole", "1000 6 Pole", "750 8 Pole"],
-    brand: ["Siemens", "Crompton", "Havells", "Bharat Bijlee", "Marathon"],
     mounting: ["Foot", "Flange", "Foot Cum Flange", "Face", "Foot Cum Face"]
   },
   gearbox: {
-    hp: ["0.12", "0.16", "0.25", "0.33", "0.5", "0.75", "1", "1.5", "2", "3", "4", "5", "5.5", "7.5", "10", "12.5", "15", "20", "25", "30", "40", "50", "60", "75"],
     type: ["Bevel Helical - A Series", "Inline Helical- AS Series", "Planetary - 3 SERIES", "Shaft Mounted - TA Series", "VF", "VFR Series", "Worm - W", "WR"],
-    model: ["100", "100.1", "110", "130", "150", "16", "185", "20", "210", "25", "250", "30", "30.3", "35", "35.35", "44", "45", "45.55", "49", "49,55", "50.6", "55", "60", "60.6", "603", "63", "70.7", "75", "80", "80.8", "86", "90"]
+    model: ["100", "100.1", "110", "130", "150", "16", "185", "20", "210", "25", "250", "30", "30.3", "35", "35.35", "44", "45", "45.55", "49", "49,55", "50.6", "55", "60", "60.6", "603", "63", "70.7", "75", "80", "80.8", "86", "90"],
+    hp: ["0.12", "0.16", "0.25", "0.33", "0.5", "0.75", "1", "1.5", "2", "3", "4", "5", "5.5", "7.5", "10", "12.5", "15", "20", "25", "30", "40", "50", "60", "75"]
   },
   drives: {
     model: ["AUTOMATION DRIVE (ADVANCED) - FC301", "AUTOMATION DRIVE (ADVANCED) - FC302", "AUTOMATION DRIVE (BASIC) - FC360", "HVAC (ADVANCED) - FC102", "HVAC (BASIC) - FC101", "MICRO DRIVE(BASIC) - FC051"],

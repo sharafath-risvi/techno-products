@@ -172,7 +172,7 @@ function LeadershipHero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: EASE, delay: 0.15 }}
             style={{
-              display: 'inline-flex', alignItems: 'center',
+              display: 'inline-flex', alignItems: 'center', gap: 12,
               marginBottom: 32,
             }}
           >
@@ -183,6 +183,15 @@ function LeadershipHero() {
               color: '#0067A4',
             }}>
               About Our Leadership
+            </span>
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#D71B32' }} />
+            <span style={{
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700, fontSize: 11,
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              color: '#0067A4',
+            }}>
+              Since 1999
             </span>
           </motion.div>
 
@@ -296,9 +305,9 @@ function LeadershipHero() {
             }}
           >
             {[
-              { val: '26+', label: 'Years of Leadership' },
-              { val: '5,000+', label: 'Clients Served' },
-              { val: '40+', label: 'Engineering Staff' },
+              { val: '5000+', label: 'Customers' },
+              { val: '40+', label: 'Projects' },
+              { val: '26+', label: 'Years' },
             ].map((stat, i) => (
               <div
                 key={stat.label}
@@ -331,6 +340,8 @@ function LeadershipHero() {
               </div>
             ))}
           </motion.div>
+
+
         </motion.div>
 
         {/* ─── RIGHT: Layered image composition ─── */}

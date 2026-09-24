@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import SectionTag, { RevealText } from '../components/ui/RevealText';
+import OurCompanyHeroCarousel from '../components/about/OurCompanyHeroCarousel';
 import AboutHero from '../components/about/AboutHero';
 import FullOurStory from '../components/about/FullOurStory';
 import MissionVision from '../components/about/MissionVision';
@@ -60,16 +61,19 @@ const cardVariants = {
 export default function OurCompanyPage() {
   return (
     <main>
-      {/* 1. Cinematic Hero — exact same AboutHero component */}
+      {/* 1. New Carousel Hero */}
+      <OurCompanyHeroCarousel />
+
+      {/* 2. Our Identity (Static version of previous animated hero) */}
       <AboutHero />
 
-      {/* 2. Our Story — exact same FullOurStory component */}
+      {/* 3. Our Story — Timeline & Statistics */}
       <FullOurStory />
 
-      {/* 3. Mission & Vision — exact same MissionVision component */}
+      {/* 4. Mission & Vision */}
       <MissionVision />
 
-      {/* 4. Core Values — premium editorial redesign */}
+      {/* 5. Core Values — premium editorial redesign */}
       <section style={{
         padding: '40px 0',
         background: '#FAFAFA',
