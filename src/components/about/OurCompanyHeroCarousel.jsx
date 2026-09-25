@@ -42,13 +42,14 @@ export default function OurCompanyHeroCarousel() {
             display: none !important;
           }
           .carousel-placeholder-mobile {
-            width: 100% !important; height: auto !important; visibility: hidden !important; display: block !important;
+            width: 100% !important; height: 1000px !important; visibility: hidden !important; display: block !important;
           }
           .about-hero-carousel {
             margin-top: 0 !important;
           }
           .about-hero-carousel img {
-            object-fit: contain !important; /* ensure image fully fits without crop */
+            object-fit: cover !important; /* ensure image fully fills the taller container */
+            height: 100% !important;
           }
         }
       `}</style>
