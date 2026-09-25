@@ -274,7 +274,17 @@ export default function ProductCategoryPage() {
           background: linear-gradient(to right, #001426 0%, transparent 100%);
         }
 
-
+        @media (max-width: 1023px) {
+          .all-products-hero-section {
+            padding-top: 0 !important;
+          }
+          .all-products-hero-section img {
+            margin-top: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            object-fit: contain !important;
+          }
+        }
       `}</style>
 
       {/* 1. Category Hero */}

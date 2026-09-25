@@ -30,11 +30,41 @@ export default function OurCompanyHeroCarousel() {
   return (
     <section className="about-hero-carousel" style={{ position: 'relative', width: '100%', overflow: 'hidden', background: '#00101F', marginTop: 112 }}>
       
-      {/* Invisible placeholder to establish natural height based on aspect ratio */}
+      <style>{`
+        .carousel-placeholder-desktop {
+          width: 100%; height: auto; visibility: hidden; display: block;
+        }
+        .carousel-placeholder-mobile {
+          display: none;
+        }
+        @media (max-width: 1023px) {
+          .carousel-placeholder-desktop {
+            display: none !important;
+          }
+          .carousel-placeholder-mobile {
+            width: 100% !important; height: auto !important; visibility: hidden !important; display: block !important;
+          }
+          .about-hero-carousel {
+            margin-top: 0 !important;
+          }
+          .about-hero-carousel img {
+            object-fit: contain !important; /* ensure image fully fits without crop */
+          }
+        }
+      `}</style>
+      
+      {/* Desktop placeholder (fixed to first image to prevent layout shift) */}
       <img 
         src={carouselImages[0]} 
-        alt="Placeholder"
-        style={{ width: '100%', height: 'auto', visibility: 'hidden', display: 'block' }}
+        alt="Placeholder Desktop"
+        className="carousel-placeholder-desktop"
+      />
+      
+      {/* Mobile placeholder (dynamic to prevent letterboxing and ensure full width) */}
+      <img 
+        src={carouselImages[currentIndex]} 
+        alt="Placeholder Mobile"
+        className="carousel-placeholder-mobile"
       />
 
       <AnimatePresence mode="popLayout">

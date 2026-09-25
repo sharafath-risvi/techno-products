@@ -111,6 +111,14 @@ export default function AboutHero() {
             margin: 0 auto;
           }
         }
+        @media (max-width: 767px) {
+          .identity-image-wrap {
+            max-width: 100% !important;
+          }
+          .identity-image-wrap img {
+            aspect-ratio: 16/9 !important;
+          }
+        }
       `}</style>
     </section>
   );
