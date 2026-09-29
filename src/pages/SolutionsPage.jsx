@@ -59,7 +59,7 @@ export default function SolutionsPage() {
                 <div style={{ padding: 28 }}>
                   <div style={{ fontSize: 28, marginBottom: 12 }}>{sol.icon}</div>
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, color: '#001426', marginBottom: 12, lineHeight: 1.2 }}>{sol.title}</h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 20 }}>{sol.description}</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.7, marginBottom: 20 }}>{sol.description}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
                     {sol.industries.slice(0, 3).map(ind => (
                       <span key={ind} style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#0067A4', background: '#EEF4F8', borderRadius: 20, padding: '3px 10px' }}>{ind}</span>
@@ -121,7 +121,7 @@ export default function SolutionsPage() {
           <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 40px)', color: '#000', marginBottom: 16 }}>
             Not Sure Which Solution You Need?
           </h2>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#666', marginBottom: 32, maxWidth: 520, marginInline: 'auto' }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#000000', marginBottom: 32, maxWidth: 520, marginInline: 'auto' }}>
             Our application engineers will analyse your requirements and recommend the right approach — at no charge.
           </p>
           <Link to="/contact" className="btn btn-primary" style={{ padding: '14px 36px', fontSize: 15 }}>

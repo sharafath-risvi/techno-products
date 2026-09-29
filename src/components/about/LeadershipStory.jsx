@@ -33,14 +33,14 @@ export default function LeadershipStory() {
               lineHeight: 1.1, letterSpacing: '-0.02em', margin: '0 0 24px 0' 
             }}
           >
-            Meet Our <span style={{ color: '#00446F' }}>Founder</span>
+            Meet Our <span style={{ color: '#00446F' }}>Founder's</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#555555', lineHeight: 1.6, margin: 0 }}
+            style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#000000', lineHeight: 1.6, margin: 0 }}
           >
             The visionary minds driving Techno Products toward engineering excellence and continuous industrial innovation.
           </motion.p>
@@ -98,14 +98,14 @@ export default function LeadershipStory() {
                     alignItems: 'flex-start'
                   }}
                 >
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3.5vw, 48px)', color: '#111111', margin: '0 0 12px 0', lineHeight: 1.1 }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3.5vw, 48px)', color: '#000000', margin: '0 0 12px 0', lineHeight: 1.1 }}>
                     {founder.name}
                   </h3>
                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 15, color: '#D71B32', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 32 }}>
                     {founder.position}
                   </div>
                   
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#555555', lineHeight: 1.6, margin: '0 0 48px 0', fontWeight: 400, maxWidth: 600 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#000000', lineHeight: 1.6, margin: '0 0 48px 0', fontWeight: 400, maxWidth: 600 }}>
                     {founder.shortDesc}
                   </p>
 

@@ -122,7 +122,7 @@ export default function ProductCategories() {
                   <div className="hero-number">{activeProduct.number}</div>
                   <h3 className="hero-title" style={{ marginBottom: 16 }}>{activeProduct.title}</h3>
                   <p className="hero-description" style={{
-                    fontFamily: 'var(--font-body)', fontSize: 17, color: '#555',
+                    fontFamily: 'var(--font-body)', fontSize: 17, color: '#000000',
                     lineHeight: 1.6, maxWidth: 480, margin: 0,
                     display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'
                   }}>

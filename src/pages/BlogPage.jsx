@@ -56,15 +56,15 @@ export default function BlogPage() {
               <div style={{ padding: '48px 48px 48px 0' }} className="featured-content">
                 <div style={{ display: 'flex', gap: 12, marginBottom: 20 }}>
                   <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#0067A4', background: '#EEF4F8', borderRadius: 20, padding: '4px 12px' }}>{featured.category}</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000', display: 'flex', alignItems: 'center', gap: 4 }}>
                     <Clock size={12} />{featured.readTime}
                   </span>
                 </div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(22px, 2.5vw, 32px)', color: '#000', lineHeight: 1.2, marginBottom: 16 }}>{featured.title}</h2>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#555', lineHeight: 1.8, marginBottom: 28 }}>{featured.excerpt}</p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.8, marginBottom: 28 }}>{featured.excerpt}</p>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
                   {featured.tags.map(t => (
-                    <span key={t} style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#666', background: '#eee', borderRadius: 20, padding: '3px 10px' }}>{t}</span>
+                    <span key={t} style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#000000', background: '#eee', borderRadius: 20, padding: '3px 10px' }}>{t}</span>
                   ))}
                 </div>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: '#00446F' }}>
@@ -119,14 +119,14 @@ export default function BlogPage() {
                 <div style={{ padding: 24 }}>
                   <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
                     <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#0067A4', background: '#EEF4F8', borderRadius: 20, padding: '3px 10px' }}>{post.category}</span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#999', display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={11} />{post.readTime}</span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#000000', display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={11} />{post.readTime}</span>
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 17, color: '#000', lineHeight: 1.3, marginBottom: 12 }}>{post.title}</h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 16 }}>{post.excerpt.slice(0, 100)}...</p>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.7, marginBottom: 16 }}>{post.excerpt.slice(0, 100)}...</p>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {post.tags.slice(0, 2).map(t => (
-                        <span key={t} style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#888', background: '#F0F0F0', borderRadius: 20, padding: '2px 8px', display: 'flex', alignItems: 'center', gap: 3 }}>
+                        <span key={t} style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: '#000000', background: '#F0F0F0', borderRadius: 20, padding: '2px 8px', display: 'flex', alignItems: 'center', gap: 3 }}>
                           <Tag size={10} />{t}
                         </span>
                       ))}
@@ -138,7 +138,7 @@ export default function BlogPage() {
             ))}
           </div>
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px 0', color: '#888', fontFamily: 'var(--font-body)', fontSize: 16 }}>
+            <div style={{ textAlign: 'center', padding: '60px 0', color: '#000000', fontFamily: 'var(--font-body)', fontSize: 16 }}>
               No articles in this category yet. More coming soon.
             </div>
           )}

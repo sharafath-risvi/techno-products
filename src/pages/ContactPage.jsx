@@ -269,27 +269,27 @@ export default function ContactPage() {
               <div className="sales-network-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Trichy</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-11192</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-11192</span>
                 </div>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Dindigul</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75310</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75310</span>
                 </div>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Erode</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98418-17058</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98418-17058</span>
                 </div>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Thoothukudi</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 97109-35725</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 97109-35725</span>
                 </div>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Kerala</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75316</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75316</span>
                 </div>
                 <div className="sales-mini-item" style={{ background: '#F8FAFC', padding: '24px', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'flex-start', textAlign: 'left', transition: 'all 0.3s' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '18px', color: '#001426' }}>Puducherry</span>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#444', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75314</span>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000', display: 'flex', alignItems: 'center', gap: '8px' }}><Phone size={16} color="#0067A4" /> +91 98412-75314</span>
                 </div>
               </div>
             </motion.div>

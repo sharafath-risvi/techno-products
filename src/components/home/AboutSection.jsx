@@ -69,7 +69,7 @@ export default function AboutSection() {
                 <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, color: '#00446F' }}>
                   Danfoss DrivePro®
                 </div>
-                <div style={{ fontSize: 11, color: '#666', marginTop: 2 }}>
+                <div style={{ fontSize: 11, color: '#000000', marginTop: 2 }}>
                   Authorized Partner
                 </div>
               </div>

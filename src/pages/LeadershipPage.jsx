@@ -241,7 +241,7 @@ function LeadershipHero() {
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: 'clamp(16px, 1.3vw, 18px)',
-              color: '#555',
+              color: '#000000',
               lineHeight: 1.8,
               maxWidth: 520,
               marginBottom: 48,
@@ -331,7 +331,7 @@ function LeadershipHero() {
                 <div style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 11,
-                  color: '#888',
+                  color: '#000000',
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
                 }}>
@@ -358,16 +358,13 @@ function LeadershipHero() {
               borderRadius: 24,
               overflow: 'hidden',
               boxShadow: '0 40px 80px -20px rgba(0,16,31,0.15)',
-              aspectRatio: '4/5',
             }}
           >
-            <motion.div style={{ y: imgMainY, height: '115%', marginTop: '-7.5%', willChange: 'transform' }}>
-              <img
-                src={IMG_MAIN}
-                alt="Techno Products leadership team"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-            </motion.div>
+            <img
+              src={IMG_MAIN}
+              alt="Techno Products leadership team"
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            />
             {/* Subtle bottom gradient so it blends into the glass bar below */}
             <div style={{
               position: 'absolute', inset: 0,

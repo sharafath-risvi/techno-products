@@ -109,7 +109,7 @@ export default function TrustStats() {
                 {/* Description */}
                 <div style={{
                   fontFamily: 'var(--font-body)', fontSize: 14,
-                  color: '#555', lineHeight: 1.6, maxWidth: 260, margin: '0 auto'
+                  color: '#000000', lineHeight: 1.6, maxWidth: 260, margin: '0 auto'
                 }}>
                   {stat.description}
                 </div>

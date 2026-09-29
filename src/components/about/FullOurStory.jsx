@@ -32,26 +32,17 @@ export default function FullOurStory() {
           <div className="our-story-image-wrap" style={{
             position: 'sticky',
             top: 120,
-            height: 'calc(100vh - 200px)',
-            minHeight: 500,
             borderRadius: 32,
             overflow: 'hidden',
             boxShadow: '0 40px 80px -20px rgba(0,0,0,0.15)',
             transform: 'translateZ(0)' // Hardware acceleration
           }}>
-            {/* Extremely slow, continuous breathing parallax */}
-            <motion.div
-              animate={{ scale: [1, 1.08, 1] }}
-              transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ width: '100%', height: '100%' }}
-            >
-              <img 
-                src={STORY_IMG} 
-                alt="Techno Products Engineering Facility" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                loading="lazy"
-              />
-            </motion.div>
+            <img 
+              src={STORY_IMG} 
+              alt="Techno Products Engineering Facility" 
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+              loading="lazy"
+            />
           </div>
 
           {/* RIGHT: Scrolling Story Content */}
@@ -80,7 +71,7 @@ export default function FullOurStory() {
                 transition={{ duration: 0.8, delay: 0.1 }}
                 style={{ 
                   fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(36px, 4vw, 56px)',
-                  color: '#111111', margin: '0 0 40px 0', letterSpacing: '-0.02em', lineHeight: 1.1
+                  color: '#000000', margin: '0 0 40px 0', letterSpacing: '-0.02em', lineHeight: 1.1
                 }}
               >
                 Engineering Excellence Built Over Two Decades
@@ -99,7 +90,7 @@ export default function FullOurStory() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.7, delay: i * 0.1 }}
-                    style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#555555', lineHeight: 1.7, margin: 0, fontWeight: 400 }}
+                    style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#000000', lineHeight: 1.7, margin: 0, fontWeight: 400 }}
                   >
                     {para}
                   </motion.p>
@@ -113,7 +104,7 @@ export default function FullOurStory() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, color: '#111111', marginBottom: 48 }}
+                style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, color: '#000000', marginBottom: 48 }}
               >
                 The Journey
               </motion.h3>
@@ -140,7 +131,7 @@ export default function FullOurStory() {
                     <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#D71B32', marginBottom: 8, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                       {item.title}
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666666', lineHeight: 1.6 }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.6 }}>
                       {item.desc}
                     </div>
                   </motion.div>

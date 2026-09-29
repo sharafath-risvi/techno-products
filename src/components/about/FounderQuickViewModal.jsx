@@ -104,7 +104,7 @@ export default function FounderQuickViewModal({ founder, onClose }) {
           gap: 40
         }}>
           <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3vw, 48px)', color: '#111111', margin: '0 0 8px 0', lineHeight: 1.1 }}>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3vw, 48px)', color: '#000000', margin: '0 0 8px 0', lineHeight: 1.1 }}>
               {founder.name}
             </h2>
             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, color: '#D71B32', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
@@ -113,17 +113,17 @@ export default function FounderQuickViewModal({ founder, onClose }) {
           </div>
 
           <div style={{ paddingLeft: 24, borderLeft: '3px solid #0067A4' }}>
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#111111', margin: '0 0 12px 0' }}>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 18, color: '#000000', margin: '0 0 12px 0' }}>
               {founder.title}
             </h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#333333', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#000000', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
               "{founder.content}"
             </p>
           </div>
 
           <div>
             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 20, color: '#000000', marginBottom: 16 }}><span style={{ color: '#00446F' }}>Leadership</span> Philosophy</h3>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#555555', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.6, margin: 0 }}>
               {founder.philosophy}
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function FounderQuickViewModal({ founder, onClose }) {
               {founder.achievements.map((ach, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: '50%', background: '#00101F', color: '#ffffff', fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 2 }}>✓</div>
-                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#444444', lineHeight: 1.5 }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.5 }}>
                     {ach}
                   </span>
                 </div>

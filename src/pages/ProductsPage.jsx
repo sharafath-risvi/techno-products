@@ -81,7 +81,7 @@ export default function ProductsPage() {
                   Failed to load categories. Please try again later.
                 </div>
               ) : categories.length === 0 ? (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
+                <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#000000', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
                   No categories found.
                 </div>
               ) : (
@@ -107,7 +107,7 @@ export default function ProductsPage() {
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                             />
                           ) : (
-                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontFamily: 'var(--font-heading)' }}>
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontFamily: 'var(--font-heading)' }}>
                               No Image
                             </div>
                           )}
@@ -136,7 +136,7 @@ export default function ProductsPage() {
                             {cat.name}
                           </h3>
                           <p style={{ 
-                            fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', 
+                            fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', 
                             lineHeight: 1.7, marginBottom: 24, flexGrow: 1 
                           }}>
                             {cat.description || "View products in this category."}
@@ -144,7 +144,7 @@ export default function ProductsPage() {
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: 20 }}>
                             <div style={{ display: 'flex', gap: 8 }}>
                               {cat.brands && cat.brands.slice(0, 2).map((b) => (
-                                <span key={b} style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888', background: '#F5F5F5', padding: '4px 10px', borderRadius: 4 }}>
+                                <span key={b} style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000', background: '#F5F5F5', padding: '4px 10px', borderRadius: 4 }}>
                                   {b}
                                 </span>
                               ))}

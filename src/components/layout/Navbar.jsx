@@ -100,6 +100,7 @@ export default function Navbar() {
         { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.webp' },
         { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.webp' },
         { label: 'Galleries', desc: 'Explore moments, milestones and experiences from Techno Products', href: '/insights/galleries', image: '/galleries/47cbc571-551f-4b9b-a2e3-705139c7d396.JPG' },
+        { label: 'Newsroom', desc: 'Discover the latest updates, milestones and stories from Techno Products.', href: '/insights/newsroom', image: '/industries images/about1.JPG' },
       ],
     },
     { label: 'Contact', href: '/contact' },
@@ -337,7 +338,7 @@ export default function Navbar() {
                             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                           >
                             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: '#001426', marginBottom: 2 }}>{child.label}</div>
-                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888' }}>{child.desc}</div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000' }}>{child.desc}</div>
                           </Link>
                         ))}
                       </motion.div>
@@ -366,7 +367,7 @@ export default function Navbar() {
                           <div>
                             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: activeBlue, marginBottom: 16 }}>Specialist Solutions</div>
                             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, lineHeight: 1.2, color: '#001426', marginBottom: 16 }}>End-to-End Systems</h3>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 24 }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.7, marginBottom: 24 }}>
                               Integrated electro-mechanical & automation architectures engineered specifically for demanding industrial applications.
                             </p>
                           </div>
@@ -415,7 +416,7 @@ export default function Navbar() {
                                 </div>
                                 <div style={{ padding: '16px' }}>
                                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>{hoveredSolution.title}</div>
-                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 12 }}>{hoveredSolution.description}</div>
+                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', lineHeight: 1.6, marginBottom: 12 }}>{hoveredSolution.description}</div>
                                   <Link to={`/solutions/${hoveredSolution.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: activeBlue, textDecoration: 'none' }}>
                                     View Solution Details <ArrowRight size={12} />
                                   </Link>
@@ -450,7 +451,7 @@ export default function Navbar() {
                           <div>
                             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: activeBlue, marginBottom: 16 }}>Knowledge & Proof</div>
                             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, lineHeight: 1.2, color: '#001426', marginBottom: 16 }}>Technical Insights</h3>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 24 }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.7, marginBottom: 24 }}>
                               Discover in-depth engineering articles, verified client testimonials, and proven field case stories.
                             </p>
                           </div>
@@ -491,7 +492,7 @@ export default function Navbar() {
                                 </div>
                                 <div style={{ padding: '16px' }}>
                                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>{hoveredInsight.label}</div>
-                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 12 }}>{hoveredInsight.desc}</div>
+                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', lineHeight: 1.6, marginBottom: 12 }}>{hoveredInsight.desc}</div>
                                   <Link to={hoveredInsight.href} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: activeBlue, textDecoration: 'none' }}>
                                     View Section <ArrowRight size={12} />
                                   </Link>
@@ -539,7 +540,7 @@ export default function Navbar() {
                               )}
                               <div>
                                 <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: '#001426', marginBottom: 2 }}>{child.label}</div>
-                                <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888' }}>{child.desc}</div>
+                                <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000' }}>{child.desc}</div>
                               </div>
                             </Link>
                           ))}
@@ -578,7 +579,7 @@ export default function Navbar() {
                           <div>
                             <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: activeBlue, marginBottom: 16 }}>Industries We Serve</div>
                             <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, lineHeight: 1.2, color: '#001426', marginBottom: 16 }}>Engineered for Every Sector</h3>
-                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.7, marginBottom: 24 }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.7, marginBottom: 24 }}>
                               From cement to pharmaceuticals, our solutions are purpose-built for the unique demands of each industrial sector.
                             </p>
                           </div>
@@ -631,7 +632,7 @@ export default function Navbar() {
                                 </div>
                                 <div style={{ padding: '16px' }}>
                                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>{hoveredIndustry.name}</div>
-                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.6, marginBottom: 12 }}>{hoveredIndustry.shortDesc}</div>
+                                  <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', lineHeight: 1.6, marginBottom: 12 }}>{hoveredIndustry.shortDesc}</div>
                                   <Link to={`/industries/${hoveredIndustry.slug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: activeBlue, textDecoration: 'none' }}>
                                     View Industry <ArrowRight size={12} />
                                   </Link>

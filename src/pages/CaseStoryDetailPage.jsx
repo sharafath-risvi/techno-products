@@ -46,7 +46,7 @@ export default function CaseStoryDetailPage() {
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 36, color: '#001426', marginBottom: 16 }}>
             Case Story Not Found
           </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#64748B', marginBottom: 32 }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', marginBottom: 32 }}>
             The case story you are looking for may have been updated or moved.
           </p>
           <Link to="/case-stories" className="btn btn-primary" style={{ display: 'inline-flex' }}>
@@ -180,7 +180,7 @@ export default function CaseStoryDetailPage() {
                 <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#001426', marginBottom: 10 }}>
                   Need a Similar Solution?
                 </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#666', lineHeight: 1.65, marginBottom: 24 }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.65, marginBottom: 24 }}>
                   Consult our application engineers to evaluate custom drive and automation upgrades for your plant.
                 </p>
 
@@ -194,14 +194,14 @@ export default function CaseStoryDetailPage() {
                     <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#001426', marginBottom: 6 }}>
                       Inquiry Received!
                     </h4>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#444', lineHeight: 1.5 }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', lineHeight: 1.5 }}>
                       Our industrial specialists will review your requirements and contact you within 4 business hours.
                     </p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Full Name *</label>
+                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Full Name *</label>
                       <input 
                         type="text" required placeholder="e.g. Rajesh Kumar"
                         value={formData.fullName} onChange={e => setFormData({ ...formData, fullName: e.target.value })}
@@ -210,7 +210,7 @@ export default function CaseStoryDetailPage() {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Company Name *</label>
+                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Company Name *</label>
                       <input 
                         type="text" required placeholder="e.g. ABC Manufacturing"
                         value={formData.companyName} onChange={e => setFormData({ ...formData, companyName: e.target.value })}
@@ -220,7 +220,7 @@ export default function CaseStoryDetailPage() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                       <div>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Phone *</label>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Phone *</label>
                         <input 
                           type="tel" required placeholder="+91..."
                           value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -228,7 +228,7 @@ export default function CaseStoryDetailPage() {
                         />
                       </div>
                       <div>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Email *</label>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Email *</label>
                         <input 
                           type="email" required placeholder="name@company.com"
                           value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -238,7 +238,7 @@ export default function CaseStoryDetailPage() {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Industry Sector</label>
+                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Industry Sector</label>
                       <select 
                         value={formData.industry} onChange={e => setFormData({ ...formData, industry: e.target.value })}
                         style={{ width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #CBD5E1', fontFamily: 'var(--font-body)', fontSize: 14, outline: 'none', background: '#FAFAFA' }}
@@ -253,7 +253,7 @@ export default function CaseStoryDetailPage() {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#333', marginBottom: 6 }}>Project Details / Message</label>
+                      <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 12, color: '#000000', marginBottom: 6 }}>Project Details / Message</label>
                       <textarea 
                         rows="3" placeholder="Briefly describe your plant application or drive requirement..."
                         value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}
@@ -273,22 +273,22 @@ export default function CaseStoryDetailPage() {
 
                 {/* Supporting Contact Details */}
                 <div style={{ borderTop: '1px solid #E5E7EB', paddingTop: 22, marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  <a href="tel:+914448555333" style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#333', textDecoration: 'none', fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
+                  <a href="tel:+914448555333" style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#000000', textDecoration: 'none', fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
                     <div style={{ width: 32, height: 32, borderRadius: 10, background: '#F5F7FA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0067A4', flexShrink: 0 }}>
                       <Phone size={15} />
                     </div>
                     +91 44 4855 5333
                   </a>
 
-                  <a href="mailto:solutions@technoproducts.in" style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#333', textDecoration: 'none', fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
+                  <a href="mailto:solutions@technoproducts.in" style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#000000', textDecoration: 'none', fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 500 }}>
                     <div style={{ width: 32, height: 32, borderRadius: 10, background: '#F5F7FA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0067A4', flexShrink: 0 }}>
                       <Mail size={15} />
                     </div>
                     solutions@technoproducts.in
                   </a>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#666', fontFamily: 'var(--font-body)', fontSize: 13 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 10, background: '#F5F7FA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', flexShrink: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#000000', fontFamily: 'var(--font-body)', fontSize: 13 }}>
+                    <div style={{ width: 32, height: 32, borderRadius: 10, background: '#F5F7FA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', flexShrink: 0 }}>
                       <Clock size={15} />
                     </div>
                     Mon – Sat: 9:00 AM – 6:30 PM
@@ -301,7 +301,7 @@ export default function CaseStoryDetailPage() {
                   }}>
                     <ShieldCheck size={20} style={{ color: 'var(--color-green)', flexShrink: 0 }} />
                     <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12, color: '#001426', lineHeight: 1.3 }}>
-                      Trusted Engineering Partner <span style={{ fontWeight: 500, color: '#666', display: 'block', fontSize: 11 }}>26+ Years of Industrial Excellence</span>
+                      Trusted Engineering Partner <span style={{ fontWeight: 500, color: '#000000', display: 'block', fontSize: 11 }}>26+ Years of Industrial Excellence</span>
                     </div>
                   </div>
                 </div>

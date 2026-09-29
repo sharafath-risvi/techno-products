@@ -42,7 +42,7 @@ export default function BrandPartners() {
             </h2>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 16,
-              color: '#666', lineHeight: 1.75,
+              color: '#000000', lineHeight: 1.75,
             }}>
               Every product we supply carries manufacturer certification, full warranty, and complete technical support — backed by official partnership agreements with world leaders in industrial engineering.
             </p>
@@ -113,7 +113,7 @@ export default function BrandPartners() {
                     <div style={{ padding: '24px 24px 28px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                       <p style={{
                         fontFamily: 'var(--font-body)', fontSize: 14,
-                        color: '#666', lineHeight: 1.75,
+                        color: '#000000', lineHeight: 1.75,
                         marginBottom: 20, flexGrow: 1,
                       }}>
                         {partner.description}

@@ -27,6 +27,7 @@ export default function ProductDetailPage() {
     gst: '',
     address: '',
     industryType: '',
+    application: '',
     message: ''
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -54,7 +55,7 @@ export default function ProductDetailPage() {
           <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 36, color: '#001426', marginBottom: 16 }}>
             Product Not Found
           </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#64748B', marginBottom: 32 }}>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', marginBottom: 32 }}>
             The industrial product specification you are looking for may have been updated or moved.
           </p>
           <Link to="/products" className="btn btn-primary" style={{ display: 'inline-flex' }}>
@@ -108,15 +109,15 @@ export default function ProductDetailPage() {
       <section style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', paddingTop: 120, paddingBottom: 20 }}>
         <div className="container">
           <nav style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', fontSize: 13, fontFamily: 'var(--font-heading)' }}>
-            <Link to="/" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }}>Home</Link>
+            <Link to="/" style={{ color: '#000000', textDecoration: 'none', transition: 'color 0.2s' }}>Home</Link>
             <ChevronRight size={14} color="#94A3B8" />
-            <Link to="/products" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }}>Products</Link>
+            <Link to="/products" style={{ color: '#000000', textDecoration: 'none', transition: 'color 0.2s' }}>Products</Link>
             <ChevronRight size={14} color="#94A3B8" />
             <Link to={`/products/${categorySlug}`} style={{ color: '#0067A4', fontWeight: 700, textDecoration: 'none' }}>
               {categorySlug.toUpperCase()}
             </Link>
             <ChevronRight size={14} color="#94A3B8" />
-            <span style={{ color: '#0F172A', fontWeight: 700 }} className="truncate-breadcrumb" dangerouslySetInnerHTML={{ __html: product.name }} />
+            <span style={{ color: '#000000', fontWeight: 700 }} className="truncate-breadcrumb" dangerouslySetInnerHTML={{ __html: product.name }} />
           </nav>
         </div>
       </section>
@@ -180,7 +181,7 @@ export default function ProductDetailPage() {
                 <button 
                   onClick={() => handleDownload(`${product.name} Datasheet`)}
                   className="btn btn-outline" 
-                  style={{ padding: '16px 24px', borderColor: '#CBD5E1', color: '#0F172A', fontWeight: 700 }}
+                  style={{ padding: '16px 24px', borderColor: '#CBD5E1', color: '#000000', fontWeight: 700 }}
                 >
                   <Download size={18} />
                   <span>Datasheet</span>
@@ -188,16 +189,16 @@ export default function ProductDetailPage() {
               </div>
 
               <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#64748B' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#000000' }}>
                   <ShieldCheck size={16} color="#10B981" />
                   <span>Verified B2B Supply & Application Engineering Support</span>
                 </div>
                 
                 <div style={{ display: 'flex', gap: 12 }}>
-                  <button onClick={() => window.print()} title="Print Specs" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B' }}>
+                  <button onClick={() => window.print()} title="Print Specs" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}>
                     <Printer size={18} />
                   </button>
-                  <button onClick={() => handleDownload('Product Share Link')} title="Share" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748B' }}>
+                  <button onClick={() => handleDownload('Product Share Link')} title="Share" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}>
                     <Share2 size={18} />
                   </button>
                 </div>
@@ -244,7 +245,7 @@ export default function ProductDetailPage() {
                   <h4 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: '#1E3A8A', marginBottom: 12 }}>
                     Why Order from Techno Products?
                   </h4>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#1E40AF', lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.6, margin: 0 }}>
                     As an authorized distributor for world-leading industrial automation and electro-mechanical brands, Techno Products guarantees 100% genuine factory equipment with valid manufacturer warranty, prioritized supply chain fulfillment, and comprehensive pre/post-commissioning engineering assistance.
                   </p>
                 </div>
@@ -310,10 +311,10 @@ export default function ProductDetailPage() {
                   <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'var(--color-green-xlight)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px', color: 'var(--color-green)' }}>
                     <CheckCircle size={32} />
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#0F172A', marginBottom: 12 }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#000000', marginBottom: 12 }}>
                     Inquiry Received Successfully
                   </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#64748B', lineHeight: 1.6, marginBottom: 28, maxWidth: 440, margin: '0 auto 28px' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000', lineHeight: 1.6, marginBottom: 28, maxWidth: 440, margin: '0 auto 28px' }}>
                     Thank you for contacting Techno Products. Our technical specialist will review your requirements and reply with a formal quote within 4 business hours.
                   </p>
                   <button onClick={() => setFormSubmitted(false)} className="btn btn-outline" style={{ display: 'inline-flex' }}>
@@ -322,7 +323,7 @@ export default function ProductDetailPage() {
                 </div>
               ) : (
                 <form onSubmit={handleFormSubmit} className="enquiry-form">
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#0F172A', marginBottom: 20 }}>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, color: '#000000', marginBottom: 20 }}>
                     Enquire About This Product
                   </h3>
 
@@ -384,11 +385,11 @@ export default function ProductDetailPage() {
                       </div>
                     </div>
                     <div className="form-group">
-                      <label>Industry Type / Application</label>
+                      <label>Industry Type *</label>
                       <div className="input-with-icon">
                         <Settings size={18} className="input-icon" />
                         <input 
-                          type="text" placeholder="e.g. Manufacturing, HVAC" 
+                          type="text" required placeholder="e.g. Manufacturing, HVAC" 
                           value={formData.industryType} onChange={e => setFormData({...formData, industryType: e.target.value})}
                         />
                       </div>
@@ -396,8 +397,20 @@ export default function ProductDetailPage() {
                   </div>
 
                   <div className="form-group">
-                    <label>Address</label>
+                    <label>Application *</label>
+                    <div className="input-with-icon">
+                      <Settings size={18} className="input-icon" />
+                      <input 
+                        type="text" required placeholder="e.g. Conveyor, Pump" 
+                        value={formData.application} onChange={e => setFormData({...formData, application: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Address *</label>
                     <textarea 
+                      required
                       rows="2" 
                       placeholder="Your Company Address"
                       value={formData.address} 
@@ -405,7 +418,7 @@ export default function ProductDetailPage() {
                       style={{
                         width: '100%', padding: '14px 16px', background: '#F8FAFC',
                         border: '1px solid #E2E8F0', borderRadius: '12px',
-                        fontFamily: 'var(--font-body)', fontSize: '15px', color: '#0F172A',
+                        fontFamily: 'var(--font-body)', fontSize: '15px', color: '#000000',
                         outline: 'none', transition: 'border-color 0.2s',
                         resize: 'vertical'
                       }}
@@ -426,7 +439,7 @@ export default function ProductDetailPage() {
                     Submit Quote Request
                     <ArrowRight size={18} />
                   </button>
-                  <div style={{ fontSize: 12, color: '#94A3B8', textAlign: 'center', marginTop: 12 }}>
+                  <div style={{ fontSize: 12, color: '#000000', textAlign: 'center', marginTop: 12 }}>
                     🔒 We protect your data and respond within 4 business hours.
                   </div>
                 </form>
@@ -446,7 +459,7 @@ export default function ProductDetailPage() {
                 <div style={{ fontSize: 12, color: '#0067A4', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>
                   Explore Similar Models
                 </div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, color: '#0F172A' }}>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 28, color: '#000000' }}>
                   Related Products
                 </h2>
               </div>
@@ -469,7 +482,7 @@ export default function ProductDetailPage() {
                     {rel.image ? (
                       <img src={rel.image} alt={rel.name} className="card-image" />
                     ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontFamily: 'var(--font-heading)' }}>
+                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontFamily: 'var(--font-heading)' }}>
                         No Image
                       </div>
                     )}

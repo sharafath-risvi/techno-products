@@ -42,7 +42,7 @@ export default function ClientLogos() {
             </h2>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 17,
-              color: '#666', lineHeight: 1.7,
+              color: '#000000', lineHeight: 1.7,
               maxWidth: 480, marginInline: 'auto',
             }}>
               From India's most respected conglomerates to global engineering firms — TECHNO is the trusted partner for industrial excellence.
@@ -114,7 +114,7 @@ export default function ClientLogos() {
 
                 <div style={{
                   fontFamily: 'var(--font-body)', fontSize: 11,
-                  color: '#999', lineHeight: 1.4,
+                  color: '#000000', lineHeight: 1.4,
                 }}>
                   {client.fullName}
                 </div>
@@ -181,7 +181,7 @@ export default function ClientLogos() {
                   </div>
                   <div style={{
                     fontFamily: 'var(--font-body)', fontSize: 11,
-                    color: '#777',
+                    color: '#000000',
                   }}>
                     {client.industry}
                   </div>

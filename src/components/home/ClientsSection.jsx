@@ -58,7 +58,7 @@ export default function ClientsSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           style={{ 
             fontFamily: 'var(--font-body)', fontSize: 18, 
-            color: '#555555', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
+            color: '#000000', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
           }}
         >
           Collaborating with India's leading manufacturers for over two decades, delivering reliable engineering excellence across every industrial sector.

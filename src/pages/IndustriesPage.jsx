@@ -57,7 +57,7 @@ export default function IndustriesPage() {
               </h2>
               <p style={{
                 fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.25vw, 19px)',
-                color: '#555', lineHeight: 1.75, maxWidth: 560, margin: '0 auto',
+                color: '#000000', lineHeight: 1.75, maxWidth: 560, margin: '0 auto',
               }}>
                 Engineered solutions purpose-built for the severe demands, safety requirements, and critical operations of every industrial sector we serve.
               </p>

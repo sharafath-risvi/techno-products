@@ -49,13 +49,13 @@ export default function AboutHero() {
             {/* Large Heading */}
             <h2 style={{ 
               fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 4vw, 56px)',
-              color: '#111111', margin: '0 0 24px 0', letterSpacing: '-0.02em', lineHeight: 1.1
+              color: '#000000', margin: '0 0 24px 0', letterSpacing: '-0.02em', lineHeight: 1.1
             }}>
               Building Engineering Excellence Since 1999
             </h2>
 
             {/* Minimal Description */}
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#555555', lineHeight: 1.6, margin: '0 0 48px 0', fontWeight: 400 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 18, color: '#000000', lineHeight: 1.6, margin: '0 0 48px 0', fontWeight: 400 }}>
               For over two decades, Techno Products has partnered with leading manufacturers, delivering custom-engineered systems that drive industrial success.
             </p>
 
@@ -87,7 +87,7 @@ export default function AboutHero() {
                   <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(32px, 3vw, 48px)', color: '#00101F', lineHeight: 1, margin: '0 0 8px 0' }}>
                     {stat.val}
                   </div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, color: '#777777', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 14, color: '#000000', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                     {stat.label}
                   </div>
                 </motion.div>
@@ -102,6 +102,12 @@ export default function AboutHero() {
           .identity-grid {
             grid-template-columns: 1fr !important;
             gap: 40px !important;
+          }
+          .identity-grid > :nth-child(1) {
+            order: 2 !important;
+          }
+          .identity-grid > :nth-child(2) {
+            order: 1 !important;
           }
           .about-identity-section {
             padding: 80px 0 !important;

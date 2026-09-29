@@ -106,7 +106,7 @@ export default function ServicesOverview() {
         <h2 className="expertise-intro-title">
           Our <span style={{ color: '#00446F' }}>Services</span>
         </h2>
-        <p className="expertise-intro-desc" style={{ marginTop: '16px', fontSize: '18px', color: '#555', maxWidth: '700px', margin: '16px auto 0', lineHeight: 1.6 }}>
+        <p className="expertise-intro-desc" style={{ marginTop: '16px', fontSize: '18px', color: '#000000', maxWidth: '700px', margin: '16px auto 0', lineHeight: 1.6 }}>
           Comprehensive engineering solutions designed to power industrial performance with reliability and precision.
         </p>
       </div>
@@ -331,7 +331,7 @@ export default function ServicesOverview() {
           font-family: var(--font-body);
           font-size: 16px;
           line-height: 1.6;
-          color: #4A5568;
+          color: #000000;
           margin: 0 0 48px 0;
           font-weight: 400;
         }

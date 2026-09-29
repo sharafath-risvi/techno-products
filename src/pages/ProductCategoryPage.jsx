@@ -378,7 +378,7 @@ export default function ProductCategoryPage() {
                   <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 200, overflowY: 'auto', paddingRight: 8 }} className="scrollbar-hide">
                     {FILTER_CONFIG[slug][filterKey].map(val => (
-                      <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: '#333' }}>
+                      <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000' }}>
                         <input 
                           type="checkbox" 
                           style={{ width: 16, height: 16, accentColor: '#0067A4' }}
@@ -392,7 +392,7 @@ export default function ProductCategoryPage() {
                 </div>
               ))}
 
-              <button className="btn btn-outline" onClick={handleReset} style={{ width: '100%', borderColor: '#E5E7EB', color: '#666', marginTop: 32 }}>
+              <button className="btn btn-outline" onClick={handleReset} style={{ width: '100%', borderColor: '#E5E7EB', color: '#000000', marginTop: 32 }}>
                 Reset Filters
               </button>
             </div>
@@ -440,7 +440,7 @@ export default function ProductCategoryPage() {
                 Failed to load products. Please try again.
               </div>
             ) : paginatedProducts.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
+              <div style={{ textAlign: 'center', color: '#000000', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
                 No products match the selected filters.
               </div>
             ) : (
@@ -466,7 +466,7 @@ export default function ProductCategoryPage() {
                             transition={{ duration: 0.7 }}
                           />
                         ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontFamily: 'var(--font-heading)' }}>
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontFamily: 'var(--font-heading)' }}>
                             No Image Available
                           </div>
                         )}
@@ -478,7 +478,7 @@ export default function ProductCategoryPage() {
                         
                         <div className="card-specs">
                            {/* Since the API doesn't provide explicit specs, we will display a short excerpt from description if available */}
-                           <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', lineHeight: 1.5, maxHeight: 60, overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: product.description }} />
+                           <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', lineHeight: 1.5, maxHeight: 60, overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: product.description }} />
                         </div>
                         
                         <div className="card-actions">

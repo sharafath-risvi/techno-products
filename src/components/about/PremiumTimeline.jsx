@@ -277,7 +277,7 @@ export default function PremiumTimeline() {
                 
                 <p style={{ 
                   fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 1.5vw, 18px)', 
-                  color: '#555', lineHeight: 1.7, margin: 0 
+                  color: '#000000', lineHeight: 1.7, margin: 0 
                 }}>
                   {item.description}
                 </p>

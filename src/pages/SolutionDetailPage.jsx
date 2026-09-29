@@ -61,7 +61,7 @@ export default function SolutionDetailPage() {
               <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 44px)', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#000', marginBottom: 24 }}>
                 The Complete Picture
               </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#555', lineHeight: 1.85 }}>{solution.overview}</p>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#000000', lineHeight: 1.85 }}>{solution.overview}</p>
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}>
               <div style={{ borderRadius: 24, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 24px 60px rgba(0,0,0,0.12)' }}>
@@ -141,7 +141,7 @@ export default function SolutionDetailPage() {
                     {benefit.title}
                   </h3>
                   <p style={{
-                    fontFamily: 'var(--font-body)', fontSize: 15, color: '#555',
+                    fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000',
                     lineHeight: 1.75, margin: 0,
                   }}>
                     {benefit.desc}
@@ -205,7 +205,7 @@ export default function SolutionDetailPage() {
                   </div>
                   <div style={{ padding: 32 }}>
                     <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#000', marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.name}</h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', lineHeight: 1.6, marginBottom: 24, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description || 'Industrial product engineered for reliability.'}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.6, marginBottom: 24, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description || 'Industrial product engineered for reliability.'}</p>
                     <Link to={`/products/${product.category_slug}/${product.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 15, color: '#00446F', textDecoration: 'none' }}>
                       View Product <ArrowRight size={15} />
                     </Link>

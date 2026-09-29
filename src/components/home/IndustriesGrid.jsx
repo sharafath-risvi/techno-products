@@ -43,7 +43,7 @@ export default function IndustriesGrid() {
             </h2>
           </RevealText>
           <RevealText delay={0.1}>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', lineHeight: 1.75 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.75 }}>
               From cement plants to automotive lines, from water treatment to textile mills — TECHNO delivers precision engineering solutions across the full spectrum of Indian industry.
             </p>
           </RevealText>

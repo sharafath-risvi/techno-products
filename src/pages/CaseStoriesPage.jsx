@@ -82,7 +82,7 @@ export default function CaseStoriesPage() {
                 Failed to load case stories. Please try again.
               </div>
             ) : stories.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
+              <div style={{ textAlign: 'center', color: '#000000', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
                 No case stories found.
               </div>
             ) : (
@@ -109,7 +109,7 @@ export default function CaseStoriesPage() {
                           {categoryName}
                         </div>
                         <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#CBD5E1' }} />
-                        <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 15, color: '#64748B', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 15, color: '#000000', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                           {new Date(story.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </div>
                       </div>
@@ -120,7 +120,7 @@ export default function CaseStoriesPage() {
 
                       <div style={{ marginBottom: 48, flexGrow: 1, maxWidth: 900 }}>
                         <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 15, color: '#001426', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>Executive Summary</div>
-                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(18px, 1.8vw, 20px)', color: '#334155', lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: story.excerpt }} />
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(18px, 1.8vw, 20px)', color: '#000000', lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: story.excerpt }} />
                       </div>
 
                       <div style={{ borderTop: '1px solid rgba(0,0,0,0.06)', paddingTop: 32, display: 'flex', alignItems: 'center' }}>

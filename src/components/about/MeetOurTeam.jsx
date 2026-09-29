@@ -56,7 +56,7 @@ export default function MeetOurTeam() {
           <RevealText delay={0.2}>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 'clamp(16px, 1.5vw, 18px)',
-              color: '#666', lineHeight: 1.7, maxWidth: 700, margin: '0 auto'
+              color: '#000000', lineHeight: 1.7, maxWidth: 700, margin: '0 auto'
             }}>
               Our experienced professionals work together to deliver trusted industrial engineering solutions with innovation, technical expertise, and customer-first service.
             </p>

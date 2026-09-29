@@ -179,7 +179,7 @@ export default function TestimonialsPage() {
 
                 {/* Quote */}
                 <p style={{
-                  fontFamily: 'var(--font-body)', fontSize: 15, color: '#333',
+                  fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000',
                   lineHeight: 1.85, margin: '20px 0 32px', fontStyle: 'italic', flex: 1,
                 }}>
                   "{t.quote}"
@@ -200,7 +200,7 @@ export default function TestimonialsPage() {
                     </div>
                     {/* Designation */}
                     <div style={{
-                      fontFamily: 'var(--font-body)', fontSize: 13, color: '#666', marginBottom: 2,
+                      fontFamily: 'var(--font-body)', fontSize: 13, color: '#000000', marginBottom: 2,
                     }}>
                       {t.title}
                     </div>

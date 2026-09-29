@@ -53,7 +53,7 @@ export default function HomeCaseStories() {
               Failed to load case stories. Please try again.
             </div>
           ) : caseStories.length === 0 ? (
-            <div style={{ textAlign: 'center', color: '#666', padding: '64px 0', fontFamily: 'var(--font-body)', gridColumn: '1 / -1' }}>
+            <div style={{ textAlign: 'center', color: '#000000', padding: '64px 0', fontFamily: 'var(--font-body)', gridColumn: '1 / -1' }}>
               No case stories found.
             </div>
           ) : caseStories.map((story, i) => {

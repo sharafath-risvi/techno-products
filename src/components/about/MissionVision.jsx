@@ -200,7 +200,7 @@ export default function MissionVision() {
           font-family: var(--font-body);
           font-size: 18px;
           line-height: 1.8;
-          color: #555;
+          color: #000000;
           max-width: 650px;
           margin: 0;
         }

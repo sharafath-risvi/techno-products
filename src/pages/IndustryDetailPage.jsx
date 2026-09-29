@@ -64,7 +64,7 @@ export default function IndustryDetailPage() {
             <SectionTag>SECTOR OVERVIEW</SectionTag>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 'clamp(17px, 1.35vw, 20px)',
-              color: '#333', lineHeight: 1.85, fontWeight: 400,
+              color: '#000000', lineHeight: 1.85, fontWeight: 400,
             }}>
               {industry.fullDesc}
             </p>
@@ -90,7 +90,7 @@ export default function IndustryDetailPage() {
                     <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#FAD9DD', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
                       <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, color: '#D71B32' }}>{i + 1}</span>
                     </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#444', lineHeight: 1.6 }}>{c}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000', lineHeight: 1.6 }}>{c}</p>
                   </div>
                 ))}
               </div>
@@ -110,7 +110,7 @@ export default function IndustryDetailPage() {
                     <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#D9EAF5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 }}>
                       <CheckCircle2 size={14} style={{ color: '#0067A4' }} />
                     </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#444', lineHeight: 1.6 }}>{s}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000', lineHeight: 1.6 }}>{s}</p>
                   </div>
                 ))}
               </div>
@@ -172,7 +172,7 @@ export default function IndustryDetailPage() {
                   </div>
                   <div style={{ padding: 32 }}>
                     <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#000', marginBottom: 12, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.name}</h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', lineHeight: 1.6, marginBottom: 24, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description || 'Industrial product engineered for reliability.'}</p>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.6, marginBottom: 24, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{product.description || 'Industrial product engineered for reliability.'}</p>
                     <Link to={`/products/${product.category_slug}/${product.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 15, color: '#00446F', textDecoration: 'none' }}>
                       View Product <ArrowRight size={15} />
                     </Link>

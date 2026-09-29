@@ -81,7 +81,7 @@ export default function PartnersSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           style={{ 
             fontFamily: 'var(--font-body)', fontSize: 18, 
-            color: '#555555', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
+            color: '#000000', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
           }}
         >
           Working together with globally recognized industrial brands to deliver reliable engineering solutions, quality products, and long-term value for every customer.

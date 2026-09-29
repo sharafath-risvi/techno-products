@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const carouselImages = [
-  '/Aboutpage_carasouel_images/ChatGPT Image Sep 22, 2026, 04_51_00 PM.png',
+  '/Aboutpage_carasouel_images/ChatGPT Image Sep 28, 2026, 06_10_10 PM.png',
   '/Aboutpage_carasouel_images/Screenshot 2026-09-22 at 4.47.03 PM.png',
   '/Aboutpage_carasouel_images/Screenshot 2026-09-22 at 4.47.31 PM.png',
   '/Aboutpage_carasouel_images/Screenshot 2026-09-22 at 5.53.38 PM.png'
@@ -15,9 +15,9 @@ export default function OurCompanyHeroCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselImages.length);
-    }, 6000); // 6 seconds per slide
+    }, 2500); // 2.5 seconds per slide
     return () => clearInterval(timer);
-  }, []);
+  }, [currentIndex]);
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1));

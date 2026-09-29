@@ -128,7 +128,7 @@ export default function CaseStoriesPreview() {
                     <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 15, color: '#000000', lineHeight: 1.3, marginBottom: 6 }}>
                       {cs.title}
                     </div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#999' }}>{cs.industry}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000' }}>{cs.industry}</div>
                   </div>
                 </motion.div>
               </Link>

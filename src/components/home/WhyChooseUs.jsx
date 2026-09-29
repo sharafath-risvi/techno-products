@@ -98,7 +98,7 @@ export default function WhyChooseUs() {
             <h2 style={{ fontSize: 'clamp(32px, 6vw, 40px)', fontFamily: 'var(--font-heading)', fontWeight: 700, margin: '0 0 16px', lineHeight: 1.1, color: '#000' }}>
               The <span style={{ color: '#00446F' }}>TECHNO</span> Advantage
             </h2>
-            <p style={{ fontSize: 16, fontFamily: 'var(--font-body)', color: '#555555', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 16, fontFamily: 'var(--font-body)', color: '#000000', margin: 0, lineHeight: 1.6 }}>
                We don't just supply products; we engineer complete industrial solutions.
             </p>
           </div>
@@ -223,7 +223,7 @@ export default function WhyChooseUs() {
           font-family: var(--font-body);
           font-size: 18px;
           line-height: 1.6;
-          color: #555555;
+          color: #000000;
         }
 
         /* --- Horizontal Accordion Stack --- */
@@ -407,7 +407,7 @@ export default function WhyChooseUs() {
         .card-active-desc {
           font-family: var(--font-body);
           font-size: 17px;
-          color: #555555;
+          color: #000000;
           line-height: 1.7;
           max-width: 95%;
           

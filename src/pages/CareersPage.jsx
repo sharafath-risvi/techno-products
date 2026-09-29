@@ -84,7 +84,7 @@ export default function CareersPage() {
                 
                 <p style={{ 
                   fontFamily: 'var(--font-body)', fontSize: 'clamp(17px, 1.35vw, 20px)', 
-                  color: '#444', lineHeight: 1.8, maxWidth: 580, marginBottom: 36 
+                  color: '#000000', lineHeight: 1.8, maxWidth: 580, marginBottom: 36 
                 }}>
                   Join an elite engineering team driving India's industrial automation and power transmission future. At Techno Products, your technical skill set is continuously challenged, mentored by industry veterans, and recognized with industry-leading rewards.
                 </p>
@@ -165,7 +165,7 @@ export default function CareersPage() {
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(30px, 3.8vw, 46px)', lineHeight: 1.15, letterSpacing: '-0.02em', color: '#001426', marginBottom: 24 }}>
                   Shape the Future of Industrial Automation
                 </h2>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#555', lineHeight: 1.8, marginBottom: 28 }}>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 17, color: '#000000', lineHeight: 1.8, marginBottom: 28 }}>
                   We are continuously seeking passionate electrical, mechanical, and industrial automation engineers. Even if suitable openings are not currently listed, we strongly encourage talent to submit spontaneous applications for immediate assessment and future expansion roles.
                 </p>
 
@@ -178,34 +178,34 @@ export default function CareersPage() {
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0067A4', marginTop: 6 }} />
                       <div>
                         <span style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#001426', fontWeight: 700, display: 'block', marginBottom: 4 }}>Accelerated Career Growth</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#555', lineHeight: 1.6 }}>Merit-driven progression frameworks designed to elevate your engineering career rapidly.</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.6 }}>Merit-driven progression frameworks designed to elevate your engineering career rapidly.</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0067A4', marginTop: 6 }} />
                       <div>
                         <span style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#001426', fontWeight: 700, display: 'block', marginBottom: 4 }}>Continuous Learning & Development</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#555', lineHeight: 1.6 }}>Access to global OEM technical training and certification workshops with industry leaders.</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.6 }}>Access to global OEM technical training and certification workshops with industry leaders.</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0067A4', marginTop: 6 }} />
                       <div>
                         <span style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#001426', fontWeight: 700, display: 'block', marginBottom: 4 }}>Engineering Excellence</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#555', lineHeight: 1.6 }}>Engage with multi-megawatt installations and solve real-world industrial challenges.</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.6 }}>Engage with multi-megawatt installations and solve real-world industrial challenges.</span>
                       </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                       <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0067A4', marginTop: 6 }} />
                       <div>
                         <span style={{ fontFamily: 'var(--font-heading)', fontSize: 15, color: '#001426', fontWeight: 700, display: 'block', marginBottom: 4 }}>Comprehensive Benefits</span>
-                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#555', lineHeight: 1.6 }}>Industry-benchmark compensation, project bonuses, and extensive health coverage.</span>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', lineHeight: 1.6 }}>Industry-benchmark compensation, project bonuses, and extensive health coverage.</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#666', fontSize: 14, fontFamily: 'var(--font-body)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#000000', fontSize: 14, fontFamily: 'var(--font-body)' }}>
                   <ShieldCheck size={18} style={{ color: '#0067A4' }} />
                   <span>Confidentiality guaranteed. Direct HR review.</span>
                 </div>
@@ -231,7 +231,7 @@ export default function CareersPage() {
                       <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 26, color: '#001426', marginBottom: 12 }}>
                         Application Received
                       </h3>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', lineHeight: 1.7, maxWidth: 440, margin: '0 auto 32px' }}>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', lineHeight: 1.7, maxWidth: 440, margin: '0 auto 32px' }}>
                         Thank you for your interest in joining Techno Products. Our engineering HR desk will review your profile and credentials and contact you directly when a suitable role aligns.
                       </p>
                       <button 
@@ -247,13 +247,13 @@ export default function CareersPage() {
                       <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 24, color: '#001426', marginBottom: 6 }}>
                         Candidate Application Portal
                       </h3>
-                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#777', marginBottom: 32 }}>
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', marginBottom: 32 }}>
                         Please complete all required fields. Upload your latest resume or CV in PDF or DOCX format.
                       </p>
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }} className="form-grid-2">
                         <div>
-                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                             Full Name <span style={{ color: '#D71B32' }}>*</span>
                           </label>
                           <input 
@@ -271,7 +271,7 @@ export default function CareersPage() {
                         </div>
 
                         <div>
-                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                             Email Address <span style={{ color: '#D71B32' }}>*</span>
                           </label>
                           <input 
@@ -291,7 +291,7 @@ export default function CareersPage() {
 
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }} className="form-grid-2">
                         <div>
-                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                             Phone Number <span style={{ color: '#D71B32' }}>*</span>
                           </label>
                           <input 
@@ -309,7 +309,7 @@ export default function CareersPage() {
                         </div>
 
                         <div>
-                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                             Years of Experience <span style={{ color: '#D71B32' }}>*</span>
                           </label>
                           <select 
@@ -331,7 +331,7 @@ export default function CareersPage() {
                       </div>
 
                       <div style={{ marginBottom: 20 }}>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                           Position Applying For <span style={{ color: '#D71B32' }}>*</span>
                         </label>
                         <select 
@@ -355,7 +355,7 @@ export default function CareersPage() {
 
                       {/* Resume Upload Box */}
                       <div style={{ marginBottom: 24 }}>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                           Resume Upload (PDF / DOCX) <span style={{ color: '#D71B32' }}>*</span>
                         </label>
                         <label style={{ 
@@ -370,7 +370,7 @@ export default function CareersPage() {
                           <div style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 14, color: '#001426', marginBottom: 4 }}>
                             {formData.resumeName ? `Selected: ${formData.resumeName}` : 'Click to Upload Resume or CV'}
                           </div>
-                          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#888' }}>
+                          <div style={{ fontFamily: 'var(--font-body)', fontSize: 12, color: '#000000' }}>
                             Supported formats: PDF, DOC, DOCX (Max 10 MB)
                           </div>
                           <input 
@@ -384,7 +384,7 @@ export default function CareersPage() {
                       </div>
 
                       <div style={{ marginBottom: 32 }}>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#333', marginBottom: 8 }}>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 13, color: '#000000', marginBottom: 8 }}>
                           Cover Message / Engineering Highlights
                         </label>
                         <textarea 

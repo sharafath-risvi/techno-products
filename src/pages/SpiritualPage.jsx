@@ -29,6 +29,11 @@ export default function SpiritualPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '12px' }}>
+              <div style={{ width: '6px', height: '6px', backgroundColor: '#D71B32', borderRadius: '50%' }}></div>
+              <div style={{ width: '6px', height: '6px', backgroundColor: '#D71B32', borderRadius: '50%' }}></div>
+              <div style={{ width: '6px', height: '6px', backgroundColor: '#D71B32', borderRadius: '50%' }}></div>
+            </div>
             <h4 style={{ color: '#0ea5e9', letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '14px', marginBottom: '16px', fontWeight: 600 }}>
               Infinitheism
             </h4>
@@ -53,10 +58,10 @@ export default function SpiritualPage() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', fontWeight: 700, color: '#0F172A', marginBottom: '32px', lineHeight: 1.2 }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', fontWeight: 700, color: '#000000', marginBottom: '32px', lineHeight: 1.2 }}>
                 Inspiring Significant Breakthroughs
               </h2>
-              <div style={{ fontSize: '17px', color: '#475569', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ fontSize: '17px', color: '#000000', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <p>
                   After transforming tens of thousands of people – top notch businessmen, global leaders, musicians, sportspersons, and students, by inspiring significant breakthroughs in their lives, by unleashing their internal spirit that drives them to excellence, Mahatria Ra has now divined a new path, infinitheism, realizing the great hunger in the world for a new way of life.
                 </p>
@@ -99,10 +104,10 @@ export default function SpiritualPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#0F172A', marginBottom: '16px' }}>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#000000', marginBottom: '16px' }}>
               Experience the Path
             </h3>
-            <p style={{ color: '#64748B', marginBottom: '48px', fontSize: '16px' }}>
+            <p style={{ color: '#000000', marginBottom: '48px', fontSize: '16px' }}>
               Watch and explore the humongous, boundless potential of the human spirit.
             </p>
             

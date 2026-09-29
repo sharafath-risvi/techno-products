@@ -27,6 +27,7 @@ import BlogPage from './pages/BlogPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import CaseStoriesPage from './pages/CaseStoriesPage';
 import GalleriesPage from './pages/GalleriesPage';
+import NewsroomPage from './pages/NewsroomPage';
 import CaseStoryDetailPage from './pages/CaseStoryDetailPage';
 import CareersPage from './pages/CareersPage';
 import SpiritualPage from './pages/SpiritualPage';
@@ -98,7 +99,7 @@ function NotFound() {
         <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 32, color: '#000000', marginTop: 16, marginBottom: 16 }}>
           Page Not Found
         </h2>
-        <p style={{ color: '#666', marginBottom: 40, fontFamily: 'var(--font-body)', fontSize: 16, maxWidth: 400, marginInline: 'auto' }}>
+        <p style={{ color: '#000000', marginBottom: 40, fontFamily: 'var(--font-body)', fontSize: 16, maxWidth: 400, marginInline: 'auto' }}>
           The page you're looking for doesn't exist or has been moved.
         </p>
         <a href="/" className="btn-primary" style={{ display: 'inline-block' }}>Return to Homepage</a>
@@ -158,6 +159,7 @@ export default function App() {
                 <Route path="/insights/blog" element={<BlogPage />} />
                 <Route path="/insights/testimonials" element={<TestimonialsPage />} />
                 <Route path="/insights/galleries" element={<GalleriesPage />} />
+                <Route path="/insights/newsroom" element={<NewsroomPage />} />
                 <Route path="/case-stories" element={<CaseStoriesPage />} />
                 <Route path="/case-stories/:postId" element={<CaseStoryDetailPage />} />
 

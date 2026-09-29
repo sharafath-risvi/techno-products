@@ -149,12 +149,12 @@ export default function Footer() {
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
                 <span>© 2026 Techno Products Development</span>
                 <span>
-                  Developed by <a href="https://smartstart.biz/" target="_blank" rel="noopener noreferrer" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>SmartStart</a>
+                  Developed by <a href="https://smartstart.biz/" target="_blank" rel="noopener noreferrer" style={{ color: '#000000', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>SmartStart</a>
                 </span>
               </div>
               <div className="legal-links" style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                <Link to="/privacy-policy" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Privacy Policy</Link>
-                <Link to="/cookies-policy" style={{ color: '#64748B', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Cookies Policy</Link>
+                <Link to="/privacy-policy" style={{ color: '#000000', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Privacy Policy</Link>
+                <Link to="/cookies-policy" style={{ color: '#000000', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#0067A4'} onMouseLeave={e => e.currentTarget.style.color = '#64748B'}>Cookies Policy</Link>
               </div>
             </div>
           </div>

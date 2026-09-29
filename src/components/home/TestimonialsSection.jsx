@@ -69,7 +69,7 @@ export default function TestimonialsSection() {
             </h2>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 17,
-              color: '#666', lineHeight: 1.75,
+              color: '#000000', lineHeight: 1.75,
             }}>
               For over 26 years, industry leaders across India have placed their trust in TECHNO for critical industrial components, engineering solutions, and long-term partnerships.
             </p>
@@ -129,7 +129,7 @@ export default function TestimonialsSection() {
                   {/* Placeholder message */}
                   <p style={{
                     fontFamily: 'var(--font-body)', fontStyle: 'italic',
-                    fontSize: 14, color: '#888', lineHeight: 1.75,
+                    fontSize: 14, color: '#000000', lineHeight: 1.75,
                     flexGrow: 1,
                   }}>
                     "A trusted industrial partner for our operations — delivering quality products and engineering support that keeps our plant running efficiently."
@@ -145,7 +145,7 @@ export default function TestimonialsSection() {
                     </div>
                     <div style={{
                       fontFamily: 'var(--font-body)', fontSize: 12,
-                      color: '#999', marginTop: 2,
+                      color: '#000000', marginTop: 2,
                     }}>
                       {industry}
                     </div>
@@ -161,7 +161,7 @@ export default function TestimonialsSection() {
           <RevealText delay={0.4}>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 16,
-              color: '#888', marginBottom: 28, lineHeight: 1.7,
+              color: '#000000', marginBottom: 28, lineHeight: 1.7,
             }}>
               We serve 5,000+ customers across India. Request a reference or start a conversation with our team.
             </p>

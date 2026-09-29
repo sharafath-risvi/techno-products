@@ -70,10 +70,10 @@ export default function MeeRaMayaPage() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#0F172A', marginBottom: '24px', lineHeight: 1.3 }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#000000', marginBottom: '24px', lineHeight: 1.3 }}>
                 Empowering a Peaceful & Happy Life
               </h2>
-              <div style={{ fontSize: '17px', color: '#475569', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ fontSize: '17px', color: '#000000', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <p>
                   MeeRaMaya has been a “Start-Living” initiative initiated by Mrs. Shobhana Narayanan in Chennai in the last two odd years.
                 </p>
@@ -95,10 +95,10 @@ export default function MeeRaMayaPage() {
               transition={{ duration: 0.8 }}
               style={{ order: 2 }} // On mobile, text naturally goes first if we don't adjust, but let's keep visual order
             >
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#0F172A', marginBottom: '24px', lineHeight: 1.3 }}>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#000000', marginBottom: '24px', lineHeight: 1.3 }}>
                 Insights & Inspirations
               </h2>
-              <div style={{ fontSize: '17px', color: '#475569', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ fontSize: '17px', color: '#000000', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <p>
                   MeeRaMaya has also penned down her thoughts, aspirations & desires via a series of mini publications. Within the last one year itself MeeRaMaya has been read & seen across various platforms.
                 </p>
@@ -140,10 +140,10 @@ export default function MeeRaMayaPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#0F172A', marginBottom: '16px' }}>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 700, color: '#000000', marginBottom: '16px' }}>
               MeeRaMaya in Action
             </h3>
-            <p style={{ color: '#64748B', marginBottom: '48px', fontSize: '16px' }}>
+            <p style={{ color: '#000000', marginBottom: '48px', fontSize: '16px' }}>
               Learn more about the Start-Living initiative and its impact.
             </p>
             

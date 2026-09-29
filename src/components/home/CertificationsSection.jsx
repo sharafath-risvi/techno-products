@@ -76,7 +76,7 @@ export default function CertificationsSection() {
           
           <p style={{ 
             fontFamily: 'var(--font-body)', fontSize: 18, 
-            color: '#555555', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
+            color: '#000000', lineHeight: 1.6, margin: '0 auto', maxWidth: 680, fontWeight: 400
           }}>
             Certified to deliver engineering excellence with globally recognized quality and safety standards.
           </p>

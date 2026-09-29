@@ -57,7 +57,7 @@ export default function MostViewedProducts() {
             </h2>
             <p style={{
               fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 1.2vw, 18px)',
-              color: '#555', lineHeight: 1.7, maxWidth: 560, margin: '0 auto',
+              color: '#000000', lineHeight: 1.7, maxWidth: 560, margin: '0 auto',
             }}>
               Explore our highest-demand industrial products trusted by leading manufacturers across India.
             </p>
@@ -145,7 +145,7 @@ export default function MostViewedProducts() {
                 {/* Description */}
                 <p style={{
                   fontFamily: 'var(--font-body)', fontSize: 14,
-                  color: '#555', lineHeight: 1.75, marginBottom: 24, flex: 1,
+                  color: '#000000', lineHeight: 1.75, marginBottom: 24, flex: 1,
                 }}>
                   {product.description}
                 </p>

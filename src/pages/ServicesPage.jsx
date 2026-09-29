@@ -121,7 +121,7 @@ function ServiceContent({ service, index }) {
           {service.title}
         </h2>
         <p style={{ 
-          fontFamily: 'var(--font-body)', fontSize: 16, color: '#666', 
+          fontFamily: 'var(--font-body)', fontSize: 16, color: '#000000', 
           lineHeight: 1.8, marginBottom: 40, maxWidth: 500 
         }}>
           {service.description}
@@ -131,7 +131,7 @@ function ServiceContent({ service, index }) {
           {service.features.map(feature => (
             <div key={feature} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
               <CheckCircle2 size={18} color="#0067A4" style={{ flexShrink: 0, marginTop: 2 }} />
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#333', fontWeight: 500, lineHeight: 1.4 }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: 15, color: '#000000', fontWeight: 500, lineHeight: 1.4 }}>
                 {feature}
               </span>
             </div>

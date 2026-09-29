@@ -126,7 +126,7 @@ export default function OurCompanyPage() {
               <p style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(16px, 1.5vw, 18px)',
-                color: '#666',
+                color: '#000000',
                 lineHeight: 1.7,
                 maxWidth: 700,
                 margin: '0 auto',
@@ -274,7 +274,7 @@ export default function OurCompanyPage() {
                 <p style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: 15,
-                  color: '#555555',
+                  color: '#000000',
                   lineHeight: 1.8,
                   margin: 0,
                 }}>
