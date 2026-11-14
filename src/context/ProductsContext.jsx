@@ -4,84 +4,293 @@ const ProductsContext = createContext();
 
 export const useProducts = () => useContext(ProductsContext);
 
-// In-memory cache for products
-let cachedProductsData = null;
+// ----------------------------------------------------
+// Persistent Cache & Concurrency Configuration
+// ----------------------------------------------------
+const CACHE_KEY = 'techno_products_catalogue_v1';
+const CACHE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
+const MAX_CONCURRENT_PAGES = 2;          // Controlled concurrency
+const INTER_PAIR_DELAY_MS = 350;         // Server breathing room
+const API_BASE_URL = 'https://technoproducts.in/api/wp-json/api/v1/products';
+
+// In-memory module-level cache & hydration manager
+let memoryProducts = null;
+let isHydrationInProgress = false;
+const productListeners = new Set();
+
+function notifyListeners(newProducts) {
+  memoryProducts = newProducts;
+  productListeners.forEach(listener => {
+    try {
+      listener(newProducts);
+    } catch (e) {
+      console.warn('[ProductsContext] Error notifying listener:', e);
+    }
+  });
+}
+
+function notifyError(errMessage) {
+  productListeners.forEach(listener => {
+    try {
+      if (listener.onError) listener.onError(errMessage);
+    } catch (e) {
+      // ignore
+    }
+  });
+}
+
+function readLocalStorage() {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return null;
+    const raw = window.localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.products) || parsed.products.length === 0) return null;
+    const now = Date.now();
+    const isExpired = !parsed.timestamp || (now - parsed.timestamp > CACHE_TTL_MS);
+    return {
+      products: parsed.products,
+      total: parsed.total || parsed.products.length,
+      timestamp: parsed.timestamp || 0,
+      isExpired
+    };
+  } catch (err) {
+    console.warn('[ProductsContext] Error reading localStorage cache:', err);
+    return null;
+  }
+}
+
+function writeLocalStorage(products, total) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    const payload = {
+      timestamp: Date.now(),
+      total: total || products.length,
+      products
+    };
+    window.localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+  } catch (err) {
+    console.warn('[ProductsContext] Unable to write to localStorage (storage full or disabled):', err);
+  }
+}
+
+// Resilient single page fetcher with exponential backoff & safe JSON handling
+async function fetchProductsPage(page, perPage = 50, retries = 2, delayMs = 1000) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const url = `${API_BASE_URL}?page=${page}&per_page=${perPage}`;
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        console.warn(`[ProductsContext] Page ${page} returned HTTP ${res.status} (attempt ${attempt + 1}/${retries + 1})`);
+        if (attempt < retries) {
+          await new Promise(r => setTimeout(r, delayMs * Math.pow(1.5, attempt)));
+          continue;
+        }
+        return { error: true, status: res.status, page };
+      }
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        console.warn(`[ProductsContext] Page ${page} returned non-JSON content type: ${contentType}`);
+        if (attempt < retries) {
+          await new Promise(r => setTimeout(r, delayMs * Math.pow(1.5, attempt)));
+          continue;
+        }
+        return { error: true, status: res.status, page };
+      }
+
+      const json = await res.json();
+      if (!json || !Array.isArray(json.data)) {
+        throw new Error(`Invalid response structure on page ${page}`);
+      }
+      return { ok: true, data: json.data, pagination: json.pagination, page };
+    } catch (err) {
+      console.warn(`[ProductsContext] Network error on page ${page}: ${err.message} (attempt ${attempt + 1}/${retries + 1})`);
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, delayMs * Math.pow(1.5, attempt)));
+        continue;
+      }
+      return { error: true, message: err.message, page };
+    }
+  }
+  return { error: true, page };
+}
+
+// Module-level decoupled background hydration runner
+async function startCatalogueHydration() {
+  if (isHydrationInProgress) return;
+  isHydrationInProgress = true;
+
+  try {
+    const initialCache = readLocalStorage();
+    const hasValidCache = initialCache && Array.isArray(initialCache.products) && initialCache.products.length > 0;
+
+    // Step 1: Fetch Page 1 to detect newest products and total page count
+    const firstPageResult = await fetchProductsPage(1, 50, 2, 1000);
+
+    if (firstPageResult.error) {
+      const currentCount = memoryProducts ? memoryProducts.length : (initialCache ? initialCache.products.length : 0);
+      if (currentCount === 0) {
+        notifyError('Failed to load products. Please try again.');
+      } else {
+        console.warn('[ProductsContext] Page 1 failed, but continuing with active catalogue.');
+      }
+      isHydrationInProgress = false;
+      return;
+    }
+
+    const firstPageItems = firstPageResult.data.map(normalizeProduct).filter(Boolean);
+    const totalPages = firstPageResult.pagination?.total_pages || 10;
+    const totalProducts = firstPageResult.pagination?.total || 482;
+
+    // Initialize deduplication map
+    const productMap = new Map();
+
+    if (memoryProducts && memoryProducts.length > 0) {
+      memoryProducts.forEach(p => { if (p && p.id) productMap.set(p.id, p); });
+    } else if (hasValidCache) {
+      initialCache.products.forEach(p => { if (p && p.id) productMap.set(p.id, p); });
+    }
+
+    firstPageItems.forEach(p => {
+      if (p && p.id) productMap.set(p.id, p);
+    });
+
+    // Notify listeners with initial Page 1 products immediately
+    const initialList = Array.from(productMap.values());
+    notifyListeners(initialList);
+    writeLocalStorage(initialList, totalProducts);
+
+    // Check if full background hydration is needed
+    const needsFullHydration = !hasValidCache || 
+      initialCache.isExpired || 
+      initialCache.total !== totalProducts || 
+      productMap.size < totalProducts;
+
+    if (totalPages > 1 && needsFullHydration) {
+      const remainingPages = [];
+      for (let p = 2; p <= totalPages; p++) {
+        remainingPages.push(p);
+      }
+
+      const failedPages = [];
+
+      // Controlled pairs: max 2 concurrent requests at a time
+      for (let i = 0; i < remainingPages.length; i += MAX_CONCURRENT_PAGES) {
+        const pair = remainingPages.slice(i, i + MAX_CONCURRENT_PAGES);
+        const pairResults = await Promise.all(
+          pair.map(page => fetchProductsPage(page, 50, 2, 1200))
+        );
+
+        let hasNewProducts = false;
+        pairResults.forEach(res => {
+          if (res.ok && res.data) {
+            res.data.forEach(raw => {
+              const norm = normalizeProduct(raw);
+              if (norm && norm.id) {
+                productMap.set(norm.id, norm);
+                hasNewProducts = true;
+              }
+            });
+          } else if (res.error) {
+            failedPages.push(res.page);
+          }
+        });
+
+        // Progressive state update as each pair arrives
+        if (hasNewProducts) {
+          const updatedList = Array.from(productMap.values());
+          notifyListeners(updatedList);
+          writeLocalStorage(updatedList, totalProducts);
+        }
+
+        // Short breathing room between request pairs to prevent Apache saturation
+        if (i + MAX_CONCURRENT_PAGES < remainingPages.length) {
+          await new Promise(r => setTimeout(r, INTER_PAIR_DELAY_MS));
+        }
+      }
+
+      // Retry any failed pages once after a cooldown delay
+      if (failedPages.length > 0) {
+        console.warn(`[ProductsContext] Retrying ${failedPages.length} failed pages:`, failedPages);
+        await new Promise(r => setTimeout(r, 1500));
+        for (const page of failedPages) {
+          const retryRes = await fetchProductsPage(page, 50, 1, 2000);
+          if (retryRes.ok && retryRes.data) {
+            retryRes.data.forEach(raw => {
+              const norm = normalizeProduct(raw);
+              if (norm && norm.id) productMap.set(norm.id, norm);
+            });
+            notifyListeners(Array.from(productMap.values()));
+          }
+        }
+      }
+
+      // Final update and persistent cache commit
+      const finalList = Array.from(productMap.values());
+      notifyListeners(finalList);
+      writeLocalStorage(finalList, totalProducts);
+    } else {
+      writeLocalStorage(initialList, totalProducts);
+    }
+  } catch (err) {
+    console.error('[ProductsContext] Hydration unexpected error:', err);
+    if (!memoryProducts || memoryProducts.length === 0) {
+      notifyError(err.message || 'Failed to load products.');
+    }
+  } finally {
+    isHydrationInProgress = false;
+  }
+}
 
 export function ProductsProvider({ children }) {
-  const [products, setProducts] = useState(() => cachedProductsData || []);
-  const [loading, setLoading] = useState(() => cachedProductsData ? false : true);
+  const initialCache = readLocalStorage();
+  const hasValidCache = initialCache && Array.isArray(initialCache.products) && initialCache.products.length > 0;
+
+  // Stale-While-Revalidate: render immediately if memory or localStorage products exist
+  const [products, setProducts] = useState(() => {
+    if (memoryProducts && memoryProducts.length > 0) return memoryProducts;
+    if (hasValidCache) {
+      memoryProducts = initialCache.products;
+      return initialCache.products;
+    }
+    return [];
+  });
+
+  const [loading, setLoading] = useState(() => {
+    if (memoryProducts && memoryProducts.length > 0) return false;
+    if (hasValidCache) return false;
+    return true;
+  });
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (cachedProductsData) {
-      return; // Already loaded and cached
+    const listener = (newProducts) => {
+      setProducts(newProducts);
+      setLoading(false);
+      setError(null);
+    };
+    listener.onError = (errMessage) => {
+      setError(errMessage);
+      setLoading(false);
+    };
+
+    productListeners.add(listener);
+
+    // Sync state with latest memory products if already populated
+    if (memoryProducts && memoryProducts.length > 0) {
+      setProducts(memoryProducts);
+      setLoading(false);
     }
 
-    async function fetchAllProducts() {
-      try {
-        setLoading(true);
-        // Step 1: Fetch first page to get total pages
-        const firstPageRes = await fetch('https://technoproducts.in/api/wp-json/api/v1/products?page=1&per_page=50');
-        const firstPageData = await firstPageRes.json();
-        
-        if (!firstPageData || !firstPageData.data) {
-          throw new Error('Failed to fetch initial products data.');
-        }
+    // Trigger decoupled background hydration
+    startCatalogueHydration();
 
-        const totalPages = firstPageData.pagination?.total_pages || 10;
-        
-        // 🚀 PROGRESSIVE RENDERING OPTIMIZATION 🚀
-        // Immediately normalize and render the FIRST page of products so the user doesn't wait!
-        let currentProducts = firstPageData.data.map(normalizeProduct).filter(Boolean);
-        cachedProductsData = currentProducts;
-        setProducts(currentProducts);
-        setLoading(false); // <--- UI instantly unblocks here!
-
-        if (totalPages > 1) {
-          // Step 2: Fetch remaining pages in parallel (background hydration)
-          const fetchPromises = [];
-          for (let p = 2; p <= totalPages; p++) {
-            fetchPromises.push(
-              fetch(`https://technoproducts.in/api/wp-json/api/v1/products?page=${p}&per_page=50`)
-                .then(res => res.ok ? res.json() : null)
-                .catch(err => {
-                  console.warn(`Failed to fetch products page ${p}:`, err);
-                  return null;
-                })
-            );
-          }
-
-          const remainingPagesData = await Promise.all(fetchPromises);
-          
-          const productMap = new Map();
-          currentProducts.forEach(p => {
-            if (p && p.id) productMap.set(p.id, p);
-          });
-
-          remainingPagesData.forEach(pageData => {
-            if (pageData && pageData.data) {
-              pageData.data.forEach(raw => {
-                const norm = normalizeProduct(raw);
-                if (norm && norm.id && !productMap.has(norm.id)) {
-                  productMap.set(norm.id, norm);
-                }
-              });
-            }
-          });
-
-          // Step 3: Final update with all unique products (deduplicated)
-          const allUniqueProducts = Array.from(productMap.values());
-          cachedProductsData = allUniqueProducts;
-          setProducts(allUniqueProducts);
-        }
-      } catch (err) {
-        console.error("ProductsContext fetch error:", err);
-        setError(err.message);
-        if (loading) setLoading(false);
-      }
-    }
-
-    fetchAllProducts();
+    return () => {
+      productListeners.delete(listener);
+    };
   }, []);
 
   return (

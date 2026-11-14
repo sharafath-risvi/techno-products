@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 // Global in-memory cache for API requests
 const apiCache = {};
+const inFlightRequests = {};
 
 export function useApi(url, options = {}) {
   const [data, setData] = useState(() => {
@@ -16,10 +17,7 @@ export function useApi(url, options = {}) {
   useEffect(() => {
     if (!url) return;
     
-    // If we have cached data, we don't necessarily need to fetch again,
-    // but a stale-while-revalidate approach could be used.
-    // For pure frontend optimization without changing API behavior,
-    // skipping the fetch entirely if cached is the fastest approach.
+    // If we have cached data, return synchronously without redundant network calls
     if (apiCache[url]) {
       setData(apiCache[url]);
       setLoading(false);
@@ -31,13 +29,27 @@ export function useApi(url, options = {}) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status} ${response.statusText}`);
+        // In-flight deduplication: prevent duplicate simultaneous requests across multiple components
+        if (!inFlightRequests[url]) {
+          inFlightRequests[url] = fetch(url, options)
+            .then(async (response) => {
+              if (!response.ok) {
+                throw new Error(`API error: ${response.status} ${response.statusText}`);
+              }
+              const contentType = response.headers.get('content-type') || '';
+              if (!contentType.includes('application/json')) {
+                throw new Error(`API returned non-JSON response (${response.status})`);
+              }
+              return response.json();
+            })
+            .finally(() => {
+              delete inFlightRequests[url];
+            });
         }
-        const json = await response.json();
+
+        const json = await inFlightRequests[url];
+        apiCache[url] = json; // Store in cache
         if (isMounted) {
-          apiCache[url] = json; // Store in cache
           setData(json);
         }
       } catch (err) {
