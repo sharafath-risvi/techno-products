@@ -21,7 +21,7 @@ export function ProductsProvider({ children }) {
       try {
         setLoading(true);
         // Step 1: Fetch first page to get total pages
-        const firstPageRes = await fetch('https://technoproducts.in/wp-json/api/v1/products?page=1&per_page=50');
+        const firstPageRes = await fetch('https://technoproducts.in/api/wp-json/api/v1/products?page=1&per_page=50');
         const firstPageData = await firstPageRes.json();
         
         if (!firstPageData || !firstPageData.data) {
@@ -42,7 +42,7 @@ export function ProductsProvider({ children }) {
           const fetchPromises = [];
           for (let p = 2; p <= totalPages; p++) {
             fetchPromises.push(
-              fetch(`https://technoproducts.in/wp-json/api/v1/products?page=${p}&per_page=50`)
+              fetch(`https://technoproducts.in/api/wp-json/api/v1/products?page=${p}&per_page=50`)
                 .then(res => res.ok ? res.json() : null)
                 .catch(err => {
                   console.warn(`Failed to fetch products page ${p}:`, err);
@@ -53,16 +53,26 @@ export function ProductsProvider({ children }) {
 
           const remainingPagesData = await Promise.all(fetchPromises);
           
+          const productMap = new Map();
+          currentProducts.forEach(p => {
+            if (p && p.id) productMap.set(p.id, p);
+          });
+
           remainingPagesData.forEach(pageData => {
             if (pageData && pageData.data) {
-              const newNormalized = pageData.data.map(normalizeProduct).filter(Boolean);
-              currentProducts = [...currentProducts, ...newNormalized];
+              pageData.data.forEach(raw => {
+                const norm = normalizeProduct(raw);
+                if (norm && norm.id && !productMap.has(norm.id)) {
+                  productMap.set(norm.id, norm);
+                }
+              });
             }
           });
 
-          // Step 3: Final update with all 480 products
-          cachedProductsData = currentProducts; // Store in cache
-          setProducts(currentProducts);
+          // Step 3: Final update with all unique products (deduplicated)
+          const allUniqueProducts = Array.from(productMap.values());
+          cachedProductsData = allUniqueProducts;
+          setProducts(allUniqueProducts);
         }
       } catch (err) {
         console.error("ProductsContext fetch error:", err);
@@ -85,7 +95,7 @@ export function ProductsProvider({ children }) {
 // Normalization Layer (Regex Attribute Parsing)
 // ----------------------------------------------------
 
-function normalizeProduct(product) {
+export function normalizeProduct(product) {
   if (!product) return null;
   const name = product.name || '';
   const desc = product.description || '';

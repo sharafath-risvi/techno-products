@@ -2,7 +2,7 @@ const https = require('https');
 
 async function fetchAll() {
   const fetchPage = (page) => new Promise((resolve, reject) => {
-    https.get(`https://technoproducts.in/wp-json/api/v1/products?page=${page}&per_page=50`, (res) => {
+    https.get(`https://technoproducts.in/api/wp-json/api/v1/products?page=${page}&per_page=50`, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => resolve(JSON.parse(data)));

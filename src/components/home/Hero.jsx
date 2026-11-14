@@ -92,23 +92,23 @@ export default function Hero() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         pointerEvents: 'none',
-        padding: '0 24px',
+        padding: '0 24px clamp(88px, 11vh, 110px)',
       }}>
 
         {/* STATIC HIGHLIGHTED TITLE with Premium Industrial Design */}
-        <div style={{ position: 'relative', marginBottom: 40, textAlign: 'center', padding: '0 24px', maxWidth: 1200 }}>
+        <div style={{ position: 'relative', marginBottom: 16, textAlign: 'center', padding: '0 24px', maxWidth: 1200 }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             style={{
               fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(40px, 6vw, 96px)',
+              fontSize: 'clamp(24px, 3.5vw, 44px)',
               fontWeight: 800,
               color: '#FFFFFF',
-              lineHeight: 1.05,
+              lineHeight: 1.15,
               letterSpacing: '-0.02em',
               textShadow: '0 12px 40px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.4)',
               textTransform: 'uppercase', // Premium editorial/industrial feel
@@ -119,7 +119,7 @@ export default function Hero() {
         </div>
 
         {/* ROTATING CONTENT WRAPPER */}
-        <div style={{ position: 'relative', width: '100%', height: '60px', display: 'flex', justifyContent: 'center' }}>
+        <div style={{ position: 'relative', width: '100%', height: '36px', display: 'flex', justifyContent: 'center' }}>
           <AnimatePresence mode="wait">
             {activeText !== null && (
               <motion.div
@@ -131,7 +131,7 @@ export default function Hero() {
                 style={{
                   position: 'absolute',
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(20px, 2.5vw, 36px)',
+                  fontSize: 'clamp(15px, 1.8vw, 22px)',
                   fontWeight: 400,
                   color: '#E2E8F0', // Slightly muted compared to the bold white title
                   letterSpacing: '0.04em',

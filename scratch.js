@@ -8,7 +8,7 @@ async function test() {
     const fetchPromises = [];
     for (let p = 2; p <= totalPages; p++) {
       fetchPromises.push(
-        fetch(`https://technoproducts.in/wp-json/api/v1/products?page=${p}&per_page=50`)
+        fetch(`https://technoproducts.in/api/wp-json/api/v1/products?page=${p}&per_page=50`)
           .then(res => res.json())
       );
     }

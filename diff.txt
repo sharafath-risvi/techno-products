@@ -67,7 +67,7 @@ index 861b65c..12cf313 100644
 +  }, [slug]);
 +
 +  // Fetch categories for sidebar
-+  const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
++  const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/api/wp-json/api/v1/product-categories');
 +  const categories = apiCategoriesData?.data || [];
 +
 +  // Fetch all products from context

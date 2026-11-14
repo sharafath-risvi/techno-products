@@ -11,7 +11,7 @@ import { useApi } from '../hooks/useApi';
 export default function CaseStoryDetailPage() {
   const { postId } = useParams();
   
-  const { data: apiData, loading, error } = useApi(`https://technoproducts.in/wp-json/api/v1/posts/${postId}`);
+  const { data: apiData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/posts/${postId}`);
   const story = apiData;
 
   // Form state for sticky panel

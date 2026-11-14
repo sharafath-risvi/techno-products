@@ -6,7 +6,7 @@ import { brandPartners } from '../data/siteData';
 import { useApi } from '../hooks/useApi';
 
 export default function ProductsPage() {
-  const { data: apiCategories, loading, error } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
+  const { data: apiCategories, loading, error } = useApi('https://technoproducts.in/api/wp-json/api/v1/product-categories');
   const categories = apiCategories?.data || [];
 
   return (
@@ -101,43 +101,43 @@ export default function ProductsPage() {
                       >
                         <div style={{ aspectRatio: '4/3', position: 'relative', overflow: 'hidden', background: '#F5F5F5' }}>
                           {cat.image ? (
-                            <img 
-                              src={cat.image} 
-                              alt={cat.name} 
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                            <img
+                              src={cat.image}
+                              alt={cat.name}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                           ) : (
                             <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontFamily: 'var(--font-heading)' }}>
                               No Image
                             </div>
                           )}
-                          <div style={{ 
-                            position: 'absolute', top: 16, right: 16, 
-                            background: '#fff', color: '#0067A4', 
-                            padding: '6px 14px', borderRadius: 20, 
-                            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12 
+                          <div style={{
+                            position: 'absolute', top: 16, right: 16,
+                            background: '#fff', color: '#0067A4',
+                            padding: '6px 14px', borderRadius: 20,
+                            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 12
                           }}>
                             {cat.count} Products
                           </div>
                         </div>
                         <div style={{ padding: '32px 28px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                           {cat.tag && (
-                            <div style={{ 
-                              fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11, 
-                              color: '#D71B32', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 
+                            <div style={{
+                              fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 11,
+                              color: '#D71B32', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12
                             }}>
                               {cat.tag}
                             </div>
                           )}
-                          <h3 style={{ 
-                            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22, 
-                            color: '#001426', marginBottom: 16, lineHeight: 1.2 
+                          <h3 style={{
+                            fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 22,
+                            color: '#001426', marginBottom: 16, lineHeight: 1.2
                           }}>
                             {cat.name}
                           </h3>
-                          <p style={{ 
-                            fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000', 
-                            lineHeight: 1.7, marginBottom: 24, flexGrow: 1 
+                          <p style={{
+                            fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000',
+                            lineHeight: 1.7, marginBottom: 24, flexGrow: 1
                           }}>
                             {cat.description || "View products in this category."}
                           </p>

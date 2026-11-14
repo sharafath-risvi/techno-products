@@ -129,9 +129,9 @@ export default function Footer() {
               <Phone size={18} className="contact-icon" />
               <span>+91 95516-96517<br/>+91 98412-76889</span>
             </a>
-            <a href="mailto:sales@technoproducts.in" className="footer-contact-item linkable">
+            <a href="mailto:enquire@technoproducts.in" className="footer-contact-item linkable">
               <Mail size={18} className="contact-icon" />
-              <span>sales@technoproducts.in</span>
+              <span>enquire@technoproducts.in</span>
             </a>
             <div className="footer-contact-item">
               <FileText size={18} className="contact-icon" />

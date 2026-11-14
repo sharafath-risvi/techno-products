@@ -8,7 +8,7 @@ import { useApi } from '../hooks/useApi';
 export default function CaseStoriesPage() {
   const [page, setPage] = useState(1);
   const perPage = 10;
-  const { data: apiData, loading, error } = useApi(`https://technoproducts.in/wp-json/api/v1/posts?page=${page}&per_page=${perPage}`);
+  const { data: apiData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/posts?page=${page}&per_page=${perPage}`);
   
   const stories = apiData?.data || [];
   const pagination = apiData?.pagination || { page: 1, total_pages: 1, total: 0 };

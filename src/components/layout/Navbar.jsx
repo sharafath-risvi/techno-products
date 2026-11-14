@@ -10,12 +10,14 @@ const textColor = '#000000';
 const logoBlue = '#0067A4';
 const activeBlue = '#00446F';
 
+function pointerCanHover() {
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
 export default function Navbar() {
   const [pastHero, setPastHero] = useState(false);
-  const [showNavbar, setShowNavbar] = useState(true);
-  const lastScrollYRef = useRef(0);
   const pastHeroRef = useRef(false);
-  const showNavbarRef = useRef(true);
+  const navRef = useRef(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -28,7 +30,7 @@ export default function Navbar() {
   const { products } = useProducts();
 
   // Fetch real product categories
-  const { data: apiCategoriesData } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
+  const { data: apiCategoriesData } = useApi('https://technoproducts.in/api/wp-json/api/v1/product-categories');
   const apiCategories = apiCategoriesData?.data || [];
 
   const allProductsItem = {
@@ -124,20 +126,6 @@ export default function Navbar() {
       pastHeroRef.current = isPastHero;
       setPastHero(isPastHero);
     }
-
-    let shouldShow = showNavbarRef.current;
-    if (currentScrollY > lastScrollYRef.current && currentScrollY > 100) {
-      shouldShow = false;
-    } else if (currentScrollY < lastScrollYRef.current || currentScrollY <= 100) {
-      shouldShow = true;
-    }
-    
-    if (shouldShow !== showNavbarRef.current) {
-      showNavbarRef.current = shouldShow;
-      setShowNavbar(shouldShow);
-    }
-    
-    lastScrollYRef.current = currentScrollY;
   };
 
   useEffect(() => {
@@ -160,7 +148,8 @@ export default function Navbar() {
 
   useEffect(() => { 
     setMobileOpen(false); 
-    setOpenDropdown(null); 
+    setOpenDropdown(null);
+    setIsHovered(Boolean(navRef.current?.matches(':hover') && pointerCanHover()));
     // Evaluate scroll position immediately on route change
     checkScroll();
     // Also check after a very short delay to allow the new page's DOM to mount
@@ -210,37 +199,68 @@ export default function Navbar() {
     if (p.startsWith('/solutions')) return true;
     if (p.startsWith('/industries')) return true;
     if (p.startsWith('/insights')) return true;
+    if (p === '/case-stories') return true;
+    return false;
+  };
+
+  // Same hero treatment as the homepage: transparent at the top, white on hover or after scroll.
+  const usesHeroNavbar = () => {
+    const p = location.pathname;
+    if (p === '/') return true;
+    if (p.startsWith('/solutions/')) return true;
+    if (p.startsWith('/industries/')) return true;
+    if (p === '/insights/testimonials') return true;
+    if (p === '/case-stories') return true;
     return false;
   };
 
   const isTransparentState = !pastHero && !lightHero && !mobileOpen && isTransparentAllowed();
   const applyWhiteState = pastHero || (!isTransparentAllowed() && !lightHero);
 
-  const currentTextColor = mobileOpen ? textColor : (applyWhiteState || lightHero ? '#0F172A' : '#FFFFFF');
-  const currentActiveColor = mobileOpen ? activeBlue : (applyWhiteState || lightHero ? activeBlue : '#FFFFFF');
+  const isHeroAtTop = usesHeroNavbar() && !pastHero && !mobileOpen;
+  const activeMenuItem = navItems.find((item) => item.label === openDropdown);
+  const menuOpen = Boolean(
+    activeMenuItem && (
+      activeMenuItem.dropdown ||
+      activeMenuItem.mega ||
+      activeMenuItem.industries ||
+      activeMenuItem.solutionsMega ||
+      activeMenuItem.insightsMega
+    )
+  );
+  // Hover, or an open menu, reuses the existing white navbar. Menus keep it white across the gap.
+  const showWhiteNavbar = applyWhiteState || (isHeroAtTop && (isHovered || menuOpen));
+  const fullyTransparentHero = isHeroAtTop && !showWhiteNavbar;
 
-  const navBackground = mobileOpen 
-    ? 'transparent' 
-    : (applyWhiteState 
-        ? 'rgba(255,255,255,0.85)' 
-        : (lightHero 
-            ? 'rgba(255,255,255,0.1)' 
-            : 'rgba(0, 0, 0, 0.25)'));
+  const currentTextColor = mobileOpen ? textColor : (showWhiteNavbar || lightHero ? '#0F172A' : '#FFFFFF');
+  const currentActiveColor = mobileOpen ? activeBlue : (showWhiteNavbar || lightHero ? activeBlue : '#FFFFFF');
+
+  const navBackground = mobileOpen
+    ? 'transparent'
+    : (showWhiteNavbar
+        ? 'rgba(255,255,255,0.85)'
+        : (fullyTransparentHero
+            ? 'transparent'
+            : (lightHero
+                ? 'rgba(255,255,255,0.1)'
+                : 'rgba(0, 0, 0, 0.25)')));
 
   return (
     <>
       <nav
-        onMouseEnter={() => setIsHovered(true)}
+        ref={navRef}
+        onMouseEnter={() => {
+          if (pointerCanHover()) setIsHovered(true);
+        }}
         onMouseLeave={() => setIsHovered(false)}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0,
           background: navBackground,
-          backdropFilter: mobileOpen ? 'none' : (applyWhiteState ? 'blur(10px)' : 'blur(10px)'),
-          WebkitBackdropFilter: mobileOpen ? 'none' : (applyWhiteState ? 'blur(16px)' : 'blur(12px)'),
+          backdropFilter: (mobileOpen || fullyTransparentHero) ? 'none' : 'blur(10px)',
+          WebkitBackdropFilter: (mobileOpen || fullyTransparentHero) ? 'none' : (showWhiteNavbar ? 'blur(16px)' : 'blur(12px)'),
           borderBottom: 'none',
-          boxShadow: (applyWhiteState && !mobileOpen) ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
-          transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease',
+          boxShadow: (showWhiteNavbar && !mobileOpen) ? '0 4px 24px rgba(0,0,0,0.04)' : 'none',
+          transition: 'background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease, -webkit-backdrop-filter 0.4s ease, box-shadow 0.4s ease',
           zIndex: 1000,
         }}
         role="navigation" aria-label="Main navigation"
@@ -670,10 +690,10 @@ export default function Navbar() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               height: 44, padding: '0 20px', borderRadius: 40,
-              background: applyWhiteState ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent'),
-              border: applyWhiteState ? '1px solid #E5E7EB' : (lightHero ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.4)'),
+              background: showWhiteNavbar ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent'),
+              border: showWhiteNavbar ? '1px solid #E5E7EB' : (lightHero ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.4)'),
               fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 600,
-              color: applyWhiteState ? '#001426' : (lightHero ? '#001426' : '#FFFFFF'),
+              color: showWhiteNavbar ? '#001426' : (lightHero ? '#001426' : '#FFFFFF'),
               textDecoration: 'none', letterSpacing: '0.02em',
               transition: 'all 0.2s ease',
             }}
@@ -683,9 +703,9 @@ export default function Navbar() {
               e.currentTarget.style.color = '#0067A4';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = applyWhiteState ? '#E5E7EB' : (lightHero ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.4)');
-              e.currentTarget.style.background = applyWhiteState ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent');
-              e.currentTarget.style.color = applyWhiteState ? '#001426' : (lightHero ? '#001426' : '#FFFFFF');
+              e.currentTarget.style.borderColor = showWhiteNavbar ? '#E5E7EB' : (lightHero ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.4)');
+              e.currentTarget.style.background = showWhiteNavbar ? '#FFFFFF' : (lightHero ? 'rgba(0,103,164,0.05)' : 'transparent');
+              e.currentTarget.style.color = showWhiteNavbar ? '#001426' : (lightHero ? '#001426' : '#FFFFFF');
             }}
           >
             <Phone size={14} style={{ color: 'inherit' }} />

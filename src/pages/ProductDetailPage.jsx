@@ -2,21 +2,46 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ChevronRight, CheckCircle2, FileText, Download, ShieldCheck, 
-  Settings, ArrowRight, Share2, Printer, Check, PhoneCall, Mail, Building2, User, Loader2
+  ChevronRight, CheckCircle2, CheckCircle, FileText, Download, ShieldCheck, 
+  Settings, ArrowRight, Check, PhoneCall, Mail, Building2, User, Loader2,
+  X, ExternalLink, AlertCircle, Image as ImageIcon, FileSpreadsheet
 } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
+import { resolveProductDocuments } from '../data/verifiedProductDocs';
 
 export default function ProductDetailPage() {
   const { categorySlug, productId } = useParams();
   const navigate = useNavigate();
   
-  const { data: productData, loading, error } = useApi(`https://technoproducts.in/wp-json/api/v1/products/${productId}`);
+  const { data: productData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/products/${productId}`);
   const product = productData;
 
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [activeTab, setActiveTab] = useState('overview');
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Datasheet modal states
+  const [isDatasheetOpen, setIsDatasheetOpen] = useState(false);
+  const [isDocLoading, setIsDocLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  // Modular resolution: WordPress API first (multi-format support), then verified fallback mapping
+  const { datasheetUrl, fileInfo, pricing } = resolveProductDocuments(productId, product);
+
+  // Handle ESC key and scroll lock when datasheet modal is open
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsDatasheetOpen(false);
+    };
+    if (isDatasheetOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isDatasheetOpen]);
   
   // Enquiry form states
   const [formData, setFormData] = useState({
@@ -32,12 +57,14 @@ export default function ProductDetailPage() {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // Reset top scroll and image/tab index when product ID changes
+  // Reset top scroll, image/tab index and datasheet modal when product ID changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActiveImageIdx(0);
     setActiveTab('overview');
     setFormSubmitted(false);
+    setIsDatasheetOpen(false);
+    setIsDocLoading(true);
   }, [productId]);
 
   if (loading) {
@@ -71,6 +98,51 @@ export default function ProductDetailPage() {
   const handleDownload = (title) => {
     setToastMessage(`Downloading ${title}...`);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const handleDownloadDatasheet = async (e) => {
+    if (e) e.stopPropagation();
+    if (!datasheetUrl) return;
+
+    const rawName = (product?.name || 'Product')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&[a-z0-9#]+;/gi, '')
+      .replace(/[^a-zA-Z0-9_\- ]/g, '')
+      .trim()
+      .replace(/\s+/g, '_');
+
+    const ext = fileInfo?.extension || datasheetUrl.split('.').pop()?.split(/[?#]/)[0] || 'pdf';
+    const filename = `${rawName || 'Product'}_Datasheet.${ext}`;
+
+    setIsDownloading(true);
+    setToastMessage(`Downloading ${filename}...`);
+
+    try {
+      const response = await fetch(datasheetUrl);
+      if (!response.ok) throw new Error('Network response was not ok');
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      // Direct anchor download fallback
+      const link = document.createElement('a');
+      link.href = datasheetUrl;
+      link.download = filename;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } finally {
+      setIsDownloading(false);
+      setTimeout(() => setToastMessage(null), 3500);
+    }
   };
 
   const handleFormSubmit = (e) => {
@@ -130,15 +202,21 @@ export default function ProductDetailPage() {
             {/* Left: Gallery & Images */}
             <div className="detail-gallery">
               <div className="main-image-wrapper">
-                <motion.img
-                  key={activeImageIdx}
-                  src={images[activeImageIdx]}
-                  alt={product.name}
-                  initial={{ opacity: 0.8 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="main-image"
-                />
+                {images.length > 0 && images[activeImageIdx] ? (
+                  <motion.img
+                    key={activeImageIdx}
+                    src={images[activeImageIdx]}
+                    alt={product.name}
+                    initial={{ opacity: 0.8 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className="main-image"
+                  />
+                ) : (
+                  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontFamily: 'var(--font-heading)', fontSize: 16 }}>
+                    No Image Available
+                  </div>
+                )}
                 {product.brand && <div className="gallery-badge-brand">{product.brand}</div>}
                 <div className="gallery-badge-status">Official Industrial Warranty</div>
               </div>
@@ -162,6 +240,25 @@ export default function ProductDetailPage() {
             <div className="detail-info">
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
                 <span className="category-tag">{categorySlug}</span>
+                {pricing && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      padding: '4px 12px',
+                      borderRadius: 999,
+                      background: '#F0FDF4',
+                      border: '1px solid #BBF7D0',
+                      color: '#15803D',
+                      fontSize: 12,
+                      fontWeight: 600,
+                    }}
+                  >
+                    <CheckCircle2 size={13} color="#16A34A" />
+                    Verified Price: ₹ {Number(pricing.listPrice).toLocaleString('en-IN')}
+                  </span>
+                )}
               </div>
 
               <h1 className="product-title" dangerouslySetInnerHTML={{ __html: product.name }} />
@@ -178,30 +275,24 @@ export default function ProductDetailPage() {
                   <ArrowRight size={18} />
                 </a>
                 
+                {/* Datasheet Button: Rendered consistently on EVERY individual product detail page */}
                 <button 
-                  onClick={() => handleDownload(`${product.name} Datasheet`)}
+                  onClick={() => {
+                    setIsDocLoading(true);
+                    setIsDatasheetOpen(true);
+                  }}
                   className="btn btn-outline" 
                   style={{ padding: '16px 24px', borderColor: '#CBD5E1', color: '#000000', fontWeight: 700 }}
+                  title="View Product Datasheet"
                 >
                   <Download size={18} />
                   <span>Datasheet</span>
                 </button>
               </div>
 
-              <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#000000' }}>
-                  <ShieldCheck size={16} color="#10B981" />
-                  <span>Verified B2B Supply & Application Engineering Support</span>
-                </div>
-                
-                <div style={{ display: 'flex', gap: 12 }}>
-                  <button onClick={() => window.print()} title="Print Specs" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}>
-                    <Printer size={18} />
-                  </button>
-                  <button onClick={() => handleDownload('Product Share Link')} title="Share" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#000000' }}>
-                    <Share2 size={18} />
-                  </button>
-                </div>
+              <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#000000' }}>
+                <ShieldCheck size={16} color="#10B981" />
+                <span>Verified B2B Supply & Application Engineering Support</span>
               </div>
             </div>
 
@@ -298,7 +389,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Email Technical Support</div>
-                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquiry@technoproducts.in</div>
+                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquire@technoproducts.in</div>
                   </div>
                 </div>
               </div>
@@ -506,6 +597,654 @@ export default function ProductDetailPage() {
           </div>
         </section>
       )}
+
+      {/* 5. Datasheet Document Viewer Modal */}
+      <AnimatePresence>
+        {isDatasheetOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsDatasheetOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 99999,
+              background: 'rgba(0, 20, 38, 0.75)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '16px',
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: '100%',
+                maxWidth: '1100px',
+                height: 'min(90vh, 920px)',
+                background: '#FFFFFF',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              {/* Modal Header */}
+              <div
+                style={{
+                  background: '#001426',
+                  color: '#FFFFFF',
+                  padding: '16px 24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 16,
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, flex: 1 }}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: 'rgba(0, 103, 164, 0.2)',
+                      border: '1px solid rgba(96, 165, 250, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#60A5FA',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {fileInfo?.isImage ? (
+                      <ImageIcon size={20} />
+                    ) : fileInfo?.category === 'spreadsheet' ? (
+                      <FileSpreadsheet size={20} />
+                    ) : (
+                      <FileText size={20} />
+                    )}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 16,
+                        fontWeight: 700,
+                        color: '#FFFFFF',
+                        margin: 0,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: product.name }}
+                    />
+                    <div style={{ fontSize: 12, color: '#94A3B8', marginTop: 2, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span>{fileInfo ? `${fileInfo.label} • ${fileInfo.filename}` : 'Official Manufacturer Technical Datasheet'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Header Action Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {datasheetUrl && fileInfo && (
+                    <>
+                      <span
+                        style={{
+                          padding: '5px 10px',
+                          borderRadius: 6,
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          color: '#93C5FD',
+                          fontSize: 11,
+                          fontWeight: 700,
+                          letterSpacing: '0.05em',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {fileInfo.extension}
+                      </span>
+
+                      <a
+                        href={datasheetUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-datasheet-action"
+                        title="Open document in new window"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          padding: '8px 14px',
+                          borderRadius: 8,
+                          background: 'rgba(255, 255, 255, 0.08)',
+                          border: '1px solid rgba(255, 255, 255, 0.15)',
+                          color: '#E2E8F0',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 13,
+                          fontWeight: 600,
+                          textDecoration: 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <ExternalLink size={15} />
+                        <span className="datasheet-btn-label">New Tab</span>
+                      </a>
+
+                      <button
+                        onClick={handleDownloadDatasheet}
+                        disabled={isDownloading}
+                        className="btn-datasheet-download"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 6,
+                          padding: '8px 18px',
+                          borderRadius: 8,
+                          background: '#0067A4',
+                          border: 'none',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 13,
+                          fontWeight: 700,
+                          cursor: isDownloading ? 'wait' : 'pointer',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        {isDownloading ? (
+                          <Loader2 size={15} className="animate-spin" />
+                        ) : (
+                          <Download size={15} />
+                        )}
+                        <span>{isDownloading ? 'Downloading...' : 'Download'}</span>
+                      </button>
+                    </>
+                  )}
+
+                  <button
+                    onClick={() => setIsDatasheetOpen(false)}
+                    aria-label="Close Datasheet Viewer"
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 8,
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      color: '#E2E8F0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Content Body - Product Datasheet Single Section */}
+              <div
+                style={{
+                  flex: 1,
+                  position: 'relative',
+                  background: '#F8FAFC',
+                  overflowY: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <div style={{ background: '#FFFFFF', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  {/* Section Header */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '14px 24px',
+                      background: '#F8FAFC',
+                      borderBottom: '1px solid #E2E8F0',
+                      flexWrap: 'wrap',
+                      gap: 10,
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: 6,
+                          background: '#0067A4',
+                          color: '#FFFFFF',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {fileInfo?.isImage ? (
+                          <ImageIcon size={16} />
+                        ) : fileInfo?.category === 'spreadsheet' ? (
+                          <FileSpreadsheet size={16} />
+                        ) : (
+                          <FileText size={16} />
+                        )}
+                      </div>
+                      <div>
+                        <h4
+                          style={{
+                            fontFamily: 'var(--font-heading)',
+                            fontSize: 14,
+                            fontWeight: 700,
+                            color: '#0F172A',
+                            margin: 0,
+                          }}
+                        >
+                          Product Technical Datasheet
+                        </h4>
+                        <span style={{ fontSize: 11, color: '#64748B' }}>
+                          {fileInfo ? `${fileInfo.label} (${fileInfo.extension.toUpperCase()})` : 'Official Manufacturer Engineering Specification'}
+                        </span>
+                      </div>
+                    </div>
+                    {datasheetUrl && fileInfo && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 5,
+                            padding: '3px 10px',
+                            borderRadius: 999,
+                            background: '#ECFDF5',
+                            border: '1px solid #A7F3D0',
+                            color: '#065F46',
+                            fontSize: 11,
+                            fontWeight: 600,
+                          }}
+                        >
+                          <ShieldCheck size={12} color="#10B981" />
+                          Verified OEM Document
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Multi-Format Preview Display */}
+                  {datasheetUrl && fileInfo ? (
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                      {/* 1. PDF Document Preview */}
+                      {fileInfo.category === 'pdf' && (
+                        <div style={{ position: 'relative', width: '100%', height: 560, background: '#1E293B' }}>
+                          {isDocLoading && (
+                            <div
+                              style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: '#F8FAFC',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 12,
+                                zIndex: 2,
+                              }}
+                            >
+                              <Loader2 size={36} color="#0067A4" className="animate-spin" />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-heading)',
+                                  fontSize: 13,
+                                  fontWeight: 600,
+                                  color: '#475569',
+                                }}
+                              >
+                                Loading technical datasheet preview...
+                              </span>
+                            </div>
+                          )}
+                          <iframe
+                            src={`${datasheetUrl}#toolbar=1&navpanes=0`}
+                            title={`${product.name} Datasheet PDF`}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              border: 'none',
+                            }}
+                            onLoad={() => setIsDocLoading(false)}
+                          />
+                        </div>
+                      )}
+
+                      {/* 2. Image Preview (JPG, JPEG, PNG, WEBP, GIF, SVG) */}
+                      {fileInfo.category === 'image' && (
+                        <div
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            minHeight: 520,
+                            background: '#0B132B',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: 24,
+                            overflow: 'auto',
+                          }}
+                        >
+                          {isDocLoading && (
+                            <div
+                              style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: '#F8FAFC',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: 12,
+                                zIndex: 2,
+                              }}
+                            >
+                              <Loader2 size={36} color="#0067A4" className="animate-spin" />
+                              <span
+                                style={{
+                                  fontFamily: 'var(--font-heading)',
+                                  fontSize: 13,
+                                  fontWeight: 600,
+                                  color: '#475569',
+                                }}
+                              >
+                                Loading datasheet image preview...
+                              </span>
+                            </div>
+                          )}
+                          <img
+                            src={datasheetUrl}
+                            alt={`${product.name} Datasheet`}
+                            onLoad={() => setIsDocLoading(false)}
+                            onError={() => setIsDocLoading(false)}
+                            style={{
+                              maxWidth: '100%',
+                              maxHeight: 'min(65vh, 600px)',
+                              objectFit: 'contain',
+                              borderRadius: 8,
+                              boxShadow: '0 12px 30px rgba(0,0,0,0.4)',
+                              background: '#FFFFFF',
+                            }}
+                          />
+                        </div>
+                      )}
+
+                      {/* 3. Office Documents (Word DOC/DOCX, Excel XLS/XLSX, PowerPoint PPT/PPTX) */}
+                      {(fileInfo.category === 'document' || fileInfo.category === 'spreadsheet' || fileInfo.category === 'presentation') && (
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 540, background: '#F8FAFC' }}>
+                          <div
+                            style={{
+                              padding: '14px 24px',
+                              background: '#EFF6FF',
+                              borderBottom: '1px solid #BFDBFE',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              flexWrap: 'wrap',
+                              gap: 12,
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                              <div
+                                style={{
+                                  width: 36,
+                                  height: 36,
+                                  borderRadius: 8,
+                                  background: '#DBEAFE',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#1D4ED8',
+                                }}
+                              >
+                                {fileInfo.category === 'spreadsheet' ? <FileSpreadsheet size={20} /> : <FileText size={20} />}
+                              </div>
+                              <div>
+                                <div style={{ fontWeight: 700, fontSize: 14, color: '#1E3A8A' }}>
+                                  {fileInfo.filename}
+                                </div>
+                                <div style={{ fontSize: 12, color: '#3B82F6' }}>
+                                  {fileInfo.label} • Embedded preview & direct download available
+                                </div>
+                              </div>
+                            </div>
+                            <button
+                              onClick={handleDownloadDatasheet}
+                              disabled={isDownloading}
+                              className="btn btn-primary"
+                              style={{ padding: '8px 18px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            >
+                              <Download size={14} />
+                              <span>{isDownloading ? 'Downloading...' : 'Download Document'}</span>
+                            </button>
+                          </div>
+
+                          <div style={{ position: 'relative', width: '100%', height: 480, background: '#FFFFFF' }}>
+                            {isDocLoading && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  inset: 0,
+                                  background: '#F8FAFC',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: 12,
+                                  zIndex: 2,
+                                }}
+                              >
+                                <Loader2 size={36} color="#0067A4" className="animate-spin" />
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: '#475569',
+                                  }}
+                                >
+                                  Loading document preview...
+                                </span>
+                              </div>
+                            )}
+                            <iframe
+                              src={`https://docs.google.com/viewer?url=${encodeURIComponent(datasheetUrl)}&embedded=true`}
+                              title={`${product.name} Document Preview`}
+                              style={{ width: '100%', height: '100%', border: 'none' }}
+                              onLoad={() => setIsDocLoading(false)}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 4. Text & CSV Documents (TXT, CSV) */}
+                      {fileInfo.category === 'text' && (
+                        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 520, background: '#F8FAFC' }}>
+                          <div
+                            style={{
+                              padding: '12px 24px',
+                              background: '#F1F5F9',
+                              borderBottom: '1px solid #CBD5E1',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              flexWrap: 'wrap',
+                              gap: 12,
+                            }}
+                          >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <FileText size={18} color="#0067A4" />
+                              <span style={{ fontWeight: 600, fontSize: 13, color: '#334155' }}>
+                                {fileInfo.filename} ({fileInfo.extension.toUpperCase()})
+                              </span>
+                            </div>
+                            <button
+                              onClick={handleDownloadDatasheet}
+                              disabled={isDownloading}
+                              className="btn btn-primary"
+                              style={{ padding: '6px 14px', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                            >
+                              <Download size={13} />
+                              <span>Download</span>
+                            </button>
+                          </div>
+                          <div style={{ position: 'relative', width: '100%', height: 480, background: '#FFFFFF' }}>
+                            {isDocLoading && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  inset: 0,
+                                  background: '#F8FAFC',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: 12,
+                                  zIndex: 2,
+                                }}
+                              >
+                                <Loader2 size={36} color="#0067A4" className="animate-spin" />
+                                <span
+                                  style={{
+                                    fontFamily: 'var(--font-heading)',
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    color: '#475569',
+                                  }}
+                                >
+                                  Loading document text...
+                                </span>
+                              </div>
+                            )}
+                            <iframe
+                              src={datasheetUrl}
+                              title={`${product.name} Text`}
+                              style={{ width: '100%', height: '100%', border: 'none', background: '#FFFFFF' }}
+                              onLoad={() => setIsDocLoading(false)}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Empty / Unavailable State */
+                    <div
+                      style={{
+                        padding: '40px 24px',
+                        textAlign: 'center',
+                        background: '#FFFFFF',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 56,
+                          height: 56,
+                          borderRadius: '50%',
+                          background: '#EFF6FF',
+                          border: '1px solid #BFDBFE',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          margin: '0 auto 16px',
+                          color: '#0067A4',
+                        }}
+                      >
+                        <FileText size={26} />
+                      </div>
+                      <h4
+                        style={{
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: 18,
+                          fontWeight: 700,
+                          color: '#0F172A',
+                          marginBottom: 8,
+                        }}
+                      >
+                        Datasheet Currently Unavailable
+                      </h4>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: 14,
+                          color: '#64748B',
+                          lineHeight: 1.5,
+                          maxWidth: 520,
+                          margin: '0 auto 20px',
+                        }}
+                      >
+                        Datasheet currently unavailable. Please contact us for assistance.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setIsDatasheetOpen(false);
+                          setTimeout(() => {
+                            document.getElementById('product-enquiry')?.scrollIntoView({ behavior: 'smooth' });
+                          }, 150);
+                        }}
+                        className="btn btn-primary"
+                        style={{ padding: '10px 20px', fontSize: 13, display: 'inline-flex', alignItems: 'center', gap: 6, margin: '0 auto' }}
+                      >
+                        <span>Contact Us for Assistance</span>
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  )}
+
+                  {datasheetUrl && fileInfo && (
+                    <div
+                      style={{
+                        background: '#FFFFFF',
+                        borderTop: '1px solid #E2E8F0',
+                        padding: '10px 24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        fontSize: 12,
+                        color: '#64748B',
+                        flexWrap: 'wrap',
+                        gap: 8,
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <ShieldCheck size={14} color="#10B981" />
+                        <span>Verified {fileInfo.label} Specification</span>
+                      </div>
+                      <div>
+                        Trouble viewing preview?{' '}
+                        <a
+                          href={datasheetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: '#0067A4', fontWeight: 600, textDecoration: 'underline' }}
+                        >
+                          Open document directly
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Styled CSS for Product Detail Page */}
       <style>{`
@@ -1181,6 +1920,20 @@ export default function ProductDetailPage() {
           /* Applications grid: single column */
           .applications-grid {
             grid-template-columns: 1fr;
+          }
+        }
+
+        .btn-datasheet-action:hover {
+          background: rgba(255, 255, 255, 0.16) !important;
+          color: #FFFFFF !important;
+        }
+        .btn-datasheet-download:hover {
+          background: #005587 !important;
+        }
+
+        @media (max-width: 640px) {
+          .datasheet-btn-label {
+            display: none;
           }
         }
 

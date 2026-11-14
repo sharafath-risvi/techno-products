@@ -5,7 +5,7 @@ import SectionTag, { RevealText } from '../ui/RevealText';
 import { useApi } from '../../hooks/useApi';
 
 export default function HomeCaseStories() {
-  const { data: apiData, loading, error } = useApi('https://technoproducts.in/wp-json/api/v1/posts?page=1&per_page=2');
+  const { data: apiData, loading, error } = useApi('https://technoproducts.in/api/wp-json/api/v1/posts?page=1&per_page=2');
   const caseStories = apiData?.data || [];
 
   return (

@@ -89,7 +89,7 @@ export default function ContactPage() {
                   </div>
                   <div className="info-row">
                     <Mail size={20} className="info-icon" />
-                    <p>sales@technoproducts.in</p>
+                    <p>enquire@technoproducts.in</p>
                   </div>
                 </div>
               </motion.div>
@@ -185,7 +185,7 @@ export default function ContactPage() {
                 </div>
                 <div className="info-row">
                   <Mail size={20} className="info-icon" />
-                  <p>sales@technoproducts.in</p>
+                  <p>enquire@technoproducts.in</p>
                 </div>
                 <div className="info-row">
                   <FileText size={20} className="info-icon" />
@@ -330,7 +330,7 @@ export default function ContactPage() {
               <div className="quick-icon"><Mail size={24} /></div>
               <div className="quick-info">
                 <span className="quick-label">Sales Support</span>
-                <span className="quick-value">sales@technoproducts.in</span>
+                <span className="quick-value">enquire@technoproducts.in</span>
               </div>
             </div>
             <div className="quick-card">

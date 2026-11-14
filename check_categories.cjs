@@ -3,7 +3,7 @@ const https = require('https');
 
 function fetchPage(page) {
   return new Promise((resolve, reject) => {
-    https.get(`https://technoproducts.in/wp-json/api/v1/products?page=${page}&per_page=50`, (res) => {
+    https.get(`https://technoproducts.in/api/wp-json/api/v1/products?page=${page}&per_page=50`, (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => { try { resolve(JSON.parse(data)); } catch(e) { resolve(null); } });

@@ -3,7 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, SlidersHorizontal, Search, Loader2, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
-import { useProducts } from '../context/ProductsContext';
+import { useProducts, normalizeProduct } from '../context/ProductsContext';
+import { VERIFIED_PRODUCT_DOCUMENTS } from '../data/verifiedProductDocs';
 
 // Filter Configurations based on User Prompt
 const FILTER_CONFIG = {
@@ -44,6 +45,9 @@ export default function ProductCategoryPage() {
   const slug = urlSlug || 'all';
   const navigate = useNavigate();
 
+  // Fetch all products from context at the very top so it is initialized before effects
+  const { products: allProducts, loading: prodLoading, error: prodError } = useProducts();
+
   const [page, setPage] = useState(1);
   const perPage = 12;
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,15 +55,63 @@ export default function ProductCategoryPage() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [mobilePendingFilters, setMobilePendingFilters] = useState({});
   const [mobileSearchQuery, setMobileSearchQuery] = useState('');
+  const [directFoundProduct, setDirectFoundProduct] = useState(null);
+  const [isSearchingId, setIsSearchingId] = useState(false);
 
   useEffect(() => {
     setActiveFilters({});
     setPage(1);
     setSearchQuery('');
+    setDirectFoundProduct(null);
   }, [slug]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery]);
+
+  // Proactive direct WordPress Product ID lookup fallback
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    const cleanedIdMatch = trimmed.match(/^(?:id[:\s#]*|#)?(\d+)$/i);
+    if (!cleanedIdMatch) {
+      setDirectFoundProduct(null);
+      return;
+    }
+
+    const numId = parseInt(cleanedIdMatch[1], 10);
+    // If it is already in allProducts, no extra network request needed
+    if (allProducts && allProducts.some(p => p.id === numId)) {
+      setDirectFoundProduct(null);
+      return;
+    }
+
+    let active = true;
+    setIsSearchingId(true);
+
+    fetch(`https://technoproducts.in/api/wp-json/api/v1/products/${numId}`)
+      .then(res => (res.ok ? res.json() : null))
+      .then(data => {
+        if (!active) return;
+        if (data && data.id) {
+          setDirectFoundProduct(normalizeProduct(data));
+        } else {
+          setDirectFoundProduct(null);
+        }
+      })
+      .catch(() => {
+        if (active) setDirectFoundProduct(null);
+      })
+      .finally(() => {
+        if (active) setIsSearchingId(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [searchQuery, allProducts]);
+
   // Fetch categories for sidebar
-  const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/wp-json/api/v1/product-categories');
+  const { data: apiCategoriesData, loading: catLoading } = useApi('https://technoproducts.in/api/wp-json/api/v1/product-categories');
   const categories = apiCategoriesData?.data || [];
 
   const orderedCategories = useMemo(() => {
@@ -93,9 +145,6 @@ export default function ProductCategoryPage() {
     
     return ordered;
   }, [categories]);
-
-  // Fetch all products from context
-  const { products: allProducts, loading: prodLoading, error: prodError } = useProducts();
 
   // Determine current category
   let category = categories.find(c => c.slug === slug);
@@ -148,34 +197,110 @@ export default function ProductCategoryPage() {
     return productWithImage?.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop";
   }, [allProducts, slug]);
 
+  const allAvailableProducts = useMemo(() => {
+    let list = allProducts || [];
+    if (directFoundProduct && !list.some(p => p.id === directFoundProduct.id)) {
+      list = [directFoundProduct, ...list];
+    }
+    return list;
+  }, [allProducts, directFoundProduct]);
+
   // FILTER LOGIC
   const filteredProducts = useMemo(() => {
-    let result = allProducts;
+    const trimmed = searchQuery.trim();
+    const isSearching = trimmed.length > 0;
+    const cleanedIdMatch = trimmed.match(/^(?:id[:\s#]*|#)?(\d+)$/i);
+    const isNumericId = Boolean(cleanedIdMatch);
+    const queryNum = isNumericId ? parseInt(cleanedIdMatch[1], 10) : null;
+    const queryNumStr = isNumericId ? cleanedIdMatch[1] : null;
+    const q = trimmed.toLowerCase();
 
-    // 1. ISOLATE BY CATEGORY
-    if (slug !== 'all') {
-      result = result.filter(p => p.category_slug === slug);
-    }
+    // Start with all available products from the complete catalogue
+    let list = allAvailableProducts;
 
-    // 2. SEARCH QUERY
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(p => p.name.toLowerCase().includes(q) || (p.description && p.description.toLowerCase().includes(q)));
+    // 1. Deduplicate by ID to guarantee no duplicate cards (Requirement 8)
+    const uniqueMap = new Map();
+    list.forEach(p => {
+      if (p && p.id && !uniqueMap.has(p.id)) {
+        uniqueMap.set(p.id, p);
+      }
+    });
+    list = Array.from(uniqueMap.values());
+
+    // 2. SEARCH QUERY (Requirements 1, 2, 3, 4, 5, 6)
+    if (isSearching) {
+      list = list.filter(p => {
+        // 2a. Exact WordPress Product ID Match
+        if (queryNum !== null && (p.id === queryNum || String(p.id) === queryNumStr)) return true;
+        if (String(p.id) === trimmed) return true;
+
+        // 2b. Partial Product ID Match & Embedded ID Match
+        if (String(p.id).includes(trimmed)) return true;
+        if (queryNumStr && String(p.id).includes(queryNumStr)) return true;
+        if (q.includes(String(p.id))) return true;
+
+        // 2c. Product Name Match
+        if (p.name && p.name.toLowerCase().includes(q)) return true;
+
+        // 2d. Product Description Match
+        if (p.description && p.description.toLowerCase().includes(q)) return true;
+
+        // 2e. Brand Match
+        if (p.brand && p.brand.toLowerCase().includes(q)) return true;
+        if (p.attributes?.brand && p.attributes.brand.toLowerCase().includes(q)) return true;
+
+        // 2f. Model / Type Match
+        if (p.attributes?.model && p.attributes.model.toLowerCase().includes(q)) return true;
+        if (p.attributes?.type && p.attributes.type.toLowerCase().includes(q)) return true;
+
+        // 2g. OEM Code / MLFB / SAP Product Code Match
+        const verified = VERIFIED_PRODUCT_DOCUMENTS[String(p.id)];
+        if (verified) {
+          if (verified.modelCode && verified.modelCode.toLowerCase().includes(q)) return true;
+          if (verified.mlfb && verified.mlfb.toLowerCase().includes(q)) return true;
+          if (verified.pricing?.sapCode && verified.pricing.sapCode.toLowerCase().includes(q)) return true;
+        }
+
+        return false;
+      });
+
+      // Prioritize Exact ID Match to be first in search results (Requirement 2)
+      if (isNumericId) {
+        list.sort((a, b) => {
+          if (a.id === queryNum) return -1;
+          if (b.id === queryNum) return 1;
+          return 0;
+        });
+      }
+
+      // If user is searching on a specific category slug and didn't enter a numeric ID,
+      // show matching products from current category first if available
+      if (!isNumericId && slug !== 'all') {
+        const inCategory = list.filter(p => p.category_slug === slug);
+        if (inCategory.length > 0) {
+          list = inCategory;
+        }
+      }
+    } else {
+      // No search query: isolate by category as usual
+      if (slug !== 'all') {
+        list = list.filter(p => p.category_slug === slug);
+      }
     }
 
     // 3. APPLY UI ATTRIBUTE FILTERS (AND logic across groups, OR logic within group)
     Object.keys(activeFilters).forEach(key => {
       const selectedValues = activeFilters[key];
-      if (selectedValues.length > 0) {
-        result = result.filter(p => {
+      if (selectedValues && selectedValues.length > 0) {
+        list = list.filter(p => {
           if (!p.attributes || !p.attributes[key]) return false;
           return selectedValues.includes(p.attributes[key]);
         });
       }
     });
 
-    return result;
-  }, [allProducts, slug, searchQuery, activeFilters]);
+    return list;
+  }, [allAvailableProducts, slug, searchQuery, activeFilters]);
 
   // PAGINATION
   const total_pages = Math.ceil(filteredProducts.length / perPage) || 1;
@@ -439,9 +564,31 @@ export default function ProductCategoryPage() {
               <div style={{ textAlign: 'center', color: '#D71B32', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
                 Failed to load products. Please try again.
               </div>
+            ) : isSearchingId ? (
+              <div style={{ textAlign: 'center', padding: '64px 0' }}>
+                <Loader2 size={36} color="#0067A4" className="animate-spin" style={{ margin: '0 auto 12px' }} />
+                <p style={{ color: '#64748B', fontSize: 14 }}>Searching product catalogue for ID {searchQuery.trim()}...</p>
+              </div>
             ) : paginatedProducts.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#000000', padding: '64px 0', fontFamily: 'var(--font-body)' }}>
-                No products match the selected filters.
+              <div style={{ textAlign: 'center', padding: '64px 20px', background: '#FFFFFF', borderRadius: 16, border: '1px solid #E2E8F0', margin: '20px 0' }}>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#64748B' }}>
+                  <Search size={24} />
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 20, fontWeight: 700, color: '#0F172A', marginBottom: 8 }}>
+                  No Products Found
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#64748B', maxWidth: 480, margin: '0 auto 20px' }}>
+                  {searchQuery.trim()
+                    ? `No products found matching "${searchQuery.trim()}". Try searching with a different product ID, model number, brand, or specification.`
+                    : 'No products match the selected filters.'}
+                </p>
+                <button
+                  onClick={handleReset}
+                  className="btn btn-outline"
+                  style={{ padding: '10px 20px', fontSize: 14 }}
+                >
+                  Clear Search & Filters
+                </button>
               </div>
             ) : (
               <>
@@ -449,7 +596,7 @@ export default function ProductCategoryPage() {
                   {paginatedProducts.map((product) => (
                     <motion.div
                       key={product.id}
-                      onClick={() => navigate(`/products/${slug}/${product.id}`)}
+                      onClick={() => navigate(`/products/${product.category_slug || slug}/${product.id}`)}
                       className="premium-product-card"
                       whileHover={{ y: -8, boxShadow: '0 24px 48px rgba(0,0,0,0.08)' }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -483,7 +630,7 @@ export default function ProductCategoryPage() {
                         
                         <div className="card-actions">
                           <Link 
-                            to={`/products/${slug}/${product.id}`}
+                            to={`/products/${product.category_slug || slug}/${product.id}`}
                             onClick={(e) => e.stopPropagation()}
                             className="btn-quick-view"
                             style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

@@ -12,7 +12,7 @@ const products = [
     title: 'GEARBOXES',
     shortName: 'Gearboxes',
     desc: 'Precision-engineered industrial gearboxes designed for maximum torque transmission, ultimate reliability, and long-term performance under extreme loads.',
-    image: 'https://www.technoproducts.in/wp-content/uploads/2022/11/W-Series.jpeg',
+    image: 'https://technoproducts.in/api/wp-content/uploads/2022/11/W-Series.jpeg',
     slug: '/products'
   },
   {
@@ -21,7 +21,7 @@ const products = [
     title: 'ELECTRIC MOTORS',
     shortName: 'Electric Motors',
     desc: 'High-efficiency industrial motors built to power heavy machinery with minimal energy loss and unmatched durability in harsh environments.',
-    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/1-SCA.png',
+    image: 'https://technoproducts.in/api/wp-content/uploads/2022/12/1-SCA.png',
     slug: '/products'
   },
   {
@@ -30,7 +30,7 @@ const products = [
     title: 'DRIVES & AUTOMATION',
     shortName: 'Drives & Automation',
     desc: 'Advanced VFD drives and intelligent automation systems offering precise control, energy savings, and seamless integration for smart manufacturing.',
-    image: 'https://www.technoproducts.in/wp-content/uploads/2022/12/FC051-Danfoss-Drive.jpeg',
+    image: 'https://technoproducts.in/api/wp-content/uploads/2022/12/FC051-Danfoss-Drive.jpeg',
     slug: '/products'
   },
   {
