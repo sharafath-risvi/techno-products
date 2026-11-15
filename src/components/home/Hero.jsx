@@ -16,7 +16,7 @@ export default function Hero() {
   const containerRef = useRef();
   const videoRef = useRef();
   const videoBgWrapperRef = useRef();
-  
+
   const [activeText, setActiveText] = useState(null);
 
 
@@ -24,9 +24,9 @@ export default function Hero() {
     if (!videoRef.current) return;
     const { currentTime, duration } = videoRef.current;
     if (!duration) return;
-    
+
     const progress = currentTime / duration;
-    
+
     // Text logic synced to video timeline
     let newActiveText = null;
     if (progress > 0.05 && progress < 0.48) {
@@ -34,7 +34,7 @@ export default function Hero() {
     } else if (progress > 0.52 && progress < 0.95) {
       newActiveText = 1;
     }
-    
+
     if (activeText !== newActiveText) {
       setActiveText(newActiveText);
     }
@@ -67,17 +67,17 @@ export default function Hero() {
             transformOrigin: 'center center',
           }}
         >
-          <video 
+          <video
             ref={videoRef}
             onTimeUpdate={handleTimeUpdate}
-            src="/videos/products_video.mp4"
-            autoPlay 
+            src="/videos/products_video1_com.mp4"
+            autoPlay
             loop
-            muted 
+            muted
             playsInline
-            style={{ 
-              width: '100%', 
-              height: '100%', 
+            style={{
+              width: '100%',
+              height: '100%',
               objectFit: 'cover'
             }}
           />
@@ -147,7 +147,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll Down Indicator */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           bottom: '32px',
