@@ -58,6 +58,10 @@ export default function HomeCaseStories() {
             </div>
           ) : caseStories.map((story, i) => {
             const categoryName = story.categories?.[0]?.name || 'Industrial Project';
+            const storyImage = (typeof story.image === 'string' && story.image.trim() !== '') 
+              ? story.image 
+              : (story.content?.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1] || null);
+
             return (
             <motion.div
               key={story.id}
@@ -80,6 +84,30 @@ export default function HomeCaseStories() {
                   }}
                   className="hcs-card"
                 >
+                  {storyImage && (
+                    <>
+                      <img
+                        src={storyImage}
+                        alt={story.title ? story.title.replace(/<[^>]+>/g, '') : 'Case Story'}
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          opacity: 0.35,
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: 'linear-gradient(to top, #001426 0%, rgba(0,20,38,0.85) 60%, rgba(0,20,38,0.4) 100%)',
+                        }}
+                      />
+                    </>
+                  )}
                   {/* Content */}
                   <div style={{ position: 'relative', zIndex: 1, padding: '36px 36px' }}>
                     {/* Industry + result pill */}

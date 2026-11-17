@@ -8,11 +8,37 @@ import {
 import SectionTag, { RevealText, StaggerContainer, StaggerItem } from '../components/ui/RevealText';
 import { useApi } from '../hooks/useApi';
 
+function isImageInContent(content, imageUrl) {
+  if (!content || !imageUrl || typeof content !== 'string' || typeof imageUrl !== 'string') {
+    return false;
+  }
+  const normalizedContent = content.replace(/\\\//g, '/');
+  if (normalizedContent.includes(imageUrl)) return true;
+
+  try {
+    const filename = imageUrl.split('/').pop().split('?')[0];
+    if (filename) {
+      if (normalizedContent.includes(filename)) return true;
+      const baseName = filename.replace(/(-scaled|-\d+x\d+)(\.[a-zA-Z0-9]+)$/, '$2');
+      if (baseName && baseName !== filename && normalizedContent.includes(baseName)) {
+        return true;
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+  return false;
+}
+
 export default function CaseStoryDetailPage() {
   const { postId } = useParams();
   
   const { data: apiData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/posts/${postId}`);
   const story = apiData;
+
+  const featuredImage = (typeof story?.image === 'string' && story.image.trim() !== '') ? story.image : null;
+  const imageAlreadyInContent = featuredImage ? isImageInContent(story?.content, featuredImage) : false;
+  const shouldRenderFeaturedImage = Boolean(featuredImage && !imageAlreadyInContent);
 
   // Form state for sticky panel
   const [formData, setFormData] = useState({
@@ -154,6 +180,16 @@ export default function CaseStoryDetailPage() {
             <div style={{ minWidth: 0 }}>
               <RevealText>
                 <div style={{ marginBottom: 48, background: '#FFFFFF', padding: '36px 40px', borderRadius: 24, border: '1px solid #E5E7EB', boxShadow: '0 4px 20px rgba(0,0,0,0.025)' }}>
+                  {shouldRenderFeaturedImage && (
+                    <div style={{ marginBottom: 32, borderRadius: 16, overflow: 'hidden', textAlign: 'center', background: '#F8F9FA', border: '1px solid #E5E7EB', padding: '16px' }}>
+                      <img 
+                        src={featuredImage} 
+                        alt={story.title ? story.title.replace(/<[^>]+>/g, '') : 'Case Story'} 
+                        onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                        style={{ maxWidth: '100%', maxHeight: 480, height: 'auto', objectFit: 'contain', margin: '0 auto', display: 'block', borderRadius: 12 }} 
+                      />
+                    </div>
+                  )}
                   <div className="post-content" dangerouslySetInnerHTML={{ __html: story.content }} />
                 </div>
               </RevealText>

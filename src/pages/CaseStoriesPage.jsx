@@ -10,7 +10,14 @@ export default function CaseStoriesPage() {
   const perPage = 10;
   const { data: apiData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/posts?page=${page}&per_page=${perPage}`);
   
-  const stories = apiData?.data || [];
+  const stories = (apiData?.data || []).filter((post) => {
+    if (!Array.isArray(post?.categories)) return true;
+    return !post.categories.some((cat) =>
+      cat?.slug === 'blog' ||
+      cat?.name?.toLowerCase() === 'blog' ||
+      cat?.id === 332
+    );
+  });
   const pagination = apiData?.pagination || { page: 1, total_pages: 1, total: 0 };
 
   const handlePageChange = (newPage) => {
@@ -88,6 +95,7 @@ export default function CaseStoriesPage() {
             ) : (
               stories.map((story) => {
                 const categoryName = story.categories?.[0]?.name || 'Industrial Project';
+
                 return (
                   <motion.div 
                     key={story.id}
@@ -207,7 +215,6 @@ export default function CaseStoriesPage() {
         
         @media (max-width: 1024px) {
           .case-card { flex-direction: column !important; }
-          .case-card__img { width: 100% !important; height: 320px !important; }
           .case-card > div:last-child { width: 100% !important; padding: 40px !important; }
           .case-card > div > div:nth-child(2) { flex-direction: column !important; gap: 24px !important; }
         }

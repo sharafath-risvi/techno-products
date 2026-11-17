@@ -8,6 +8,8 @@ export const useProducts = () => useContext(ProductsContext);
 // Persistent Cache & Concurrency Configuration
 // ----------------------------------------------------
 const CACHE_KEY = 'techno_products_catalogue_v1';
+/** Bump when catalogue must be fully re-fetched and pruned against WordPress (one-time stale cleanup). */
+const CATALOGUE_SCHEMA_VERSION = 2;
 const CACHE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 const MAX_CONCURRENT_PAGES = 2;          // Controlled concurrency
 const INTER_PAIR_DELAY_MS = 350;         // Server breathing room
@@ -52,6 +54,8 @@ function readLocalStorage() {
       products: parsed.products,
       total: parsed.total || parsed.products.length,
       timestamp: parsed.timestamp || 0,
+      schemaVersion: parsed.schemaVersion || 1,
+      lastFullPruneAt: parsed.lastFullPruneAt || 0,
       isExpired
     };
   } catch (err) {
@@ -60,12 +64,15 @@ function readLocalStorage() {
   }
 }
 
-function writeLocalStorage(products, total) {
+function writeLocalStorage(products, total, options = {}) {
   try {
     if (typeof window === 'undefined' || !window.localStorage) return;
+    const existing = readLocalStorage();
     const payload = {
       timestamp: Date.now(),
       total: total || products.length,
+      schemaVersion: options.schemaVersion ?? existing?.schemaVersion ?? CATALOGUE_SCHEMA_VERSION,
+      lastFullPruneAt: options.lastFullPruneAt ?? existing?.lastFullPruneAt ?? 0,
       products
     };
     window.localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
@@ -117,6 +124,27 @@ async function fetchProductsPage(page, perPage = 50, retries = 2, delayMs = 1000
   return { error: true, page };
 }
 
+// Resilient taxonomy fetcher for authoritative WordPress category assignment
+async function fetchWpTaxonomies(page = 1, perPage = 100) {
+  try {
+    const url = `https://technoproducts.in/api/wp-json/wp/v2/product?page=${page}&per_page=${perPage}&_fields=id,product_cat`;
+    const res = await fetch(url);
+    if (!res.ok) return new Map();
+    const items = await res.json();
+    if (!Array.isArray(items)) return new Map();
+    const catMap = new Map();
+    items.forEach(item => {
+      if (item && item.id && Array.isArray(item.product_cat) && item.product_cat.length > 0) {
+        catMap.set(item.id, item.product_cat);
+      }
+    });
+    return catMap;
+  } catch (err) {
+    console.warn('[ProductsContext] Non-critical taxonomy fetch failed:', err);
+    return new Map();
+  }
+}
+
 // Module-level decoupled background hydration runner
 async function startCatalogueHydration() {
   if (isHydrationInProgress) return;
@@ -126,8 +154,11 @@ async function startCatalogueHydration() {
     const initialCache = readLocalStorage();
     const hasValidCache = initialCache && Array.isArray(initialCache.products) && initialCache.products.length > 0;
 
-    // Step 1: Fetch Page 1 to detect newest products and total page count
-    const firstPageResult = await fetchProductsPage(1, 50, 2, 1000);
+    // Step 1: Fetch Page 1 and recent WordPress category taxonomy in parallel
+    const [firstPageResult, taxonomyMap] = await Promise.all([
+      fetchProductsPage(1, 50, 2, 1000),
+      fetchWpTaxonomies(1, 100)
+    ]);
 
     if (firstPageResult.error) {
       const currentCount = memoryProducts ? memoryProducts.length : (initialCache ? initialCache.products.length : 0);
@@ -140,16 +171,28 @@ async function startCatalogueHydration() {
       return;
     }
 
-    const firstPageItems = firstPageResult.data.map(normalizeProduct).filter(Boolean);
+    const firstPageItems = firstPageResult.data.map(raw => {
+      const cats = taxonomyMap?.get(raw.id);
+      return normalizeProduct(cats ? { ...raw, product_cat: cats } : raw);
+    }).filter(Boolean);
     const totalPages = firstPageResult.pagination?.total_pages || 10;
     const totalProducts = firstPageResult.pagination?.total || 482;
+
+    // Initialize live product map for this hydration cycle to record all verified active products
+    const liveProductMap = new Map();
+    firstPageItems.forEach(p => {
+      if (p && p.id) liveProductMap.set(p.id, p);
+    });
 
     // Initialize deduplication map
     const productMap = new Map();
 
-    if (memoryProducts && memoryProducts.length > 0) {
+    const cacheSchemaVersion = initialCache?.schemaVersion ?? 1;
+    const cacheNeedsPruneMigration = hasValidCache && cacheSchemaVersion < CATALOGUE_SCHEMA_VERSION;
+
+    if (memoryProducts && memoryProducts.length > 0 && !cacheNeedsPruneMigration) {
       memoryProducts.forEach(p => { if (p && p.id) productMap.set(p.id, p); });
-    } else if (hasValidCache) {
+    } else if (hasValidCache && !cacheNeedsPruneMigration) {
       initialCache.products.forEach(p => { if (p && p.id) productMap.set(p.id, p); });
     }
 
@@ -160,13 +203,34 @@ async function startCatalogueHydration() {
     // Notify listeners with initial Page 1 products immediately
     const initialList = Array.from(productMap.values());
     notifyListeners(initialList);
-    writeLocalStorage(initialList, totalProducts);
+    if (!hasValidCache) {
+      writeLocalStorage(initialList, totalProducts);
+    }
 
     // Check if full background hydration is needed
-    const needsFullHydration = !hasValidCache || 
-      initialCache.isExpired || 
-      initialCache.total !== totalProducts || 
-      productMap.size < totalProducts;
+    // 1. No valid cache
+    // 2. Cache expired (> 2h)
+    // 3. Total count changed in WordPress (e.g. products added or deleted)
+    // 4. ProductMap size does not match WordPress total (handles both additions < and deletions >)
+    // 5. Page 1 contains a brand-new product not in the cached products
+    const cachedIds = new Set(initialCache?.products?.map(cp => cp.id) || []);
+    const hasNewPage1Product = firstPageItems.some(p => p && p.id && !cachedIds.has(p.id));
+
+    const cachedUniqueCount = hasValidCache
+      ? new Set(initialCache.products.map((p) => p.id).filter(Boolean)).size
+      : 0;
+    const cacheCountDrift = hasValidCache && (
+      cachedUniqueCount !== totalProducts ||
+      initialCache.total !== totalProducts ||
+      initialCache.products.length !== totalProducts
+    );
+
+    const needsFullHydration = !hasValidCache ||
+      initialCache.isExpired ||
+      cacheNeedsPruneMigration ||
+      cacheCountDrift ||
+      productMap.size !== totalProducts ||
+      hasNewPage1Product;
 
     if (totalPages > 1 && needsFullHydration) {
       const remainingPages = [];
@@ -187,9 +251,11 @@ async function startCatalogueHydration() {
         pairResults.forEach(res => {
           if (res.ok && res.data) {
             res.data.forEach(raw => {
-              const norm = normalizeProduct(raw);
+              const cats = taxonomyMap?.get(raw.id);
+              const norm = normalizeProduct(cats ? { ...raw, product_cat: cats } : raw);
               if (norm && norm.id) {
                 productMap.set(norm.id, norm);
+                liveProductMap.set(norm.id, norm);
                 hasNewProducts = true;
               }
             });
@@ -202,7 +268,6 @@ async function startCatalogueHydration() {
         if (hasNewProducts) {
           const updatedList = Array.from(productMap.values());
           notifyListeners(updatedList);
-          writeLocalStorage(updatedList, totalProducts);
         }
 
         // Short breathing room between request pairs to prevent Apache saturation
@@ -215,24 +280,72 @@ async function startCatalogueHydration() {
       if (failedPages.length > 0) {
         console.warn(`[ProductsContext] Retrying ${failedPages.length} failed pages:`, failedPages);
         await new Promise(r => setTimeout(r, 1500));
+        const stillFailedPages = [];
         for (const page of failedPages) {
           const retryRes = await fetchProductsPage(page, 50, 1, 2000);
           if (retryRes.ok && retryRes.data) {
             retryRes.data.forEach(raw => {
-              const norm = normalizeProduct(raw);
-              if (norm && norm.id) productMap.set(norm.id, norm);
+              const cats = taxonomyMap?.get(raw.id);
+              const norm = normalizeProduct(cats ? { ...raw, product_cat: cats } : raw);
+              if (norm && norm.id) {
+                productMap.set(norm.id, norm);
+                liveProductMap.set(norm.id, norm);
+              }
             });
             notifyListeners(Array.from(productMap.values()));
+          } else {
+            stillFailedPages.push(page);
           }
         }
+        failedPages.length = 0;
+        failedPages.push(...stillFailedPages);
       }
 
-      // Final update and persistent cache commit
-      const finalList = Array.from(productMap.values());
-      notifyListeners(finalList);
-      writeLocalStorage(finalList, totalProducts);
+      // Final synchronization decision
+      if (failedPages.length === 0) {
+        // Complete, verified WordPress catalogue: replace with authoritative live list
+        // This cleanly prunes any products moved to Trash or deleted in WordPress
+        const liveIds = new Set(liveProductMap.keys());
+        const staleIds = hasValidCache
+          ? initialCache.products.map((p) => p.id).filter((id) => id && !liveIds.has(id))
+          : [];
+        if (staleIds.length > 0) {
+          console.info(`[ProductsContext] Pruned ${staleIds.length} stale product(s) no longer in WordPress.`);
+        }
+        const cleanList = Array.from(liveProductMap.values());
+        notifyListeners(cleanList);
+        writeLocalStorage(cleanList, totalProducts, {
+          schemaVersion: CATALOGUE_SCHEMA_VERSION,
+          lastFullPruneAt: Date.now(),
+        });
+      } else {
+        // Incomplete API data: preserve existing cache to prevent accidental loss
+        console.warn(`[ProductsContext] Hydration incomplete (${failedPages.length} pages failed). Preserving cached catalogue without pruning.`);
+        const fallbackList = hasValidCache
+          ? initialCache.products
+          : Array.from(productMap.values());
+        notifyListeners(fallbackList);
+      }
+    } else if (totalPages <= 1) {
+      // Single-page catalogue: Page 1 is 100% complete and authoritative
+      const cleanList = Array.from(liveProductMap.values());
+      notifyListeners(cleanList);
+      writeLocalStorage(cleanList, totalProducts, {
+        schemaVersion: CATALOGUE_SCHEMA_VERSION,
+        lastFullPruneAt: Date.now(),
+      });
     } else {
-      writeLocalStorage(initialList, totalProducts);
+      // Fresh cache metadata only — do not persist merged lists that may still contain deleted products.
+      const byId = new Map((initialCache?.products || []).map((p) => [p.id, p]));
+      firstPageItems.forEach((p) => {
+        if (p?.id) byId.set(p.id, p);
+      });
+      const mergedFreshPage = Array.from(byId.values());
+      notifyListeners(mergedFreshPage);
+      writeLocalStorage(mergedFreshPage, totalProducts, {
+        schemaVersion: initialCache?.schemaVersion ?? CATALOGUE_SCHEMA_VERSION,
+        lastFullPruneAt: initialCache?.lastFullPruneAt ?? 0,
+      });
     }
   } catch (err) {
     console.error('[ProductsContext] Hydration unexpected error:', err);
@@ -247,11 +360,12 @@ async function startCatalogueHydration() {
 export function ProductsProvider({ children }) {
   const initialCache = readLocalStorage();
   const hasValidCache = initialCache && Array.isArray(initialCache.products) && initialCache.products.length > 0;
+  const cacheIsPruned = hasValidCache && (initialCache.schemaVersion ?? 1) >= CATALOGUE_SCHEMA_VERSION;
 
   // Stale-While-Revalidate: render immediately if memory or localStorage products exist
   const [products, setProducts] = useState(() => {
     if (memoryProducts && memoryProducts.length > 0) return memoryProducts;
-    if (hasValidCache) {
+    if (hasValidCache && cacheIsPruned) {
       memoryProducts = initialCache.products;
       return initialCache.products;
     }
@@ -260,7 +374,7 @@ export function ProductsProvider({ children }) {
 
   const [loading, setLoading] = useState(() => {
     if (memoryProducts && memoryProducts.length > 0) return false;
-    if (hasValidCache) return false;
+    if (hasValidCache && cacheIsPruned) return false;
     return true;
   });
 
@@ -288,8 +402,22 @@ export function ProductsProvider({ children }) {
     // Trigger decoupled background hydration
     startCatalogueHydration();
 
+    // Re-synchronize when user returns to tab (e.g. after adding or trashing products in WP admin)
+    let lastVisibilityCheck = Date.now();
+    const handleVisibilityChange = () => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        const now = Date.now();
+        if (now - lastVisibilityCheck > 15000) {
+          lastVisibilityCheck = now;
+          startCatalogueHydration();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     return () => {
       productListeners.delete(listener);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
@@ -301,8 +429,29 @@ export function ProductsProvider({ children }) {
 }
 
 // ----------------------------------------------------
-// Normalization Layer (Regex Attribute Parsing)
+// Normalization Layer (Regex Attribute Parsing & Category Mapping)
 // ----------------------------------------------------
+
+export const WP_CATEGORY_MAP = {
+  187: 'cables',
+  196: 'drives',
+  197: 'enclosure',
+  214: 'gearbox',
+  233: 'motors',
+  252: 'switchgears',
+  cables: 'cables',
+  cable: 'cables',
+  drives: 'drives',
+  drive: 'drives',
+  enclosure: 'enclosure',
+  enclosures: 'enclosure',
+  gearbox: 'gearbox',
+  gearboxes: 'gearbox',
+  motors: 'motors',
+  motor: 'motors',
+  switchgears: 'switchgears',
+  switchgear: 'switchgears'
+};
 
 export function normalizeProduct(product) {
   if (!product) return null;
@@ -313,25 +462,52 @@ export function normalizeProduct(product) {
   const attributes = {};
   
   // 1. DEDUCE CATEGORY
-  let category_slug = 'all';
-  
-  // High-priority override for Gearboxes that might contain the word "Motor" in their description
-  if (/\bBONFIGLIOLI\b/i.test(combinedText) && /\b(GEARBOX|WORM|REDUCER)\b/i.test(combinedText)) {
-    category_slug = 'gearbox';
-  } else if (/\bMOTOR(S|L)?\b/i.test(combinedText)) {
-    category_slug = 'motors';
-  } else if (/\b(GEARBOX(ES)?|WORM|HELICAL|PLANETARY)\b/i.test(combinedText) || /\bW\s*\d+\b/i.test(combinedText)) {
-    category_slug = 'gearbox';
-  } else if (/\b(DRIVE(S)?|FC\s*\d+|FC051|VFD)/i.test(combinedText)) {
-    category_slug = 'drives';
-  } else if (/\b(CABLE(S)?|POLYCAB|WIRE(S)?|FRLS)\b/i.test(combinedText)) {
-    category_slug = 'cables';
-  } else if (/\b(ENCLOSURE(S)?|DOOR|HOFFMANN|PANEL(S)?)\b/i.test(combinedText) || /FLOOR STANDING/i.test(combinedText)) {
-    category_slug = 'enclosure';
-  } else if (/\b(SWITCHGEAR(S)?|MCB|MCCB|ACB|SIEMENS|CONTACTOR|RELAY)\b/i.test(combinedText)) {
-    category_slug = 'switchgears';
-  } else {
-    category_slug = 'uncategorized';
+  let category_slug = null;
+
+  // 1a. Authoritative WordPress Category Taxonomy Mapping (if provided)
+  if (Array.isArray(product.product_cat) && product.product_cat.length > 0) {
+    for (const catId of product.product_cat) {
+      if (WP_CATEGORY_MAP[catId]) {
+        category_slug = WP_CATEGORY_MAP[catId];
+        break;
+      }
+    }
+  }
+
+  if (!category_slug && product.category_slug && WP_CATEGORY_MAP[product.category_slug]) {
+    category_slug = WP_CATEGORY_MAP[product.category_slug];
+  }
+
+  if (!category_slug && product.category) {
+    if (typeof product.category === 'object') {
+      const catVal = product.category.slug || product.category.id || product.category.name;
+      if (catVal && WP_CATEGORY_MAP[catVal]) category_slug = WP_CATEGORY_MAP[catVal];
+    } else if (WP_CATEGORY_MAP[product.category]) {
+      category_slug = WP_CATEGORY_MAP[product.category];
+    }
+  }
+
+  // 1b. Content-Based Deduction (Regex Classification)
+  if (!category_slug) {
+    // High-priority override for Gearboxes that might contain the word "Motor" in their description
+    if (/\bBONFIGLIOLI\b/i.test(combinedText) && /\b(GEARBOX|WORM|REDUCER)\b/i.test(combinedText)) {
+      category_slug = 'gearbox';
+    } else if (/\b(ENCLOSURE(S)?|ENCL|HOFFMANN|RITTAL|ELDON|CABINET|JUNCTION\s*BOX|TERMINAL\s*BOX|DISTRIBUTION\s*BOX|CONTROL\s*DESK|WALL\s*MOUNT(?:ING|ED)?|FLOOR\s*STAND(?:ING)?|DOUBLE\s*DOOR|SINGLE\s*DOOR)\b/i.test(combinedText)) {
+      // Enclosures checked BEFORE Cables so enclosures mentioning cable entries/wiring are correctly classified as Enclosures
+      category_slug = 'enclosure';
+    } else if (/\b(SWITCHGEAR(S)?|MCCB|MCB|ACB|CONTACTOR|RELAY|CIRCUIT\s*BREAKER)\b/i.test(combinedText)) {
+      category_slug = 'switchgears';
+    } else if (/\bMOTOR(S|L)?\b/i.test(combinedText) || /\bSIMOTICS\b/i.test(combinedText)) {
+      category_slug = 'motors';
+    } else if (/\b(GEARBOX(ES)?|WORM|HELICAL|PLANETARY)\b/i.test(combinedText) || /\bW\s*\d+\b/i.test(combinedText)) {
+      category_slug = 'gearbox';
+    } else if (/\b(DRIVE(S)?|FC\s*\d+|FC051|VFD|INVERTER|DANFOSS)\b/i.test(combinedText)) {
+      category_slug = 'drives';
+    } else if (/\b(CABLE(S)?|POLYCAB|WIRE(S)?|FRLS|ARMOURED|COPPER\s*FLEXIBLE)\b/i.test(combinedText)) {
+      category_slug = 'cables';
+    } else {
+      category_slug = 'uncategorized';
+    }
   }
 
   // 2. EXTRACT HP
@@ -422,10 +598,10 @@ export function normalizeProduct(product) {
     else if (combinedText.includes("FLOOR STANDING")) attributes.type = "Floor Standing";
 
     if (combinedText.includes("WALL MOUNTED") || combinedText.includes("WALL MOUNT")) attributes.mounting = "Wall Mounted";
-    else if (combinedText.includes("FLOOR MOUNTED") || combinedText.includes("FLOOR MOUNT")) attributes.mounting = "Floor Mounted";
+    else if (combinedText.includes("FLOOR MOUNTED") || combinedText.includes("FLOOR MOUNT") || combinedText.includes("FLOOR STANDING")) attributes.mounting = "Floor Mounted";
 
-    const depthMatch = combinedText.match(/(?:D|DEPTH)\s*[:=\-]?\s*(\d{3})/);
-    if (depthMatch) attributes.depth = depthMatch[1];
+    const depthMatch = combinedText.match(/(?:D|DEPTH)\s*[:=\-]?\s*(\d{3})|(\d{3})\s*D\b/);
+    if (depthMatch) attributes.depth = depthMatch[1] || depthMatch[2];
   }
 
   // 10. SWITCHGEARS

@@ -40,6 +40,18 @@ const FILTER_CONFIG = {
   }
 };
 
+export function normalizeCategorySlug(rawSlug) {
+  if (!rawSlug) return '';
+  const s = String(rawSlug).toLowerCase().trim();
+  if (s === 'enclosures' || s === 'enclosure') return 'enclosure';
+  if (s === 'gearboxes' || s === 'gearbox') return 'gearbox';
+  if (s === 'motors' || s === 'motor') return 'motors';
+  if (s === 'drives' || s === 'drive') return 'drives';
+  if (s === 'cables' || s === 'cable') return 'cables';
+  if (s === 'switchgears' || s === 'switchgear') return 'switchgears';
+  return s;
+}
+
 export default function ProductCategoryPage() {
   const { categorySlug: urlSlug } = useParams();
   const slug = urlSlug || 'all';
@@ -147,7 +159,7 @@ export default function ProductCategoryPage() {
   }, [categories]);
 
   // Determine current category
-  let category = categories.find(c => c.slug === slug);
+  let category = categories.find(c => c.slug === slug || normalizeCategorySlug(c.slug) === normalizeCategorySlug(slug));
   if (slug === 'all') {
     category = {
       id: "all",
@@ -193,7 +205,7 @@ export default function ProductCategoryPage() {
       return heroImageMap[slug];
     }
 
-    const productWithImage = allProducts?.find(p => p.category_slug === slug && p.image);
+    const productWithImage = allProducts?.find(p => (p.category_slug === slug || normalizeCategorySlug(p.category_slug) === normalizeCategorySlug(slug)) && p.image);
     return productWithImage?.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=400&fit=crop";
   }, [allProducts, slug]);
 
@@ -276,7 +288,7 @@ export default function ProductCategoryPage() {
       // If user is searching on a specific category slug and didn't enter a numeric ID,
       // show matching products from current category first if available
       if (!isNumericId && slug !== 'all') {
-        const inCategory = list.filter(p => p.category_slug === slug);
+        const inCategory = list.filter(p => normalizeCategorySlug(p.category_slug) === normalizeCategorySlug(slug));
         if (inCategory.length > 0) {
           list = inCategory;
         }
@@ -284,7 +296,7 @@ export default function ProductCategoryPage() {
     } else {
       // No search query: isolate by category as usual
       if (slug !== 'all') {
-        list = list.filter(p => p.category_slug === slug);
+        list = list.filter(p => normalizeCategorySlug(p.category_slug) === normalizeCategorySlug(slug));
       }
     }
 
@@ -486,9 +498,9 @@ export default function ProductCategoryPage() {
                         onClick={() => { setSearchQuery(''); setPage(1); }} 
                         style={{
                           padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
-                          background: slug === cat.slug ? '#0067A4' : '#F8F9FA',
-                          color: slug === cat.slug ? '#FFF' : '#333',
-                          textDecoration: 'none', fontWeight: slug === cat.slug ? 700 : 400
+                          background: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? '#0067A4' : '#F8F9FA',
+                          color: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? '#FFF' : '#333',
+                          textDecoration: 'none', fontWeight: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? 700 : 400
                         }}
                       >
                         {cat.name}
@@ -498,24 +510,27 @@ export default function ProductCategoryPage() {
                 </div>
               </div>
 
-              {FILTER_CONFIG[slug] && Object.keys(FILTER_CONFIG[slug]).map(filterKey => (
-                <div className="filter-group" key={filterKey} style={{ marginTop: 24 }}>
-                  <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 200, overflowY: 'auto', paddingRight: 8 }} className="scrollbar-hide">
-                    {FILTER_CONFIG[slug][filterKey].map(val => (
-                      <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000' }}>
-                        <input 
-                          type="checkbox" 
-                          style={{ width: 16, height: 16, accentColor: '#0067A4' }}
-                          checked={activeFilters[filterKey]?.includes(val) || false}
-                          onChange={() => toggleFilter(filterKey, val)}
-                        />
-                        {val}
-                      </label>
-                    ))}
+              {(FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)]) && Object.keys(FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)]).map(filterKey => {
+                const currentFilters = FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)];
+                return (
+                  <div className="filter-group" key={filterKey} style={{ marginTop: 24 }}>
+                    <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxHeight: 200, overflowY: 'auto', paddingRight: 8 }} className="scrollbar-hide">
+                      {currentFilters[filterKey].map(val => (
+                        <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: '#000000' }}>
+                          <input 
+                            type="checkbox" 
+                            style={{ width: 16, height: 16, accentColor: '#0067A4' }}
+                            checked={activeFilters[filterKey]?.includes(val) || false}
+                            onChange={() => toggleFilter(filterKey, val)}
+                          />
+                          {val}
+                        </label>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               <button className="btn btn-outline" onClick={handleReset} style={{ width: '100%', borderColor: '#E5E7EB', color: '#000000', marginTop: 32 }}>
                 Reset Filters
@@ -1250,9 +1265,9 @@ export default function ProductCategoryPage() {
                         onClick={() => { setSearchQuery(''); setPage(1); setIsMobileFilterOpen(false); }} 
                         style={{
                           padding: '10px 16px', borderRadius: 8, fontSize: 15, fontFamily: 'var(--font-body)',
-                          background: slug === cat.slug ? '#0067A4' : '#F8F9FA',
-                          color: slug === cat.slug ? '#FFF' : '#333',
-                          textDecoration: 'none', fontWeight: slug === cat.slug ? 700 : 400
+                          background: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? '#0067A4' : '#F8F9FA',
+                          color: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? '#FFF' : '#333',
+                          textDecoration: 'none', fontWeight: (slug === cat.slug || normalizeCategorySlug(slug) === normalizeCategorySlug(cat.slug)) ? 700 : 400
                         }}
                       >
                         {cat.name}
@@ -1261,23 +1276,26 @@ export default function ProductCategoryPage() {
                   </div>
                 </div>
 
-                {FILTER_CONFIG[slug] && Object.keys(FILTER_CONFIG[slug]).map(filterKey => (
-                  <div className="filter-group" key={filterKey}>
-                    <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
-                    <div className="checkbox-list">
-                      {FILTER_CONFIG[slug][filterKey].map(val => (
-                        <label key={val} className="checkbox-label">
-                          <input 
-                            type="checkbox" 
-                            checked={mobilePendingFilters[filterKey]?.includes(val) || false}
-                            onChange={() => toggleMobileFilter(filterKey, val)}
-                          />
-                          <span>{val}</span>
-                        </label>
-                      ))}
+                {(FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)]) && Object.keys(FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)]).map(filterKey => {
+                  const currentFilters = FILTER_CONFIG[slug] || FILTER_CONFIG[normalizeCategorySlug(slug)];
+                  return (
+                    <div className="filter-group" key={filterKey}>
+                      <h3 style={{ textTransform: 'capitalize' }}>{filterKey}</h3>
+                      <div className="checkbox-list">
+                        {currentFilters[filterKey].map(val => (
+                          <label key={val} className="checkbox-label">
+                            <input 
+                              type="checkbox" 
+                              checked={mobilePendingFilters[filterKey]?.includes(val) || false}
+                              onChange={() => toggleMobileFilter(filterKey, val)}
+                            />
+                            <span>{val}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="drawer-footer" style={{ display: 'flex', gap: '16px' }}>
                 <button 

@@ -101,6 +101,7 @@ export default function Navbar() {
       insightsItems: [
         { label: 'Testimonials', desc: 'Hear what our valued clients across India say about our supply & support', href: '/insights/testimonials', image: '/industries images/testimonal.webp' },
         { label: 'Case Stories', desc: 'Real engineering results from successful process turnarounds', href: '/case-stories', image: '/industries images/case_stories.webp' },
+        { label: 'Blog', desc: 'Technical guides, application engineering articles, and field perspectives', href: '/insights/blog', image: '/industries images/allproducts.png' },
         { label: 'Galleries', desc: 'Explore moments, milestones and experiences from Techno Products', href: '/insights/galleries', image: '/galleries/47cbc571-551f-4b9b-a2e3-705139c7d396.JPG' },
         { label: 'Newsroom', desc: 'Discover the latest updates, milestones and stories from Techno Products.', href: '/insights/newsroom', image: '/industries images/about1.JPG' },
       ],
@@ -187,7 +188,6 @@ export default function Navbar() {
   const isLightHero = () => {
     const p = location.pathname;
     if (p === '/contact' || p === '/careers' || p === '/about/leadership') return true;
-    if (p.startsWith('/case-stories/') && p.split('/').length === 3) return true;
     return false;
   };
   const lightHero = isLightHero();
@@ -199,7 +199,7 @@ export default function Navbar() {
     if (p.startsWith('/solutions')) return true;
     if (p.startsWith('/industries')) return true;
     if (p.startsWith('/insights')) return true;
-    if (p === '/case-stories') return true;
+    if (p.startsWith('/case-stories')) return true;
     return false;
   };
 
@@ -210,7 +210,9 @@ export default function Navbar() {
     if (p.startsWith('/solutions/')) return true;
     if (p.startsWith('/industries/')) return true;
     if (p === '/insights/testimonials') return true;
-    if (p === '/case-stories') return true;
+    if (p.startsWith('/insights/blog')) return true;
+    if (p.startsWith('/blog')) return true;
+    if (p.startsWith('/case-stories')) return true;
     return false;
   };
 

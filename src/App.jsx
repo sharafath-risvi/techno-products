@@ -24,6 +24,7 @@ import SolutionDetailPage from './pages/SolutionDetailPage';
 import IndustriesPage from './pages/IndustriesPage';
 import IndustryDetailPage from './pages/IndustryDetailPage';
 import BlogPage from './pages/BlogPage';
+import BlogDetailPage from './pages/BlogDetailPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import CaseStoriesPage from './pages/CaseStoriesPage';
 import GalleriesPage from './pages/GalleriesPage';
@@ -157,6 +158,9 @@ export default function App() {
 
                 {/* Phase 2 – Insights */}
                 <Route path="/insights/blog" element={<BlogPage />} />
+                <Route path="/insights/blog/:postId" element={<BlogDetailPage />} />
+                <Route path="/blog" element={<BlogPage />} />
+                <Route path="/blog/:postId" element={<BlogDetailPage />} />
                 <Route path="/insights/testimonials" element={<TestimonialsPage />} />
                 <Route path="/insights/galleries" element={<GalleriesPage />} />
                 <Route path="/insights/newsroom" element={<NewsroomPage />} />
