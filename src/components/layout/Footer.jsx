@@ -73,7 +73,7 @@ export default function Footer() {
           {/* Column 1: Brand */}
           <motion.div variants={itemVariants} className="footer-col brand-col">
             <Link to="/" className="footer-logo">
-              <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 150, width: 'auto', objectFit: 'contain' }} />
+              <img src="/Logo/logo1.webp" alt="Techno Products" style={{ height: 150, width: 'auto', objectFit: 'contain' }} />
             </Link>
             <p className="footer-desc">
               Premier channel partner for top global industrial brands. Delivering reliable engineering solutions and performance-driven products since 1999.

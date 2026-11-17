@@ -273,7 +273,7 @@ export default function Navbar() {
           <div style={{ flex: '0 0 auto', paddingLeft: 8, paddingRight: 24 }}>
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 100, width: 'auto', objectFit: 'contain' }} />
+                <img src="/Logo/logo1.webp" alt="Techno Products" style={{ height: 100, width: 'auto', objectFit: 'contain' }} />
               </div>
             </Link>
           </div>

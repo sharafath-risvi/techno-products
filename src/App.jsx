@@ -76,7 +76,7 @@ function LoadingScreen({ onComplete }) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
-          <img src="/Logo/logo1.png" alt="Techno Products" style={{ height: 200, width: 'auto', objectFit: 'contain' }} />
+          <img src="/Logo/logo1.webp" alt="Techno Products" style={{ height: 200, width: 'auto', objectFit: 'contain' }} />
         </motion.div>
       </div>
       <motion.div
