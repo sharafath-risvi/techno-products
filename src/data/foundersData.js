@@ -28,7 +28,10 @@ export const foundersData = [
     ],
     philosophy: "A company's true strength lies in its people. By aligning personal growth with organizational values, we engineer excellence from the inside out.",
     image: "/AboutTechno_images/shobana_narayanan.jpg"
-  },
+  }
+];
+
+export const leadersData = [
   {
     id: 'sumesh-murali',
     name: "Mr. Sumesh Murali",
@@ -45,3 +48,5 @@ export const foundersData = [
     image: "/AboutTechno_images/sumesh_murali.jpeg"
   }
 ];
+
+export const leaderData = leadersData[0];

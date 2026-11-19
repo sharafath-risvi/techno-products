@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import SectionTag, { RevealText, StaggerContainer, StaggerItem, RevealSlideLeft, RevealSlideRight } from '../components/ui/RevealText';
 import FullOurStory from '../components/about/FullOurStory';
 import LeadershipStory from '../components/about/LeadershipStory';
+import LeaderSection from '../components/about/LeaderSection';
 import MissionVision from '../components/about/MissionVision';
 import MeetOurTeam from '../components/about/MeetOurTeam';
 import AboutHero from '../components/about/AboutHero';
@@ -23,10 +24,13 @@ export default function AboutPage() {
       {/* 3. Mission & Vision */}
       <MissionVision />
 
-      {/* 4. Meet Our Leadership (Pinned GSAP Section) */}
+      {/* 4. Meet Our Leadership (Founders) */}
       <LeadershipStory />
 
-      {/* 5. Meet Our Team */}
+      {/* 5. Leader Section */}
+      <LeaderSection />
+
+      {/* 6. Meet Our Team */}
       <MeetOurTeam />
 
       {/* 6. CTA Section */}

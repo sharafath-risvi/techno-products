@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import LeadershipStory from '../components/about/LeadershipStory';
+import LeaderSection from '../components/about/LeaderSection';
 import MeetOurTeam from '../components/about/MeetOurTeam';
 import CTASection from '../components/home/CTASection';
 
@@ -396,10 +397,13 @@ export default function LeadershipPage() {
       {/* 1. Premium Leadership Hero */}
       <LeadershipHero />
 
-      {/* 2. Meet Our Founder — existing LeadershipStory component, untouched */}
+      {/* 2. Meet Our Founders */}
       <LeadershipStory />
 
-      {/* 3. Our Team — existing MeetOurTeam component, untouched */}
+      {/* 3. Leader Section */}
+      <LeaderSection />
+
+      {/* 4. Our Team */}
       <MeetOurTeam />
 
       {/* 4. CTA — existing CTASection with industrial background built-in */}

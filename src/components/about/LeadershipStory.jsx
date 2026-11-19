@@ -33,7 +33,7 @@ export default function LeadershipStory() {
               lineHeight: 1.1, letterSpacing: '-0.02em', margin: '0 0 24px 0' 
             }}
           >
-            Meet Our <span style={{ color: '#00446F' }}>Founder's</span>
+            Meet Our <span style={{ color: '#00446F' }}>Founders</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
