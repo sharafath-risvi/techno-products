@@ -10,13 +10,13 @@ export default function ContactPage() {
     target: heroRef,
     offset: ["start start", "end start"]
   });
-  
+
   // Parallax effect for the hero image
   const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   return (
     <main style={{ background: '#FAFAFA' }}>
-      
+
       {/* 1. HERO SECTION */}
       <section ref={heroRef} className="contact-hero">
         <div className="container contact-hero-container">
@@ -40,12 +40,12 @@ export default function ContactPage() {
               </div>
             </RevealText>
           </div>
-          
+
           <div className="contact-hero-image-wrapper">
             <motion.div style={{ y, width: '100%', height: '120%' }}>
-              <img 
-                src="/products_bghero/contacthero.png" 
-                alt="Contact Techno Products" 
+              <img
+                src="/products_bghero/contacthero.png"
+                alt="Contact Techno Products"
                 className="hero-image"
               />
             </motion.div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
       <section className="contact-info-section">
         <div className="container">
           <div className="contact-split-layout">
-            
+
             {/* Left Side: Info */}
             <div className="contact-info-left">
               <RevealText>
@@ -67,7 +67,7 @@ export default function ContactPage() {
                 </p>
               </RevealText>
 
-              <motion.div 
+              <motion.div
                 className="head-office-card"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -85,11 +85,11 @@ export default function ContactPage() {
                   </div>
                   <div className="info-row">
                     <Phone size={20} className="info-icon" />
-                    <p>+91 95516 96517<br/>+91 98412 76889</p>
+                    <p>+91 95516 96517<br />+91 98412 76889</p>
                   </div>
                   <div className="info-row">
                     <Mail size={20} className="info-icon" />
-                    <p>enquire@technoproducts.in</p>
+                    <p>enquiry@technoproducts.in</p>
                   </div>
                 </div>
               </motion.div>
@@ -97,7 +97,7 @@ export default function ContactPage() {
 
             {/* Right Side: Premium Form */}
             <div className="contact-form-right">
-              <motion.div 
+              <motion.div
                 className="premium-contact-form"
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -135,7 +135,7 @@ export default function ContactPage() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="input-group full-width" style={{ marginTop: '24px' }}>
                     <label>Subject</label>
                     <div className="input-wrapper">
@@ -166,7 +166,7 @@ export default function ContactPage() {
           <div className="section-header-center">
             <h2 className="section-title text-center">Our Branch Network</h2>
           </div>
-          
+
           <div className="branch-grid-premium">
             {/* Head Office */}
             <motion.div className="premium-branch-card" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}>
@@ -177,19 +177,19 @@ export default function ContactPage() {
               <div className="card-body">
                 <div className="info-row">
                   <MapPin size={20} className="info-icon" />
-                  <p>No.78/2E1, Noombal Village,<br/>Maccana Industrial Estate,<br/>(Nearby Sundaram Fastners Pvt Ltd (TVS)),<br/>Velapanchavadi, Chennai – 600077</p>
+                  <p>No.78/2E1, Noombal Village,<br />Maccana Industrial Estate,<br />(Nearby Sundaram Fastners Pvt Ltd (TVS)),<br />Velapanchavadi, Chennai – 600077</p>
                 </div>
                 <div className="info-row">
                   <Phone size={20} className="info-icon" />
-                  <p>+91 95516-96517<br/>+91 98412-76889</p>
+                  <p>+91 95516-96517<br />+91 98412-76889</p>
                 </div>
                 <div className="info-row">
                   <Mail size={20} className="info-icon" />
-                  <p>enquire@technoproducts.in</p>
+                  <p>enquiry@technoproducts.in</p>
                 </div>
                 <div className="info-row">
                   <FileText size={20} className="info-icon" />
-                  <p>GST No.<br/>33AABCT1291J1ZF</p>
+                  <p>GST No.<br />33AABCT1291J1ZF</p>
                 </div>
               </div>
             </motion.div>
@@ -203,11 +203,11 @@ export default function ContactPage() {
               <div className="card-body">
                 <div className="info-row">
                   <MapPin size={20} className="info-icon" />
-                  <p>SF No.119, VKV Industrial Estate,<br/>VKV Nagar, K. Vadamadurai NGGO Colony (PO),<br/>Coimbatore – 641022</p>
+                  <p>SF No.119, VKV Industrial Estate,<br />VKV Nagar, K. Vadamadurai NGGO Colony (PO),<br />Coimbatore – 641022</p>
                 </div>
                 <div className="info-row">
                   <Phone size={20} className="info-icon" />
-                  <p>+91 0422-3559811<br/>+91 98412-04295<br/>+91 99629-91583</p>
+                  <p>+91 0422-3559811<br />+91 98412-04295<br />+91 99629-91583</p>
                 </div>
                 <div className="info-row">
                   <Mail size={20} className="info-icon" />
@@ -225,7 +225,7 @@ export default function ContactPage() {
               <div className="card-body">
                 <div className="info-row">
                   <MapPin size={20} className="info-icon" />
-                  <p>A37, Automobile SIDCO Industrial Estate,<br/>Kappalur, Madurai – 625008</p>
+                  <p>A37, Automobile SIDCO Industrial Estate,<br />Kappalur, Madurai – 625008</p>
                 </div>
                 <div className="info-row">
                   <Phone size={20} className="info-icon" />
@@ -247,11 +247,11 @@ export default function ContactPage() {
               <div className="card-body">
                 <div className="info-row">
                   <MapPin size={20} className="info-icon" />
-                  <p>33/1, 2nd Main Road, Peenya Industrial Area, 2nd Stage,<br/>(Opposite Peenya 2nd Stage Bus Stop, Below BESCOM Office),<br/>Bengaluru – 560058</p>
+                  <p>33/1, 2nd Main Road, Peenya Industrial Area, 2nd Stage,<br />(Opposite Peenya 2nd Stage Bus Stop, Below BESCOM Office),<br />Bengaluru – 560058</p>
                 </div>
                 <div className="info-row">
                   <Phone size={20} className="info-icon" />
-                  <p>+91 98412-76889<br/>+91 99419-16488</p>
+                  <p>+91 98412-76889<br />+91 99419-16488</p>
                 </div>
                 <div className="info-row">
                   <Mail size={20} className="info-icon" />
@@ -259,7 +259,7 @@ export default function ContactPage() {
                 </div>
               </div>
             </motion.div>
-            
+
             {/* Sales Network */}
             <motion.div className="premium-branch-card" style={{ gridColumn: '1 / -1' }} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.5, ease: 'easeOut' }}>
               <div className="card-header" style={{ marginBottom: '32px', borderBottom: '1px solid rgba(0,0,0,0.06)', paddingBottom: '20px' }}>
@@ -301,20 +301,20 @@ export default function ContactPage() {
       <section className="map-section">
         <div className="container">
           <h2 className="section-title text-center" style={{ marginBottom: '40px' }}>Find Us Across South India</h2>
-          <motion.div 
+          <motion.div
             className="map-container"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <iframe 
-              src="https://maps.google.com/maps?width=100%25&height=500&hl=en&q=Techno%20Products%20Development%20Pvt.%20Ltd.,%2078/2E1,%20Noombal%20Rd,%20Velappanchavadi,%20Chennai,%20Tamil%20Nadu%20600077+(Techno%20Products%20Development)&t=&z=15&ie=UTF8&iwloc=B&output=embed" 
-              width="100%" 
-              height="500" 
-              style={{ border: 0 }} 
-              allowFullScreen="" 
-              loading="lazy" 
+            <iframe
+              src="https://maps.google.com/maps?width=100%25&height=500&hl=en&q=Techno%20Products%20Development%20Pvt.%20Ltd.,%2078/2E1,%20Noombal%20Rd,%20Velappanchavadi,%20Chennai,%20Tamil%20Nadu%20600077+(Techno%20Products%20Development)&t=&z=15&ie=UTF8&iwloc=B&output=embed"
+              width="100%"
+              height="500"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               title="Techno Products Head Office Location"
             ></iframe>
@@ -330,7 +330,7 @@ export default function ContactPage() {
               <div className="quick-icon"><Mail size={24} /></div>
               <div className="quick-info">
                 <span className="quick-label">Sales Support</span>
-                <span className="quick-value">enquire@technoproducts.in</span>
+                <span className="quick-value">enquiry@technoproducts.in</span>
               </div>
             </div>
             <div className="quick-card">

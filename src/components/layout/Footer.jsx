@@ -63,7 +63,7 @@ export default function Footer() {
   return (
     <footer className="premium-footer">
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <motion.div 
+        <motion.div
           className="footer-main-grid"
           variants={containerVariants}
           initial="hidden"
@@ -123,19 +123,19 @@ export default function Footer() {
             <h4 className="footer-heading">Get in Touch</h4>
             <div className="footer-contact-item">
               <MapPin size={18} className="contact-icon" />
-              <span>Chennai Head Office<br/>Tamil Nadu, India</span>
+              <span>Chennai Head Office<br />Tamil Nadu, India</span>
             </div>
             <a href="tel:+919551696517" className="footer-contact-item linkable">
               <Phone size={18} className="contact-icon" />
-              <span>+91 95516-96517<br/>+91 98412-76889</span>
+              <span>+91 95516-96517<br />+91 98412-76889</span>
             </a>
-            <a href="mailto:enquire@technoproducts.in" className="footer-contact-item linkable">
+            <a href="mailto:enquiry@technoproducts.in" className="footer-contact-item linkable">
               <Mail size={18} className="contact-icon" />
-              <span>enquire@technoproducts.in</span>
+              <span>enquiry@technoproducts.in</span>
             </a>
             <div className="footer-contact-item">
               <FileText size={18} className="contact-icon" />
-              <span>GST No.<br/>33AABCT1291J1ZF</span>
+              <span>GST No.<br />33AABCT1291J1ZF</span>
             </div>
           </motion.div>
         </motion.div>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronRight, CheckCircle2, CheckCircle, FileText, Download, ShieldCheck, 
+import {
+  ChevronRight, CheckCircle2, CheckCircle, FileText, Download, ShieldCheck,
   Settings, ArrowRight, Check, PhoneCall, Mail, Building2, User, Loader2,
   X, ExternalLink, AlertCircle, Image as ImageIcon, FileSpreadsheet
 } from 'lucide-react';
@@ -12,7 +12,7 @@ import { resolveProductDocuments } from '../data/verifiedProductDocs';
 export default function ProductDetailPage() {
   const { categorySlug, productId } = useParams();
   const navigate = useNavigate();
-  
+
   const { data: productData, loading, error } = useApi(`https://technoproducts.in/api/wp-json/api/v1/products/${productId}`);
   const product = productData;
 
@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
       document.body.style.overflow = '';
     };
   }, [isDatasheetOpen]);
-  
+
   // Enquiry form states
   const [formData, setFormData] = useState({
     fullName: '',
@@ -198,7 +198,7 @@ export default function ProductDetailPage() {
       <section style={{ padding: '40px 0' }}>
         <div className="container">
           <div className="product-detail-hero">
-            
+
             {/* Left: Gallery & Images */}
             <div className="detail-gallery">
               <div className="main-image-wrapper">
@@ -262,26 +262,26 @@ export default function ProductDetailPage() {
               </div>
 
               <h1 className="product-title" dangerouslySetInnerHTML={{ __html: product.name }} />
-              
+
               <div className="product-short-desc" dangerouslySetInnerHTML={{ __html: product.description }} />
               {/* CTA Button Group */}
               <div className="detail-actions">
-                <a 
-                  href="#product-enquiry" 
-                  className="btn btn-primary" 
+                <a
+                  href="#product-enquiry"
+                  className="btn btn-primary"
                   style={{ flex: 1, justifyContent: 'center', padding: '16px 28px', fontSize: 16 }}
                 >
                   Request Official Quotation
                   <ArrowRight size={18} />
                 </a>
-                
+
                 {/* Datasheet Button: Rendered consistently on EVERY individual product detail page */}
-                <button 
+                <button
                   onClick={() => {
                     setIsDocLoading(true);
                     setIsDatasheetOpen(true);
                   }}
-                  className="btn btn-outline" 
+                  className="btn btn-outline"
                   style={{ padding: '16px 24px', borderColor: '#CBD5E1', color: '#000000', fontWeight: 700 }}
                   title="View Product Datasheet"
                 >
@@ -303,7 +303,7 @@ export default function ProductDetailPage() {
       {/* 3. Detailed Tabs Section */}
       <section style={{ background: '#F8FAFC', padding: '40px 0', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0' }}>
         <div className="container">
-          
+
           {/* Tab Headers */}
           <div className="tab-navigation scrollbar-hide">
             {[
@@ -325,7 +325,7 @@ export default function ProductDetailPage() {
 
           {/* Tab Content Box */}
           <div className="tab-content-box">
-            
+
             {/* OVERVIEW TAB */}
             {activeTab === 'overview' && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
@@ -353,7 +353,7 @@ export default function ProductDetailPage() {
       <section id="product-enquiry" style={{ padding: '40px 0', background: '#FFFFFF' }}>
         <div className="container">
           <div className="enquiry-container">
-            
+
             {/* Left Box: Context & Contact info */}
             <div className="enquiry-left">
               <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.1)', color: '#FFF', padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
@@ -389,7 +389,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div>
                     <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>Email Technical Support</div>
-                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquire@technoproducts.in</div>
+                    <div style={{ fontWeight: 700, fontSize: 16 }}>enquiry@technoproducts.in</div>
                   </div>
                 </div>
               </div>
@@ -423,9 +423,9 @@ export default function ProductDetailPage() {
                       <label>Full Name *</label>
                       <div className="input-with-icon">
                         <User size={18} className="input-icon" />
-                        <input 
-                          type="text" required placeholder="e.g. Rajesh Kumar" 
-                          value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})}
+                        <input
+                          type="text" required placeholder="e.g. Rajesh Kumar"
+                          value={formData.fullName} onChange={e => setFormData({ ...formData, fullName: e.target.value })}
                         />
                       </div>
                     </div>
@@ -433,9 +433,9 @@ export default function ProductDetailPage() {
                       <label>Company Name *</label>
                       <div className="input-with-icon">
                         <Building2 size={18} className="input-icon" />
-                        <input 
-                          type="text" required placeholder="e.g. Apex Industries Ltd" 
-                          value={formData.companyName} onChange={e => setFormData({...formData, companyName: e.target.value})}
+                        <input
+                          type="text" required placeholder="e.g. Apex Industries Ltd"
+                          value={formData.companyName} onChange={e => setFormData({ ...formData, companyName: e.target.value })}
                         />
                       </div>
                     </div>
@@ -446,9 +446,9 @@ export default function ProductDetailPage() {
                       <label>Email Address *</label>
                       <div className="input-with-icon">
                         <Mail size={18} className="input-icon" />
-                        <input 
-                          type="email" required placeholder="rajesh@company.com" 
-                          value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
+                        <input
+                          type="email" required placeholder="rajesh@company.com"
+                          value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })}
                         />
                       </div>
                     </div>
@@ -456,9 +456,9 @@ export default function ProductDetailPage() {
                       <label>Phone Number *</label>
                       <div className="input-with-icon">
                         <PhoneCall size={18} className="input-icon" />
-                        <input 
-                          type="tel" required placeholder="+91 98765 43210" 
-                          value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
+                        <input
+                          type="tel" required placeholder="+91 98765 43210"
+                          value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })}
                         />
                       </div>
                     </div>
@@ -469,9 +469,9 @@ export default function ProductDetailPage() {
                       <label>GST *</label>
                       <div className="input-with-icon">
                         <FileText size={18} className="input-icon" />
-                        <input 
-                          type="text" required placeholder="e.g. 22AAAAA0000A1Z5" 
-                          value={formData.gst} onChange={e => setFormData({...formData, gst: e.target.value})}
+                        <input
+                          type="text" required placeholder="e.g. 22AAAAA0000A1Z5"
+                          value={formData.gst} onChange={e => setFormData({ ...formData, gst: e.target.value })}
                         />
                       </div>
                     </div>
@@ -479,9 +479,9 @@ export default function ProductDetailPage() {
                       <label>Industry Type *</label>
                       <div className="input-with-icon">
                         <Settings size={18} className="input-icon" />
-                        <input 
-                          type="text" required placeholder="e.g. Manufacturing, HVAC" 
-                          value={formData.industryType} onChange={e => setFormData({...formData, industryType: e.target.value})}
+                        <input
+                          type="text" required placeholder="e.g. Manufacturing, HVAC"
+                          value={formData.industryType} onChange={e => setFormData({ ...formData, industryType: e.target.value })}
                         />
                       </div>
                     </div>
@@ -491,21 +491,21 @@ export default function ProductDetailPage() {
                     <label>Application *</label>
                     <div className="input-with-icon">
                       <Settings size={18} className="input-icon" />
-                      <input 
-                        type="text" required placeholder="e.g. Conveyor, Pump" 
-                        value={formData.application} onChange={e => setFormData({...formData, application: e.target.value})}
+                      <input
+                        type="text" required placeholder="e.g. Conveyor, Pump"
+                        value={formData.application} onChange={e => setFormData({ ...formData, application: e.target.value })}
                       />
                     </div>
                   </div>
 
                   <div className="form-group">
                     <label>Address *</label>
-                    <textarea 
+                    <textarea
                       required
-                      rows="2" 
+                      rows="2"
                       placeholder="Your Company Address"
-                      value={formData.address} 
-                      onChange={e => setFormData({...formData, address: e.target.value})}
+                      value={formData.address}
+                      onChange={e => setFormData({ ...formData, address: e.target.value })}
                       style={{
                         width: '100%', padding: '14px 16px', background: '#F8FAFC',
                         border: '1px solid #E2E8F0', borderRadius: '12px',
@@ -518,11 +518,11 @@ export default function ProductDetailPage() {
 
                   <div className="form-group">
                     <label>Application Requirements & Quantity</label>
-                    <textarea 
-                      rows="4" 
+                    <textarea
+                      rows="4"
                       placeholder={`Please mention your quantity, voltage rating, installation date, or specific customization requirements for the ${product.name}...`}
-                      value={formData.message} 
-                      onChange={e => setFormData({...formData, message: e.target.value})}
+                      value={formData.message}
+                      onChange={e => setFormData({ ...formData, message: e.target.value })}
                     />
                   </div>
 
@@ -581,7 +581,7 @@ export default function ProductDetailPage() {
                   <div className="card-content">
                     <h3 className="card-title" dangerouslySetInnerHTML={{ __html: rel.name }} />
                     <div className="card-actions">
-                      <Link 
+                      <Link
                         to={`/products/${categorySlug}/${rel.id}`}
                         onClick={(e) => e.stopPropagation()}
                         className="btn-quick-view"
